@@ -690,6 +690,7 @@ step(nest_1.mod.full)
 
 nest_1.mod.red <- glm(SES_nest_1 ~ trmt + pland + enn, family = gaussian, data = SES)
 summary(nest_1.mod.red)
+#the below code is for seeing if variables are correlated
 summ(nest_1.mod.red, scale = TRUE, confint = TRUE, vifs = TRUE) #VIF should be <3
 qqnorm(resid(nest_1.mod.red))
 qqline(resid(nest_1.mod.red))
