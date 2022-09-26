@@ -10,10 +10,12 @@
 #
 # KI Perry; 21 July 2021
 #CA Shepard 07 June 2022
+#CA Shepard; 26 September 2022
 ###################################################################################
+#Creating the datasets----
 
 t <- read.csv("./btraits_final.csv", row.names=1)
-a <- read.csv("./bcomm_final.csv", row.names=1)
+a <- read.csv("./bcomm_final.localanalysis.csv", row.names=1)
 
 
 str(a)
@@ -22,13 +24,15 @@ a1 <- a #save the original dataset
 # pull out treatments that we want to keep
 farm <- a[which(a$trmt == "Farm"),]
 str(farm)
+Control <- a[which(a$trmt == "Control"),]
+str(Control)
 T1 <- a[which(a$trmt == "T1"),]
 str(T1)
 T8 <- a[which(a$trmt == "T8"),]
 str(T8)
 
-# create new dataset with only farm, t1, and t8 treatments
-a <- rbind(farm, T1, T8)
+# create new dataset with only farm, Control, t1, and t8 treatments
+a <- rbind(farm, Control,T1, T8)
 str(a)
 
 a <- a[2:360]
@@ -87,8 +91,9 @@ setdiff(rownames (t2), colnames(a))
 rownames(t2) == colnames(a) # we are good to go!
 
 ##############################################################################
-## Observed Community Metrics
+## Observed Community Metrics----
 
+#Loading needed packages ------
 if (!suppressWarnings(require(FD))) install.packages("FD")
 citation("FD")
 
@@ -150,7 +155,7 @@ falpha <- bb.rao$FD$Alpha
 falpha
 
 #We have now calculated all the indices with our observed bee data
-#next, we need to run the null model!
+#next, we need to run the null model!----
 
 #using independent swap method for randomizing the presence/absence matrix
 #this will constrain the null communities by species richness and species frequency
