@@ -298,7 +298,7 @@ nfsor <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes/fbeta_sor.csv", r
 #allows comparison among sites with different numbers of species
 
 
-##calculate SES values for each metric
+#calculate SES values for each metric----
 
 ## community weighted means
 ## body length
@@ -361,7 +361,7 @@ SES_ori_0
 SES_ori_1 <- (cwm.obs$ori_1 - apply(nori_1, MARGIN = 1, mean)) / apply(nori_1, MARGIN = 1, sd, na.rm=T)
 SES_ori_1
 
-## taxonomic beta diversity
+## taxonomic beta diversity----
 beta.sor <- as.matrix(b.dist$beta.sor)
 beta.sor <- colMeans(beta.sor)
 
@@ -385,7 +385,7 @@ SES_bsim
 SES_bsne <- (beta.t$beta.sne - apply(nbsne, MARGIN = 1, mean)) / apply(nbsne, MARGIN = 1, sd, na.rm=T)
 SES_bsne
 
-## functional diversity
+## functional diversity----
 fbeta.sor <- as.matrix(b.fun$funct.beta.sor)
 fbeta.sor <- colMeans(fbeta.sor)
 
@@ -423,8 +423,8 @@ write.csv(SES.all, file = "SES_Local.csv")
 #import the SES data
 SES.all <- read.csv("./SES_Local.csv", row.names = 1)
 
-## import the landscape data
-land <- read.csv("./landscape.csv", row.names = 1)
+# import the landscape data-----
+land <- read.csv("./landscape.localanalysis.csv", row.names = 1)
 str(land)
 
 land$trmt <- as.factor(land$trmt)
@@ -441,13 +441,16 @@ str(SES)
 farm <- SES[which(SES$trmt == "Farm"),]
 str(farm)
 
+control <- SES[which(SES$trmt == "Control"),]
+str(control)
+
 T1 <- SES[which(SES$trmt == "T1"),]
 str(T1)
 
 T8 <- SES[which(SES$trmt == "T8"),]
 str(T8)
 
-
+#Loading more needed packages----
 if (!suppressWarnings(require(nortest))) install.packages("nortest")
 citation("nortest")
 
