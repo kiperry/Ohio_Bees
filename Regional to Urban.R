@@ -7,7 +7,7 @@
 # CWM and Functional Diversity - Null Models
 #
 # KI Perry; 20 July 2021
-#does this work? 
+# CA Shepard: 26 September 2022 
 ###################################################################################
 
 t <- read.csv("./btraits_final.csv", row.names=1)
