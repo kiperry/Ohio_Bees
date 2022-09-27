@@ -489,7 +489,7 @@ dotchart(land$enn, pch = 19)
 plot(land[2:4], pch = 19)
 cor(land[2:4], method = c("pearson"), use = "complete.obs")
 
-## now let's compare by treatment----
+# now let's compare by treatment----
 
 ## body length
 hist(SES$SES_bl)
@@ -532,7 +532,8 @@ AICctab(bl.mod.full, bl.mod.null)
 
 
 
-## lec_0 - Kleptoparasitic
+## lecty---- 
+##lec_0- Kleptoparasitic
 hist(SES$SES_lec_0)
 plot(SES$SES_lec_0, ylim = c(-3.5, 0.5))
 abline(h = 0.0, col = "black", lwd = 3, lty=2)
@@ -542,6 +543,8 @@ abline(h = 0.0, col = "black", lwd = 3, lty=2)
 ## compare to null expectations by treatment
 lec_0.farm <- wilcox.test(farm$SES_lec_0, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 lec_0.farm
+lec_0.control <- wilcox.test(control$SES_lec_0, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
+lec_0.control
 lec_0.t1 <- wilcox.test(T1$SES_lec_0, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 lec_0.t1
 lec_0.t8 <- wilcox.test(T8$SES_lec_0, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
@@ -583,6 +586,8 @@ abline(h = 0.0, col = "black", lwd = 3, lty=2)
 ## compare to null expectations by treatment
 lec_1.farm <- wilcox.test(farm$SES_lec_1, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 lec_1.farm
+lec_1.control <- wilcox.test(control$SES_lec_1, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
+lec_1.control
 lec_1.t1 <- wilcox.test(T1$SES_lec_1, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 lec_1.t1
 lec_1.t8 <- wilcox.test(T8$SES_lec_1, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
@@ -635,6 +640,8 @@ abline(h = 0.0, col = "black", lwd = 3, lty=2)
 ## compare to null expectations by treatment
 lec_2.farm <- wilcox.test(farm$SES_lec_2, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 lec_2.farm
+lec_2.control <- wilcox.test(control$SES_lec_2, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
+lec_2.control
 lec_2.t1 <- wilcox.test(T1$SES_lec_2, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 lec_2.t1
 lec_2.t8 <- wilcox.test(T8$SES_lec_2, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
@@ -673,7 +680,7 @@ anova(lec_2.mod.full, lec_2.mod.red, lec_2.mod.null, test = "F")
 AICctab(lec_2.mod.full, lec_2.mod.red, lec_2.mod.null)
 
 
-
+##Nesting----
 ## nest_1 - Soil
 hist(SES$SES_nest_1)
 plot(SES$SES_nest_1)
@@ -684,6 +691,8 @@ abline(h = 0.0, col = "black", lwd = 3, lty=2)
 ## compare to null expectations by treatment
 nest_1.farm <- wilcox.test(farm$SES_nest_1, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 nest_1.farm
+nest_1.control <- wilcox.test(control$SES_nest_1, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
+nest_1.control
 nest_1.t1 <- wilcox.test(T1$SES_nest_1, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 nest_1.t1
 nest_1.t8 <- wilcox.test(T8$SES_nest_1, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
@@ -739,6 +748,8 @@ abline(h = 0.0, col = "black", lwd = 3, lty=2)
 ## compare to null expectations by treatment
 nest_2.farm <- wilcox.test(farm$SES_nest_2, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 nest_2.farm
+nest_2.control <- wilcox.test(control$SES_nest_2, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
+nest_2.control
 nest_2.t1 <- wilcox.test(T1$SES_nest_2, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 nest_2.t1
 nest_2.t8 <- wilcox.test(T8$SES_nest_2, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
@@ -786,6 +797,8 @@ abline(h = 0.0, col = "black", lwd = 3, lty=2)
 ## compare to null expectations by treatment
 nest_3.farm <- wilcox.test(farm$SES_nest_3, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 nest_3.farm
+nest_3.control <- wilcox.test(control$SES_nest_3, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
+nest_3.control
 nest_3.t1 <- wilcox.test(T1$SES_nest_3, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 nest_3.t1
 nest_3.t8 <- wilcox.test(T8$SES_nest_3, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
@@ -833,6 +846,8 @@ abline(h = 0.0, col = "black", lwd = 3, lty=2)
 ## compare to null expectations by treatment
 nest_4.farm <- wilcox.test(farm$SES_nest_4, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 nest_4.farm
+nest_4.control <- wilcox.test(control$SES_nest_4, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
+nest_4.control
 nest_4.t1 <- wilcox.test(T1$SES_nest_4, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 nest_4.t1
 nest_4.t8 <- wilcox.test(T8$SES_nest_4, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
@@ -879,6 +894,8 @@ abline(h = 0.0, col = "black", lwd = 3, lty=2)
 ## compare to null expectations by treatment
 nest_5.farm <- wilcox.test(farm$SES_nest_5, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 nest_5.farm
+nest_5.control <- wilcox.test(control$SES_nest_5, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
+nest_5.control
 nest_5.t1 <- wilcox.test(T1$SES_nest_5, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 nest_5.t1
 nest_5.t8 <- wilcox.test(T8$SES_nest_5, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
@@ -915,7 +932,7 @@ anova(nest_5.mod.full, nest_5.mod.red, nest_5.mod.null)
 AICctab(nest_5.mod.full, nest_5.mod.red, nest_5.mod.null)
 
 
-
+##Sociality----
 ## soc_1 - Subsocial
 hist(SES$SES_soc_1)
 plot(SES$SES_soc_1)
@@ -926,6 +943,8 @@ abline(h = 0.0, col = "black", lwd = 3, lty=2)
 ## compare to null expectations by treatment
 soc_1.farm <- wilcox.test(farm$SES_soc_1, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 soc_1.farm
+soc_1.control <- wilcox.test(control$SES_soc_1, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
+soc_1.control
 soc_1.t1 <- wilcox.test(T1$SES_soc_1, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 soc_1.t1
 soc_1.t8 <- wilcox.test(T8$SES_soc_1, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
@@ -974,6 +993,8 @@ abline(h = 0.0, col = "black", lwd = 3, lty=2)
 ## compare to null expectations by treatment
 soc_2.farm <- wilcox.test(farm$SES_soc_2, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 soc_2.farm
+soc_2.control <- wilcox.test(control$SES_soc_2, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
+soc_2.control
 soc_2.t1 <- wilcox.test(T1$SES_soc_2, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 soc_2.t1
 soc_2.t8 <- wilcox.test(T8$SES_soc_2, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
@@ -1025,6 +1046,8 @@ abline(h = 0.0, col = "black", lwd = 3, lty=2)
 ## compare to null expectations by treatment
 soc_3.farm <- wilcox.test(farm$SES_soc_3, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 soc_3.farm
+soc_3.control <- wilcox.test(control$SES_soc_3, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
+soc_3.control
 soc_3.t1 <- wilcox.test(T1$SES_soc_3, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 soc_3.t1
 soc_3.t8 <- wilcox.test(T8$SES_soc_3, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
@@ -1066,6 +1089,8 @@ abline(h = 0.0, col = "black", lwd = 3, lty=2)
 ## compare to null expectations by treatment
 soc_4.farm <- wilcox.test(farm$SES_soc_4, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 soc_4.farm
+soc_4.control <- wilcox.test(control$SES_soc_4, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
+soc_4.control
 soc_4.t1 <- wilcox.test(T1$SES_soc_4, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 soc_4.t1
 soc_4.t8 <- wilcox.test(T8$SES_soc_4, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
@@ -1095,7 +1120,7 @@ anova(soc_4.mod.full, soc_4.mod.null)
 AICctab(soc_4.mod.full, soc_4.mod.null)
 
 
-
+##Origin----
 ## ori_0 - Native
 hist(SES$SES_ori_0)
 plot(SES$SES_ori_0)
@@ -1106,6 +1131,8 @@ abline(h = 0.0, col = "black", lwd = 3, lty=2)
 ## compare to null expectations by treatment
 ori_0.farm <- wilcox.test(farm$SES_ori_0, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 ori_0.farm
+ori_0.control <- wilcox.test(control$SES_ori_0, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
+ori_0.control
 ori_0.t1 <- wilcox.test(T1$SES_ori_0, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 ori_0.t1
 ori_0.t8 <- wilcox.test(T8$SES_ori_0, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
@@ -1152,6 +1179,8 @@ abline(h = 0.0, col = "black", lwd = 3, lty=2)
 ## compare to null expectations by treatment
 ori_1.farm <- wilcox.test(farm$SES_ori_1, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 ori_1.farm
+ori_1.control <- wilcox.test(control$SES_ori_1, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
+ori_1.control
 ori_1.t1 <- wilcox.test(T1$SES_ori_1, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 ori_1.t1
 ori_1.t8 <- wilcox.test(T8$SES_ori_1, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
@@ -1187,7 +1216,7 @@ anova(ori_1.mod.full, ori_1.mod.red, ori_1.mod.null)
 AICctab(ori_1.mod.full, ori_1.mod.red, ori_1.mod.null)
 
 
-
+##taxonomic diversity----
 ## taxonomic diveristy - beta sor
 hist(SES$SES_bsor)
 plot(SES$SES_bsor, ylim = c(-0.5, 8))
@@ -1198,6 +1227,8 @@ abline(h = 0.0, col = "black", lwd = 3, lty=2)
 ## compare to null expectations by treatment
 bsor.farm <- wilcox.test(farm$SES_bsor, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 bsor.farm
+bsor.control <- wilcox.test(control$SES_bsor, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
+bsor.control
 bsor.t1 <- wilcox.test(T1$SES_bsor, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 bsor.t1
 bsor.t8 <- wilcox.test(T8$SES_bsor, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
@@ -1244,6 +1275,8 @@ abline(h = 0.0, col = "black", lwd = 3, lty=2)
 ## compare to null expectations by treatment
 bsim.farm <- wilcox.test(farm$SES_bsim, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 bsim.farm
+bsim.control <- wilcox.test(control$SES_bsim, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
+bsim.control
 bsim.t1 <- wilcox.test(T1$SES_bsim, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 bsim.t1
 bsim.t8 <- wilcox.test(T8$SES_bsim, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
@@ -1290,6 +1323,8 @@ abline(h = 0.0, col = "black", lwd = 3, lty=2)
 ## compare to null expectations by treatment
 bsne.farm <- wilcox.test(farm$SES_bsne, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 bsne.farm
+bsne.control <- wilcox.test(control$SES_bsne, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
+bsne.control
 bsne.t1 <- wilcox.test(T1$SES_bsne, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 bsne.t1
 bsne.t8 <- wilcox.test(T8$SES_bsne, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
@@ -1320,7 +1355,7 @@ AICctab(bsne.mod.full, bsne.mod.null)
 
 
 
-## functional alpha diversity
+## functional alpha diversity----
 hist(SES$SES_falpha)
 plot(SES$SES_falpha)
 abline(h = 0.0, col = "black", lwd = 3, lty=2)
@@ -1330,6 +1365,8 @@ abline(h = 0.0, col = "black", lwd = 3, lty=2)
 ## compare to null expectations by treatment
 falpha.farm <- wilcox.test(farm$SES_falpha, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 falpha.farm
+falpha.control <- wilcox.test(control$SES_falpha, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
+falpha.control
 falpha.t1 <- wilcox.test(T1$SES_falpha, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 falpha.t1
 falpha.t8 <- wilcox.test(T8$SES_falpha, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
@@ -1366,7 +1403,7 @@ anova(falpha.mod.full, falpha.mod.red, falpha.mod.null)
 AICtab(falpha.mod.full, falpha.mod.red, falpha.mod.null)
 
 
-
+##Functional beta div----
 ## functional beta diversity - beta sor
 hist(SES$SES_fbsor)
 plot(SES$SES_fbsor, ylim = c(-0.5, 6.5))
@@ -1377,6 +1414,8 @@ abline(h = 0.0, col = "black", lwd = 3, lty=2)
 ## compare to null expectations by treatment
 fbsor.farm <- wilcox.test(farm$SES_fbsor, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 fbsor.farm
+fbsor.control <- wilcox.test(control$SES_fbsor, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
+fbsor.control
 fbsor.t1 <- wilcox.test(T1$SES_fbsor, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 fbsor.t1
 fbsor.t8 <- wilcox.test(T8$SES_fbsor, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
@@ -1424,6 +1463,8 @@ abline(h = 0.0, col = "black", lwd = 3, lty=2)
 ## compare to null expectations by treatment
 fbsim.farm <- wilcox.test(farm$SES_fbsim, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 fbsim.farm
+fbsim.control <- wilcox.test(control$SES_fbsim, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
+fbsim.control
 fbsim.t1 <- wilcox.test(T1$SES_fbsim, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 fbsim.t1
 fbsim.t8 <- wilcox.test(T8$SES_fbsim, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
@@ -1464,6 +1505,8 @@ abline(h = 0.0, col = "black", lwd = 3, lty=2)
 ## compare to null expectations by treatment
 fbsne.farm <- wilcox.test(farm$SES_fbsne, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 fbsne.farm
+fbsne.control <- wilcox.test(control$SES_fbsne, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
+fbsne.control
 fbsne.t1 <- wilcox.test(T1$SES_fbsne, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 fbsne.t1
 fbsne.t8 <- wilcox.test(T8$SES_fbsne, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
