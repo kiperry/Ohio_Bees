@@ -482,14 +482,14 @@ if (!suppressWarnings(require(interactions))) install.packages("interactions")
 citation("interactions")
 
 
-## check relationships among landscape variables
+## check relationships among landscape variables----
 dotchart(land$pland, pch = 19)
 dotchart(land$lpi, pch = 19)
 dotchart(land$enn, pch = 19)
 plot(land[2:4], pch = 19)
 cor(land[2:4], method = c("pearson"), use = "complete.obs")
 
-## now let's compare by treatment
+## now let's compare by treatment----
 
 ## body length
 hist(SES$SES_bl)
@@ -501,6 +501,8 @@ abline(h = 0.0, col = "black", lwd = 3, lty=2)
 ## compare to null expectations by treatment
 bl.farm <- wilcox.test(farm$SES_bl, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 bl.farm
+bl.control <- wilcox.test(control$SES_bl, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
+bl.control
 bl.t1 <- wilcox.test(T1$SES_bl, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 bl.t1
 bl.t8 <- wilcox.test(T8$SES_bl, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
