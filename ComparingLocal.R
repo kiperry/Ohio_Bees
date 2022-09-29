@@ -291,16 +291,14 @@ nfsim <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes/fbeta_sim.csv", r
 nfsne <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes/fbeta_sne.csv", row.names=1)
 nfsor <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes/fbeta_sor.csv", row.names=1)
 
-## SES Calculations
+# SES Calculations----
 #calculate standardized effect sizes (SES) for each trait and index
 #the effect size is the difference between the observed value and the expected one
 #then divide the effect size by the standard deviation of the null distribution to get the standardized effect size
 #allows comparison among sites with different numbers of species
 
 
-#calculate SES values for each metric----
-
-## community weighted means
+## community weighted means----
 ## body length
 SES_bl <- (cwm.obs$bl - apply(nbl, MARGIN = 1, mean)) / apply(nbl, MARGIN = 1, sd, na.rm=T)
 SES_bl
