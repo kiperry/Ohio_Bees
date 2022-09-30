@@ -508,6 +508,35 @@ bl.t8
 
 ## compare among treatments and landscape variables
 dotchart(SES$SES_bl, group = SES$trmt, pch = 19)
+
+##Need to write code for not comparing all at once----
+
+#Thus far I have found several ways that do not work.
+SES_bl ~ trmt
+farm$SES_bl
+FS_bl<-rbind(farm$SES_bl, control$SES_bl)
+FS_bl<as.matrix(FS_bl)
+<-SES[which(SES$SES_bl, group=S[[trmt=="Farm"& "Control"]])]
+farm <- a[which(a$trmt == "Farm"),]
+str(farm)
+Control <- a[which(a$trmt == "Control"),]
+str(Control)
+T1 <- a[which(a$trmt == "T1"),]
+str(T1)
+T8 <- a[which(a$trmt == "T8"),]
+str(T8)
+
+# create new dataset with only farm, Control, t1, and t8 treatments
+a <- rbind(farm, Control,T1, T8)
+str(a)
+
+a <- a[2:360]
+str(a)
+rowSums(a1[2:360])
+
+
+
+#back to normal comparisons 
 with(SES, bartlett.test(SES_bl ~ trmt))
 with(SES, ad.test(SES_bl))
 
