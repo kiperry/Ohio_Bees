@@ -510,31 +510,29 @@ bl.t8
 dotchart(SES$SES_bl, group = SES$trmt, pch = 19)
 
 ##Need to write code for not comparing all at once----
+FS_bl <- as.data.frame(cbind(farm$SES_bl, control$SES_bl))
+#okay that makes a matrix, but it doesn't work because the different treatments have different locations. can't be compared equally
+FS_comps<-SES[1:29,]
+FS_comps<-FS_comps[-3,]
+FS_comps<-FS_comps[-3,]
+FS_comps<-FS_comps[-13,]
+FS_comps<-FS_comps[-13,]
+FS_comps<-FS_comps[-13,]
+FS_comps<-FS_comps[-13,]
 
-#Thus far I have found several ways that do not work.
-SES_bl ~ trmt
-farm$SES_bl
-FS_bl<-rbind(farm$SES_bl, control$SES_bl)
-FS_bl<as.matrix(FS_bl)
-<-SES[which(SES$SES_bl, group=S[[trmt=="Farm"& "Control"]])]
-farm <- a[which(a$trmt == "Farm"),]
-str(farm)
-Control <- a[which(a$trmt == "Control"),]
-str(Control)
-T1 <- a[which(a$trmt == "T1"),]
-str(T1)
-T8 <- a[which(a$trmt == "T8"),]
-str(T8)
-
-# create new dataset with only farm, Control, t1, and t8 treatments
-a <- rbind(farm, Control,T1, T8)
-str(a)
-
-a <- a[2:360]
-str(a)
-rowSums(a1[2:360])
-
-
+FS_comps<-FS_comps[-14,]
+FS_comps<-FS_comps[-14,]
+FS_comps<-FS_comps[-15,]
+FS_comps<-FS_comps[-15,]
+FS_comps<-FS_comps[-15,]
+FS_comps<-FS_comps[-15,]
+#Okay so the above created a matrix of Francis' results
+with(FS_comps, bartlett.test(SES_bl ~ trmt))
+#####IT WORKS!!!!!
+#Okay so to do
+#1- make a matrix of Katie results
+#2- Make a matrix of both vacant lot results
+#rewrite code for comparisons to be about each thing
 
 #back to normal comparisons 
 with(SES, bartlett.test(SES_bl ~ trmt))
