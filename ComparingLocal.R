@@ -509,9 +509,10 @@ bl.t8
 ## compare among treatments and landscape variables
 dotchart(SES$SES_bl, group = SES$trmt, pch = 19)
 
-##Need to write code for not comparing all at once----
+##Below is code for not comparing all at once----
 #Don't do this code# FS_bl <- as.data.frame(cbind(farm$SES_bl, control$SES_bl))
 #The above makes a matrix, but it doesn't work because the different treatments have different locations. can't be compared equally
+#The below takes more time, but it works okay. I am pulling out data site by site to build the matrix I want
 FS_comps<-SES[1:29,]
 FS_comps<-FS_comps[-3,]
 FS_comps<-FS_comps[-3,]
@@ -565,10 +566,37 @@ VL_comps<-VL_comps[-18,]
 VL_comps<-VL_comps[-15,]
 #rewrite code for comparisons to be about each thing
 
-#back to normal comparisons 
+#back to comparisons of body length----
 with(FS_comps, bartlett.test(SES_bl ~ trmt))
-with(SES, bartlett.test(SES_bl ~ trmt))
-with(SES, ad.test(SES_bl))
+with(KT_comps, bartlett.test(SES_bl ~ trmt))
+with(VL_comps, bartlett.test(SES_bl ~ trmt))
+with(FS_comps, ad.test(SES_bl))
+with(KT_comps, ad.test(SES_bl))
+with(VL_comps, ad.test(SES_bl))
+
+FS_bl.mod.full <- glm(SES_bl ~ trmt + pland + lpi + enn, family = gaussian, data = FS_comps)
+summary(FS_bl.mod.full)
+step(FS_bl.mod.full)
+
+FS_bl.mod.red <- glm(SES_bl ~ pland + lpi + enn, family = gaussian, data = FS_comps)
+summary(FS_bl.mod.red)
+qqnorm(resid(FS_bl.mod.red))
+qqline(resid(FS_bl.mod.red))
+plot(simulateResiduals(FS_bl.mod.red))
+densityPlot(rstudent(FS_bl.mod.red)) # check density estimate of the distribution of residuals
+outlierTest(FS_bl.mod.red)
+influenceIndexPlot(FS_bl.mod.red, vars = c("Cook"), id = list(n = 3))
+#It doesn't look like there really is an outlier with Bonferroini
+
+
+FS_bl.mod.null <- glm(SES_bl ~ 1, family = gaussian, data = FS_comps)
+
+# model comparison techniques
+anova(FS_bl.mod.full, FS_bl.mod.red, FS_bl.mod.null, test = "F")
+AICctab(FS_bl.mod.full, FS_bl.mod.red, FS_bl.mod.null)
+
+Anova(FS_bl.mod.red)
+
 
 bl.mod.full <- glm(SES_bl ~ trmt + pland + lpi + enn, family = gaussian, data = SES)
 summary(bl.mod.full)
