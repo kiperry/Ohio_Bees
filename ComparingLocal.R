@@ -510,8 +510,8 @@ bl.t8
 dotchart(SES$SES_bl, group = SES$trmt, pch = 19)
 
 ##Need to write code for not comparing all at once----
-FS_bl <- as.data.frame(cbind(farm$SES_bl, control$SES_bl))
-#okay that makes a matrix, but it doesn't work because the different treatments have different locations. can't be compared equally
+#Don't do this code# FS_bl <- as.data.frame(cbind(farm$SES_bl, control$SES_bl))
+#The above makes a matrix, but it doesn't work because the different treatments have different locations. can't be compared equally
 FS_comps<-SES[1:29,]
 FS_comps<-FS_comps[-3,]
 FS_comps<-FS_comps[-3,]
@@ -526,15 +526,47 @@ FS_comps<-FS_comps[-15,]
 FS_comps<-FS_comps[-15,]
 FS_comps<-FS_comps[-15,]
 FS_comps<-FS_comps[-15,]
+FS_comps
 #Okay so the above created a matrix of Francis' results
 with(FS_comps, bartlett.test(SES_bl ~ trmt))
 #####IT WORKS!!!!!
 #Okay so to do
 #1- make a matrix of Katie results
+KT_comps<-SES[3:33,]
+KT_comps<-KT_comps[-3,]
+KT_comps<-KT_comps[-3,]
+KT_comps<-KT_comps[-3,]
+KT_comps<-KT_comps[-3,]
+KT_comps<-KT_comps[-3,]
+KT_comps<-KT_comps[-3,]
+KT_comps<-KT_comps[-3,]
+KT_comps<-KT_comps[-3,]
+KT_comps<-KT_comps[-3,]
+KT_comps<-KT_comps[-3,]
+KT_comps<-KT_comps[-7,]
+KT_comps<-KT_comps[-9,]
+KT_comps<-KT_comps[-13,]
+KT_comps<-KT_comps[-13,]
+KT_comps<-KT_comps[-13,]
 #2- Make a matrix of both vacant lot results
+VL_comps<-SES[3:32,]
+VL_comps<-VL_comps[-2,]
+VL_comps<-VL_comps[-2,]
+VL_comps<-VL_comps[-12,]
+VL_comps<-VL_comps[-13,]
+VL_comps<-VL_comps[-20,]
+VL_comps<-VL_comps[-20,]
+VL_comps<-VL_comps[-20,]
+VL_comps<-VL_comps[-20,]
+VL_comps<-VL_comps[-13,]
+VL_comps<-VL_comps[-14,]
+VL_comps<-VL_comps[-14,]
+VL_comps<-VL_comps[-18,]
+VL_comps<-VL_comps[-15,]
 #rewrite code for comparisons to be about each thing
 
 #back to normal comparisons 
+with(FS_comps, bartlett.test(SES_bl ~ trmt))
 with(SES, bartlett.test(SES_bl ~ trmt))
 with(SES, ad.test(SES_bl))
 
