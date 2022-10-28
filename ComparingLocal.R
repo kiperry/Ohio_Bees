@@ -528,6 +528,17 @@ FS_comps<-FS_comps[-15,]
 FS_comps<-FS_comps[-15,]
 FS_comps<-FS_comps[-15,]
 FS_comps
+
+
+#yep, you can also do it this way
+f.farm <- SES[which(SES$trmt == "Farm"),]
+str(f.farm)
+
+f.control <- SES[which(SES$trmt == "Control"),]
+str(f.control)
+
+FS_comps <- as.data.frame(rbind(f.control, f.farm))#here you bind by rows rather than columns (like the code above)
+
 #Okay so the above created a matrix of Francis' results
 with(FS_comps, bartlett.test(SES_bl ~ trmt))
 #####IT WORKS!!!!!
@@ -614,22 +625,20 @@ influenceIndexPlot(KT_bl.mod.null, vars = c("Cook"), id = list(n = 3))
 anova(KT_bl.mod.full, KT_bl.mod.null, test = "F")
 AICctab(KT_bl.mod.full, KT_bl.mod.null)
 
-VL_bl.mod.full <- glm(SES_bl ~ trmt + pland + lpi + enn, family = gaussian, data = VL_comps)
-summary(VL_bl.mod.full)
-step(VL_bl.mod.full)
+VL_bl.mod <- glm(SES_bl ~ trmt, family = gaussian, data = VL_comps)
+summary(VL_bl.mod)
+Anova(VL_bl.mod, test = "F")
 
-VL_bl.mod.null <- glm(SES_bl ~ 1, family = gaussian, data = VL_comps)
-summary(VL_bl.mod.null)
-qqnorm(resid(VL_bl.mod.null))
-qqline(resid(VL_bl.mod.null))
+qqnorm(resid(VL_bl.mod))
+qqline(resid(VL_bl.mod))
 plot(simulateResiduals(VL_bl.mod.null))
-densityPlot(rstudent(VL_bl.mod.null)) # check density estimate of the distribution of residuals
-outlierTest(VL_bl.mod.null)
-influenceIndexPlot(VL_bl.mod.null, vars = c("Cook"), id = list(n = 3))
+densityPlot(rstudent(VL_bl.mod)) # check density estimate of the distribution of residuals
+outlierTest(VL_bl.mod)
+influenceIndexPlot(VL_bl.mod, vars = c("Cook"), id = list(n = 3))
 
 # model comparison techniques
-anova(VL_bl.mod.full, VL_bl.mod.null, test = "F")
-AICctab(VL_bl.mod.full, VL_bl.mod.null)
+anova(VL_bl.mod, VL_bl.mod.null, test = "F")
+AICctab(VL_bl.mod, VL_bl.mod.null)
 
 
 
@@ -749,6 +758,7 @@ with(KT_comps, bartlett.test(SES_lec_1 ~ trmt))
 with(VL_comps, bartlett.test(SES_lec_1 ~ trmt))
 with(FS_comps, ad.test(SES_lec_1))
 #So normality test is failed. Not sure what to do about that.
+#I think that outlier is the cause. It is more than 2 standard devs from the rest of the data points
 with(KT_comps, ad.test(SES_lec_1))
 with(VL_comps, ad.test(SES_lec_1))
 
@@ -1027,7 +1037,7 @@ anova(KT_nest_1.mod.full, KT_nest_1.mod.red, KT_nest_1.mod.null, test = "F")
 AICctab(KT_nest_1.mod.full, KT_nest_1.mod.red, KT_nest_1.mod.null)
 
 
-
+kruskal.test(SES_nest_1 ~ trmt, data = VL_comps)
 
 
 
@@ -1315,7 +1325,8 @@ KT_nest_4.mod.null <- glm(SES_nest_4 ~ 1, family = gaussian, data = KT_comps)
 anova(KT_nest_4.mod.full, KT_nest_4.mod.red, KT_nest_4.mod.null, test = "F")
 AICctab(KT_nest_4.mod.full, KT_nest_4.mod.red, KT_nest_4.mod.null)
 
-
+kruskal.test(SES_nest_4 ~ trmt, data = VL_comps)#for the vacant lot comparison, you can use a kruskal-wallis test
+#if the data violate the normality or homogeneity assumptions. Kruskal-wallis is a non-parametric test
 
 
 ### nest_5 - Wood----
@@ -1624,6 +1635,8 @@ plot(simulateResiduals(VL_soc_2.mod.null))
 densityPlot(rstudent(VL_soc_2.mod.null)) # check density estimate of the distribution of residuals
 outlierTest(VL_soc_2.mod.null)
 influenceIndexPlot(VL_soc_2.mod.null, vars = c("Cook"), id = list(n = 3))
+
+kruskal.test(SES_soc_2 ~ trmt, data = VL_comps)
 
 # model comparison techniques
 anova(VL_soc_2.mod.full, VL_soc_2.mod.null)
