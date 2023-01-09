@@ -2146,35 +2146,92 @@ bsor.t8
 
 ## compare among treatments and landscape variables
 dotchart(SES$SES_bsor, group = SES$trmt, pch = 19)
-with(SES, bartlett.test(SES_bsor ~ trmt))
-with(SES, ad.test(SES_bsor))
+with(FS_comps, bartlett.test(SES_bsor ~ trmt))
+with(KT_comps, bartlett.test(SES_bsor ~ trmt))
+with(VL_comps, bartlett.test(SES_bsor ~ trmt))
+with(FS_comps, ad.test(SES_bsor))
+with(KT_comps, ad.test(SES_bsor))
+with(VL_comps, ad.test(SES_bsor))
 
-bsor.mod.full <- glm(SES_bsor ~ trmt + pland + lpi + enn, family = gaussian, data = SES)
-summary(bsor.mod.full)
-step(bsor.mod.full)
 
-bsor.mod.red <- glm(SES_bsor ~ enn, family = gaussian, data = SES)
-summary(bsor.mod.red)
-qqnorm(resid(bsor.mod.red))
-qqline(resid(bsor.mod.red))
-plot(simulateResiduals(bsor.mod.red))
-densityPlot(rstudent(bsor.mod.red)) # check density estimate of the distribution of residuals
-outlierTest(bsor.mod.red)
-influenceIndexPlot(bsor.mod.red, vars = c("Cook"), id = list(n = 3))
+FS_bsor.mod.full <- glm(SES_bsor ~ trmt + pland + lpi + enn, family = gaussian, data = FS_comps)
+summary(FS_bsor.mod.full)
+step(FS_bsor.mod.full)
 
-Anova(bsor.mod.red)
+FS_bsor.mod.null <- glm(SES_bsor ~ 1, family = gaussian, data = FS_comps)
+summary(FS_bsor.mod.null)
+qqnorm(resid(FS_bsor.mod.null))
+qqline(resid(FS_bsor.mod.null))
+plot(simulateResiduals(FS_bsor.mod.null))
+densityPlot(rstudent(FS_bsor.mod.null)) # check density estimate of the distribution of residuals
+outlierTest(FS_bsor.mod.null)
+influenceIndexPlot(FS_soc_4.mod.null, vars = c("Cook"), id = list(n = 3))
 
-effect_plot(bsor.mod.red, pred = enn, interval = TRUE, partial.residuals = TRUE, x.label = 'Greenspace Isolation (ENN)', y.label = 'Standardized Effect Sizes (SES)')
-
-bsor.mod.null <- glm(SES_bsor ~ 1, family = gaussian, data = SES)
 
 # model comparison techniques
-anova(bsor.mod.full, bsor.mod.red, bsor.mod.null)
-AICctab(bsor.mod.full, bsor.mod.red, bsor.mod.null)
+anova(FS_bsor.mod.full, FS_bsor.mod.null)
+AICctab(FS_bsor.mod.full, FS_bsor.mod.null)
 
 
+KT_bsor.mod.full <- glm(SES_bsor ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
+summary(KT_bsor.mod.full)
+step(KT_bsor.mod.full)
 
-## taxonomic diveristy - beta sim
+KT_bsor.mod.red <- glm(SES_bsor ~ enn, family = gaussian, data = KT_comps)
+summary(KT_bsor.mod.red)
+qqnorm(resid(KT_bsor.mod.red))
+qqline(resid(KT_bsor.mod.red))
+plot(simulateResiduals(KT_bsor.mod.red))
+#Quantile deviations detected
+densityPlot(rstudent(KT_bsor.mod.red)) # check density estimate of the distribution of residuals
+outlierTest(KT_bsor.mod.red)
+influenceIndexPlot(KT_bsor.mod.red, vars = c("Cook"), id = list(n = 3))
+
+KT_bsor.mod.null <- glm(SES_bsor ~ 1, family = gaussian, data = KT_comps)
+
+# model comparison techniques
+anova(KT_bsor.mod.full, KT_bsor.mod.red, KT_bsor.mod.null)
+AICctab(KT_bsor.mod.full, KT_bsor.mod.red, KT_bsor.mod.null)
+
+#Finding effect values of model
+Anova(KT_bsor.mod.red)
+
+effect_plot(KT_bsor.mod.red, pred = enn, interval = TRUE, partial.residuals = TRUE, x.label = 'Greenspace Isolation (ENN)', y.label = 'Standardized Effect Sizes (SES)')
+
+
+VL_bsor.mod.full <- glm(SES_bsor ~ trmt + pland + lpi + enn, family = gaussian, data = VL_comps)
+summary(VL_bsor.mod.full)
+step(VL_bsor.mod.full)
+
+VL_bsor.mod.red <- glm(SES_bsor ~ lpi+enn, family = gaussian, data = VL_comps)
+summary(VL_bsor.mod.red)
+qqnorm(resid(VL_bsor.mod.red))
+qqline(resid(VL_bsor.mod.red))
+plot(simulateResiduals(VL_bsor.mod.red))
+#Quantile deviations detected again
+densityPlot(rstudent(VL_bsor.mod.red)) # check density estimate of the distribution of residuals
+outlierTest(VL_bsor.mod.red)
+influenceIndexPlot(VL_bsor.mod.red, vars = c("Cook"), id = list(n = 3))
+#Cook's distance over .8. Not officially an outlier, but I wonder if its removal would remove the quantile deviation
+VL_bsor.mod.red2 <- update(VL_bsor.mod.red, subset = -c(32))
+plot(simulateResiduals(VL_bsor.mod.red2))
+influenceIndexPlot(VL_bsor.mod.red2, vars = c("Cook"), id = list(n = 3))
+#The point didn't go away. Which is weird
+
+VL_bsor.mod.null <- glm(SES_bsor ~ 1, family = gaussian, data = VL_comps)
+
+# model comparison techniques
+anova(VL_bsor.mod.full, VL_bsor.mod.red, VL_bsor.mod.null)
+AICctab(VL_bsor.mod.full, VL_bsor.mod.red, VL_bsor.mod.null)
+
+#Finding effect values of model
+Anova(VL_bsor.mod.red)
+
+effect_plot(VL_bsor.mod.red, pred = lpi, interval = TRUE, partial.residuals = TRUE, x.label = 'Largest Patch Index (LPI)', y.label = 'Standardized Effect Sizes (SES)')
+effect_plot(VL_bsor.mod.red, pred = enn, interval = TRUE, partial.residuals = TRUE, x.label = 'Greenspace Isolation (ENN)', y.label = 'Standardized Effect Sizes (SES)')
+
+
+### taxonomic diveristy - beta sim----
 hist(SES$SES_bsim)
 plot(SES$SES_bsim)
 abline(h = 0.0, col = "black", lwd = 3, lty=2)
@@ -2194,35 +2251,79 @@ bsim.t8
 
 ## compare among treatments and landscape variables
 dotchart(SES$SES_bsim, group = SES$trmt, pch = 19)
-with(SES, bartlett.test(SES_bsim ~ trmt))
-with(SES, ad.test(SES_bsim))
+with(FS_comps, bartlett.test(SES_bsim ~ trmt))
+with(KT_comps, bartlett.test(SES_bsim ~ trmt))
+with(VL_comps, bartlett.test(SES_bsim ~ trmt))
+with(FS_comps, ad.test(SES_bsim))
+with(KT_comps, ad.test(SES_bsim))
+with(VL_comps, ad.test(SES_bsim))
 
-bsim.mod.full <- glm(SES_bsim ~ trmt + pland + lpi + enn, family = gaussian, data = SES)
-summary(bsim.mod.full)
-step(bsim.mod.full)
 
-bsim.mod.red <- glm(SES_bsim ~ enn, family = gaussian, data = SES)
-summary(bsim.mod.red)
-qqnorm(resid(bsim.mod.red))
-qqline(resid(bsim.mod.red))
-plot(simulateResiduals(bsim.mod.red))
-densityPlot(rstudent(bsim.mod.red)) # check density estimate of the distribution of residuals
-outlierTest(bsim.mod.red)
-influenceIndexPlot(bsim.mod.red, vars = c("Cook"), id = list(n = 3))
+FS_bsim.mod.full <- glm(SES_bsim ~ trmt + pland + lpi + enn, family = gaussian, data = FS_comps)
+summary(FS_bsim.mod.full)
+step(FS_bsim.mod.full)
 
-Anova(bsim.mod.red)
+FS_bsim.mod.red <- glm(SES_bsim ~ trmt+enn, family = gaussian, data = FS_comps)
+summary(FS_bsim.mod.red)
+qqnorm(resid(FS_bsim.mod.red))
+qqline(resid(FS_bsim.mod.red))
+plot(simulateResiduals(FS_bsim.mod.red))
+densityPlot(rstudent(FS_bsim.mod.red)) # check density estimate of the distribution of residuals
+outlierTest(FS_bsim.mod.red)
+influenceIndexPlot(FS_bsim.mod.red, vars = c("Cook"), id = list(n = 3))
 
-effect_plot(bsim.mod.red, pred = enn, interval = TRUE, partial.residuals = TRUE, x.label = 'Greenspace Isolation (ENN)', y.label = 'Standardized Effect Sizes (SES)')
-
-bsim.mod.null <- glm(SES_bsim ~ 1, family = gaussian, data = SES)
+FS_bsim.mod.null <- glm(SES_bsim ~ 1, family = gaussian, data = FS_comps)
 
 # model comparison techniques
-anova(bsim.mod.full, bsim.mod.red, bsim.mod.null)
-AICctab(bsim.mod.full, bsim.mod.red, bsim.mod.null)
+anova(FS_bsim.mod.full, FS_bsim.mod.red, FS_bsim.mod.null)
+AICctab(FS_bsim.mod.full, FS_bsim.mod.red, FS_bsim.mod.null)
+#null was best model
 
+KT_bsim.mod.full <- glm(SES_bsim ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
+summary(KT_bsim.mod.full)
+step(KT_bsim.mod.full)
 
+KT_bsim.mod.red <- glm(SES_bsim ~ pland, family = gaussian, data = KT_comps)
+summary(KT_bsim.mod.red)
+qqnorm(resid(KT_bsim.mod.red))
+qqline(resid(KT_bsim.mod.red))
+plot(simulateResiduals(KT_bsim.mod.red))
+#Quantile deviations detected
+densityPlot(rstudent(KT_bsim.mod.red)) # check density estimate of the distribution of residuals
+outlierTest(KT_bsim.mod.red)
+influenceIndexPlot(KT_bsim.mod.red, vars = c("Cook"), id = list(n = 3))
 
-## taxonomic diveristy - beta sne
+KT_bsim.mod.null <- glm(SES_bsim ~ 1, family = gaussian, data = KT_comps)
+
+# model comparison techniques
+anova(KT_bsim.mod.full, KT_bsim.mod.red, KT_bsim.mod.null)
+AICctab(KT_bsim.mod.full, KT_bsim.mod.red, KT_bsim.mod.null)
+
+#null is best model
+
+VL_bsim.mod.full <- glm(SES_bsim ~ trmt + pland + lpi + enn, family = gaussian, data = VL_comps)
+summary(VL_bsim.mod.full)
+step(VL_bsim.mod.full)
+
+VL_bsim.mod.red <- glm(SES_bsim ~ trmt + enn, family = gaussian, data = VL_comps)
+summary(VL_bsim.mod.red)
+qqnorm(resid(VL_bsim.mod.red))
+qqline(resid(VL_bsim.mod.red))
+plot(simulateResiduals(VL_bsim.mod.red))
+#no sig problems detected
+densityPlot(rstudent(VL_bsim.mod.red)) # check density estimate of the distribution of residuals
+outlierTest(VL_bsim.mod.red)
+influenceIndexPlot(VL_bsim.mod.red, vars = c("Cook"), id = list(n = 3))
+
+VL_bsim.mod.null <- glm(SES_bsim ~ 1, family = gaussian, data = VL_comps)
+
+# model comparison techniques
+anova(VL_bsim.mod.full, VL_bsim.mod.red, VL_bsim.mod.null)
+AICctab(VL_bsim.mod.full, VL_bsim.mod.red, VL_bsim.mod.null)
+
+#null was best model
+
+### taxonomic diveristy - beta sne----
 hist(SES$SES_bsne)
 plot(SES$SES_bsne)
 abline(h = 0.0, col = "black", lwd = 3, lty=2)
@@ -2242,26 +2343,59 @@ bsne.t8
 
 ## compare among treatments and landscape variables
 dotchart(SES$SES_bsne, group = SES$trmt, pch = 19)
-with(SES, bartlett.test(SES_bsne ~ trmt))
-with(SES, ad.test(SES_bsne))
+with(FS_comps, bartlett.test(SES_bsne ~ trmt))
+with(KT_comps, bartlett.test(SES_bsne ~ trmt))
+with(VL_comps, bartlett.test(SES_bsne ~ trmt))
+with(FS_comps, ad.test(SES_bsne))
+with(KT_comps, ad.test(SES_bsne))
+with(VL_comps, ad.test(SES_bsne))
+#VL fails Anderson Darling normality test. KW test instead
 
-bsne.mod.full <- glm(SES_bsne ~ trmt + pland + lpi + enn, family = gaussian, data = SES)
-summary(bsne.mod.full)
-step(bsne.mod.full)
+FS_bsne.mod.full <- glm(SES_bsne ~ trmt + pland + lpi + enn, family = gaussian, data = FS_comps)
+summary(FS_bsne.mod.full)
+step(FS_bsne.mod.full)
 
-bsne.mod.null <- glm(SES_bsne ~ 1, family = gaussian, data = SES)
-summary(bsne.mod.null)
-qqnorm(resid(bsne.mod.null))
-qqline(resid(bsne.mod.null))
-plot(simulateResiduals(bsne.mod.null))
-densityPlot(rstudent(bsne.mod.null)) # check density estimate of the distribution of residuals
-outlierTest(bsne.mod.null)
-influenceIndexPlot(bsne.mod.null, vars = c("Cook"), id = list(n = 3))
+FS_bsne.mod.red <- glm(SES_bsne ~ trmt, family = gaussian, data = FS_comps)
+summary(FS_bsne.mod.red)
+qqnorm(resid(FS_bsne.mod.red))
+qqline(resid(FS_bsne.mod.red))
+plot(simulateResiduals(FS_bsne.mod.red))
+densityPlot(rstudent(FS_bsne.mod.red)) # check density estimate of the distribution of residuals
+outlierTest(FS_bsne.mod.red)
+influenceIndexPlot(FS_bsne.mod.red, vars = c("Cook"), id = list(n = 3))
+
+FS_bsne.mod.null <- glm(SES_bsne ~ 1, family = gaussian, data = FS_comps)
 
 # model comparison techniques
-anova(bsne.mod.full, bsne.mod.null)
-AICctab(bsne.mod.full, bsne.mod.null)
+anova(FS_bsne.mod.full, FS_bsne.mod.red, FS_bsne.mod.null)
+AICctab(FS_bsne.mod.full, FS_bsne.mod.red, FS_bsne.mod.null)
 
+#Null was best model fit
+
+KT_bsne.mod.full <- glm(SES_bsne ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
+summary(KT_bsne.mod.full)
+step(KT_bsne.mod.full)
+
+KT_bsne.mod.red <- glm(SES_bsne ~ pland, family = gaussian, data = KT_comps)
+summary(KT_bsne.mod.red)
+qqnorm(resid(KT_bsne.mod.red))
+qqline(resid(KT_bsne.mod.red))
+plot(simulateResiduals(KT_bsne.mod.red))
+#quantile deviations again
+densityPlot(rstudent(KT_bsne.mod.red)) # check density estimate of the distribution of residuals
+outlierTest(KT_bsne.mod.red)
+influenceIndexPlot(KT_bsne.mod.red, vars = c("Cook"), id = list(n = 3))
+
+KT_bsne.mod.null <- glm(SES_bsne ~ 1, family = gaussian, data = KT_comps)
+
+# model comparison techniques
+anova(KT_bsne.mod.full, KT_bsne.mod.red, KT_bsne.mod.null)
+AICctab(KT_bsne.mod.full, KT_bsne.mod.red, KT_bsne.mod.null)
+
+#Null was best model fit
+
+#kruskal wallace for VL
+kruskal.test(SES_bsne ~ trmt, data = VL_comps)
 
 
 ## functional alpha diversity----
@@ -2362,7 +2496,7 @@ AICctab(fbsor.mod.full, fbsor.mod.red, fbsor.mod.null)
 
 
 
-## functional beta diversity - beta sim
+### functional beta diversity - beta sim----
 hist(SES$SES_fbsim)
 plot(SES$SES_fbsim)
 abline(h = 0.0, col = "black", lwd = 3, lty=2)
@@ -2404,7 +2538,7 @@ AICctab(fbsim.mod.full, fbsim.mod.null)
 
 
 
-## functional beta diversity - beta sne
+### functional beta diversity - beta sne----
 hist(SES$SES_fbsne)
 plot(SES$SES_fbsne, ylim = c(-0.5, 6))
 abline(h = 0.0, col = "black", lwd = 3, lty=2)
