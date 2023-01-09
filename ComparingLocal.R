@@ -2058,7 +2058,10 @@ densityPlot(rstudent(FS_ori_1.mod.red)) # check density estimate of the distribu
 outlierTest(FS_ori_1.mod.red)
 influenceIndexPlot(FS_ori_1.mod.red, vars = c("Cook"), id = list(n = 3))
 #okay there is an outlier
-#going to skip removing it for now, will check coefficient difs next time
+FS_ori_1.mod.red2 <- update(FS_ori_1.mod.red, subset = -c(13))
+summary(FS_ori_1.mod.red2)
+compareCoefs(FS_ori_1.mod.red2, FS_ori_1.mod.red) # compares estimated coefficients and their standard errors
+#It doesn't look like they change much
 
 Anova(FS_ori_1.mod.red)
 
@@ -2098,30 +2101,29 @@ KT_ori_1.mod.null <- glm(SES_ori_0 ~ 1, family = gaussian, data = KT_comps)
 anova(KT_ori_1.mod.full, KT_ori_1.mod.red, KT_ori_1.mod.null)
 AICctab(KT_ori_1.mod.full, KT_ori_1.mod.red, KT_ori_1.mod.null)
 
-#to do- fix below, but it will be the same as native
-VL_ori_0.mod.full <- glm(SES_ori_0 ~ trmt + pland + lpi + enn, family = gaussian, data = VL_comps)
-summary(VL_ori_0.mod.full)
-step(VL_ori_0.mod.full)
+VL_ori_1.mod.full <- glm(SES_ori_1 ~ trmt + pland + lpi + enn, family = gaussian, data = VL_comps)
+summary(VL_ori_1.mod.full)
+step(VL_ori_1.mod.full)
 
 
-VL_ori_0.mod.red <- glm(SES_ori_0 ~ enn, family = gaussian, data = VL_comps)
-summary(VL_ori_0.mod.red)
-qqnorm(resid(VL_ori_0.mod.red))
-qqline(resid(VL_ori_0.mod.red))
-plot(simulateResiduals(VL_ori_0.mod.red))
-densityPlot(rstudent(VL_ori_0.mod.red)) # check density estimate of the distribution of residuals
-outlierTest(VL_ori_0.mod.red)
-influenceIndexPlot(VL_ori_0.mod.red, vars = c("Cook"), id = list(n = 3))
+VL_ori_1.mod.red <- glm(SES_ori_1 ~ enn, family = gaussian, data = VL_comps)
+summary(VL_ori_1.mod.red)
+qqnorm(resid(VL_ori_1.mod.red))
+qqline(resid(VL_ori_1.mod.red))
+plot(simulateResiduals(VL_ori_1.mod.red))
+densityPlot(rstudent(VL_ori_1.mod.red)) # check density estimate of the distribution of residuals
+outlierTest(VL_ori_1.mod.red)
+influenceIndexPlot(VL_ori_1.mod.red, vars = c("Cook"), id = list(n = 3))
 
-Anova(VL_ori_0.mod.red)
+Anova(VL_ori_1.mod.red)
 
-effect_plot(VL_ori_0.mod.red, pred = enn, interval = TRUE, partial.residuals = TRUE, x.label = 'Largest Patch Index (LPI)', y.label = 'Standardized Effect Sizes (SES)')
+effect_plot(VL_ori_1.mod.red, pred = enn, interval = TRUE, partial.residuals = TRUE, x.label = 'Largest Patch Index (LPI)', y.label = 'Standardized Effect Sizes (SES)')
 
-VL_ori_0.mod.null <- glm(SES_ori_0 ~ 1, family = gaussian, data = VL_comps)
+VL_ori_1.mod.null <- glm(SES_ori_1 ~ 1, family = gaussian, data = VL_comps)
 
 # model comparison techniques
-anova(VL_ori_0.mod.full, VL_ori_0.mod.red, VL_ori_0.mod.null)
-AICctab(VL_ori_0.mod.full, VL_ori_0.mod.red, VL_ori_0.mod.null)
+anova(VL_ori_1.mod.full, VL_ori_1.mod.red, VL_ori_1.mod.null)
+AICctab(VL_ori_1.mod.full, VL_ori_1.mod.red, VL_ori_1.mod.null)
 
 ##taxonomic diversity----
 ## taxonomic diveristy - beta sor
