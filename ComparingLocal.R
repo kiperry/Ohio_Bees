@@ -435,6 +435,7 @@ str(SES)
 SES$site <- as.factor(SES$Row.names)
 str(SES)
 
+write.csv(SES, file = "SES.csv")
 ## pull out data for each treatment
 farm <- SES[which(SES$trmt == "Farm"),]
 str(farm)
@@ -607,6 +608,12 @@ anova(FS_bl.mod.full, FS_bl.mod.red, FS_bl.mod.null, test = "F")
 AICctab(FS_bl.mod.full, FS_bl.mod.red, FS_bl.mod.null)
 
 Anova(FS_bl.mod.red)
+
+effect_plot(FS_bl.mod.red, pred = pland, interval = TRUE, partial.residuals = TRUE, x.label = '(PLAND)', y.label = 'Standardized Effect Sizes (SES)')
+effect_plot(FS_bl.mod.red, pred = lpi, interval = TRUE, partial.residuals = TRUE, x.label = 'Largest Patch Index (LPI)', y.label = 'Standardized Effect Sizes (SES)')
+effect_plot(FS_bl.mod.red, pred = enn, interval = TRUE, partial.residuals = TRUE, x.label = '(ENN)', y.label = 'Standardized Effect Sizes (SES)')
+
+
 
 KT_bl.mod.full <- glm(SES_bl ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
 summary(KT_bl.mod.full)
@@ -915,9 +922,9 @@ Anova(FS_lec_2.mod.red)
 emmeans(FS_lec_2.mod.red, pairwise ~ trmt)
 plot_summs(FS_lec_2.mod.red, scale = TRUE)
 
-effect_plot(FS_lec_2.mod.red, pred = trmt, interval = TRUE, partial.residuals = TRUE, x.label = '', y.label = 'Standardized Effect Sizes (SES)')
+effect_plot(FS_lec_2.mod.red, pred = trmt, interval = TRUE, partial.residuals = TRUE, x.label = 'Treatment', y.label = 'Standardized Effect Sizes (SES)')
 effect_plot(FS_lec_2.mod.red, pred = lpi, interval = TRUE, partial.residuals = TRUE, x.label = 'Largest Patch Index (LPI)', y.label = 'Standardized Effect Sizes (SES)')
-effect_plot(FS_lec_2.mod.red, pred = pland, interval = TRUE, partial.residuals = TRUE, x.label = 'Largest Patch Index (LPI)', y.label = 'Standardized Effect Sizes (SES)')
+effect_plot(FS_lec_2.mod.red, pred = pland, interval = TRUE, partial.residuals = TRUE, x.label = ' (PLAND)', y.label = 'Standardized Effect Sizes (SES)')
 
 
 FS_lec_2.mod.null <- glm(SES_lec_2 ~ 1, family = gaussian, data = FS_comps)
@@ -969,8 +976,8 @@ Anova(VL_lec_2.mod.red)
 emmeans(VL_lec_2.mod.red, pairwise ~ trmt)
 plot_summs(VL_lec_2.mod.red, scale = TRUE)
 
-effect_plot(VL_lec_2.mod.red, pred = trmt, interval = TRUE, partial.residuals = TRUE, x.label = '', y.label = 'Standardized Effect Sizes (SES)')
-effect_plot(VL_lec_2.mod.red, pred = lpi, interval = TRUE, partial.residuals = TRUE, x.label = 'Largest Patch Index (LPI)', y.label = 'Standardized Effect Sizes (SES)')
+effect_plot(VL_lec_2.mod.red, pred = trmt, interval = TRUE, partial.residuals = TRUE, x.label = 'TRT', y.label = 'Standardized Effect Sizes (SES)')
+effect_plot(VL_lec_2.mod.red, pred = pland, interval = TRUE, partial.residuals = TRUE, x.label = ' (PLAND)', y.label = 'Standardized Effect Sizes (SES)')
 
 VL_lec_2.mod.null <- glm(SES_lec_2 ~ 1, family = gaussian, data = VL_comps)
 
@@ -1357,10 +1364,11 @@ outlierTest(KT_nest_4.mod.red)
 influenceIndexPlot(KT_nest_4.mod.red, vars = c("Cook"), id = list(n = 3))
 
 Anova(KT_nest_4.mod.red)
+emmeans(KT_nest_4.mod.red, pairwise ~ trmt)
 
-effect_plot(KT_nest_4.mod.red, pred = trmt, interval = TRUE, partial.residuals = TRUE, x.label = '', y.label = 'Standardized Effect Sizes (SES)')
-effect_plot(KT_nest_4.mod.red, pred = pland, interval = TRUE, partial.residuals = TRUE, x.label = '', y.label = 'Standardized Effect Sizes (SES)')
-effect_plot(KT_nest_4.mod.red, pred = enn, interval = TRUE, partial.residuals = TRUE, x.label = '', y.label = 'Standardized Effect Sizes (SES)')
+effect_plot(KT_nest_4.mod.red, pred = trmt, interval = TRUE, partial.residuals = TRUE, x.label = 'TRT', y.label = 'Standardized Effect Sizes (SES)')
+effect_plot(KT_nest_4.mod.red, pred = pland, interval = TRUE, partial.residuals = TRUE, x.label = 'PLAND', y.label = 'Standardized Effect Sizes (SES)')
+effect_plot(KT_nest_4.mod.red, pred = enn, interval = TRUE, partial.residuals = TRUE, x.label = 'ENN', y.label = 'Standardized Effect Sizes (SES)')
 
 
 KT_nest_4.mod.null <- glm(SES_nest_4 ~ 1, family = gaussian, data = KT_comps)
@@ -1415,9 +1423,10 @@ outlierTest(FS_nest_5.mod.red)
 influenceIndexPlot(FS_nest_5.mod.red, vars = c("Cook"), id = list(n = 3))
 
 Anova(FS_nest_5.mod.red)
+emmeans(FS_nest_5.mod.red, pairwise ~ trmt)
 
-effect_plot(FS_nest_5.mod.red, pred = trmt, interval = TRUE, partial.residuals = TRUE, x.label = '', y.label = 'Standardized Effect Sizes (SES)')
-effect_plot(FS_nest_5.mod.red, pred = lpi, interval = TRUE, partial.residuals = TRUE, x.label = '', y.label = 'Standardized Effect Sizes (SES)')
+effect_plot(FS_nest_5.mod.red, pred = trmt, interval = TRUE, partial.residuals = TRUE, x.label = 'TRT', y.label = 'Standardized Effect Sizes (SES)')
+effect_plot(FS_nest_5.mod.red, pred = lpi, interval = TRUE, partial.residuals = TRUE, x.label = 'LPI', y.label = 'Standardized Effect Sizes (SES)')
 
 
 FS_nest_5.mod.null <- glm(SES_nest_5 ~ 1, family = gaussian, data = FS_comps)
@@ -1441,6 +1450,7 @@ outlierTest(KT_nest_5.mod.red)
 influenceIndexPlot(KT_nest_5.mod.red, vars = c("Cook"), id = list(n = 3))
 
 Anova(KT_nest_5.mod.red)
+emmeans(KT_nest_5.mod.red, pairwise ~ trmt)
 
 effect_plot(KT_nest_5.mod.red, pred = trmt, interval = TRUE, partial.residuals = TRUE, x.label = '', y.label = 'Standardized Effect Sizes (SES)')
 #for some reason I keep needing to do dev.off() in order to get the effect plots to run. but it works so yaY?
@@ -1466,8 +1476,8 @@ influenceIndexPlot(VL_nest_5.mod.red, vars = c("Cook"), id = list(n = 3))
 
 Anova(VL_nest_5.mod.red)
 
-effect_plot(VL_nest_5.mod.red, pred = lpi, interval = TRUE, partial.residuals = TRUE, x.label = '', y.label = 'Standardized Effect Sizes (SES)')
-effect_plot(VL_nest_5.mod.red, pred = enn, interval = TRUE, partial.residuals = TRUE, x.label = '', y.label = 'Standardized Effect Sizes (SES)')
+effect_plot(VL_nest_5.mod.red, pred = lpi, interval = TRUE, partial.residuals = TRUE, x.label = 'LPI', y.label = 'Standardized Effect Sizes (SES)')
+effect_plot(VL_nest_5.mod.red, pred = enn, interval = TRUE, partial.residuals = TRUE, x.label = 'ENN', y.label = 'Standardized Effect Sizes (SES)')
 
 
 VL_nest_5.mod.null <- glm(SES_nest_5 ~ 1, family = gaussian, data = VL_comps)
@@ -1552,8 +1562,8 @@ influenceIndexPlot(KT_soc_1.mod.red, vars = c("Cook"), id = list(n = 3))
 Anova(KT_soc_1.mod.red)
 
 dev.off()
-effect_plot(KT_soc_1.mod.red, pred = pland, interval = TRUE, partial.residuals = TRUE, x.label = '', y.label = 'Standardized Effect Sizes (SES)')
-effect_plot(KT_soc_1.mod.red, pred = enn, interval = TRUE, partial.residuals = TRUE, x.label = '', y.label = 'Standardized Effect Sizes (SES)')
+effect_plot(KT_soc_1.mod.red, pred = pland, interval = TRUE, partial.residuals = TRUE, x.label = 'PLAND', y.label = 'Standardized Effect Sizes (SES)')
+effect_plot(KT_soc_1.mod.red, pred = enn, interval = TRUE, partial.residuals = TRUE, x.label = 'ENN', y.label = 'Standardized Effect Sizes (SES)')
 
 
 KT_soc_1.mod.null <- glm(SES_soc_1 ~ 1, family = gaussian, data = KT_comps)
@@ -1579,9 +1589,9 @@ Anova(VL_soc_1.mod.red)
 emmeans(VL_soc_1.mod.red, pairwise ~ trmt)
 
 dev.off()
-effect_plot(VL_soc_1.mod.red, pred = trmt, interval = TRUE, partial.residuals = TRUE, x.label = '', y.label = 'Standardized Effect Sizes (SES)')
-effect_plot(VL_soc_1.mod.red, pred = pland, interval = TRUE, partial.residuals = TRUE, x.label = '', y.label = 'Standardized Effect Sizes (SES)')
-effect_plot(VL_soc_1.mod.red, pred = enn, interval = TRUE, partial.residuals = TRUE, x.label = '', y.label = 'Standardized Effect Sizes (SES)')
+effect_plot(VL_soc_1.mod.red, pred = trmt, interval = TRUE, partial.residuals = TRUE, x.label = 'trt', y.label = 'Standardized Effect Sizes (SES)')
+effect_plot(VL_soc_1.mod.red, pred = pland, interval = TRUE, partial.residuals = TRUE, x.label = 'pland', y.label = 'Standardized Effect Sizes (SES)')
+effect_plot(VL_soc_1.mod.red, pred = enn, interval = TRUE, partial.residuals = TRUE, x.label = 'enn', y.label = 'Standardized Effect Sizes (SES)')
 
 
 VL_soc_1.mod.null <- glm(SES_soc_1 ~ 1, family = gaussian, data = VL_comps)
@@ -1864,7 +1874,7 @@ compareCoefs(KT_soc_4.mod.red2, KT_soc_4.mod.red) # compares estimated coefficie
 
 Anova(KT_soc_4.mod.red)
 
-effect_plot(KT_soc_4.mod.red, pred = enn, interval = TRUE, partial.residuals = TRUE, x.label = '', y.label = 'Standardized Effect Sizes (SES)')
+effect_plot(KT_soc_4.mod.red, pred = enn, interval = TRUE, partial.residuals = TRUE, x.label = 'ENN', y.label = 'Standardized Effect Sizes (SES)')
 
 
 KT_soc_4.mod.null <- glm(SES_soc_4 ~ 1, family = gaussian, data = KT_comps)
@@ -1954,7 +1964,7 @@ Anova(FS_ori_0.mod.red)
 Anova(FS_ori_0.mod.red2)
 #Which should I use?
 
-effect_plot(FS_ori_0.mod.red, pred = enn, interval = TRUE, partial.residuals = TRUE, x.label = 'Largest Patch Index (LPI)', y.label = 'Standardized Effect Sizes (SES)')
+effect_plot(FS_ori_0.mod.red, pred = enn, interval = TRUE, partial.residuals = TRUE, x.label = ' (ENN)', y.label = 'Standardized Effect Sizes (SES)')
 
 FS_ori_0.mod.null <- glm(SES_ori_0 ~ 1, family = gaussian, data = FS_comps)
 FS_ori_0.mod.null2 <- update(FS_ori_0.mod.null, subset = -c(13))
@@ -2065,7 +2075,7 @@ compareCoefs(FS_ori_1.mod.red2, FS_ori_1.mod.red) # compares estimated coefficie
 
 Anova(FS_ori_1.mod.red)
 
-effect_plot(FS_ori_1.mod.red, pred = enn, interval = TRUE, partial.residuals = TRUE, x.label = 'Largest Patch Index (LPI)', y.label = 'Standardized Effect Sizes (SES)')
+effect_plot(FS_ori_1.mod.red, pred = enn, interval = TRUE, partial.residuals = TRUE, x.label = 'ENN ', y.label = 'Standardized Effect Sizes (SES)')
 
 FS_ori_1.mod.null <- glm(SES_ori_1 ~ 1, family = gaussian, data = FS_comps)
 
@@ -2487,8 +2497,8 @@ influenceIndexPlot(VL_falpha.mod.red, vars = c("Cook"), id = list(n = 3))
 
 Anova(VL_falpha.mod.red)
 
-effect_plot(VL_falpha.mod.red, pred = pland, interval = TRUE, partial.residuals = TRUE, x.label = '', y.label = '(PLAND)')
-effect_plot(VL_falpha.mod.red, pred = enn, interval = TRUE, partial.residuals = TRUE, x.label = '', y.label = '(PLAND)')
+effect_plot(VL_falpha.mod.red, pred = pland, interval = TRUE, partial.residuals = TRUE, x.label = '(PLAND)', y.label = 'SES')
+effect_plot(VL_falpha.mod.red, pred = enn, interval = TRUE, partial.residuals = TRUE, x.label = 'ENN', y.label = 'SES')
 
 
 VL_falpha.mod.null <- glm(SES_falpha ~ 1, family = gaussian, data = VL_comps)
@@ -2624,8 +2634,8 @@ outlierTest(FS_fbsim.mod.red)
 influenceIndexPlot(FS_fbsim.mod.red, vars = c("Cook"), id = list(n = 3))
 
 Anova(FS_fbsim.mod.red)
-effect_plot(FS_fbsim.mod.red, pred = pland, interval = TRUE, partial.residuals = TRUE, x.label = '', y.label = '(PLAND)')
-effect_plot(FS_fbsim.mod.red, pred = lpi, interval = TRUE, partial.residuals = TRUE, x.label = '', y.label = 'Largest patch Index (LPI)')
+effect_plot(FS_fbsim.mod.red, pred = pland, interval = TRUE, partial.residuals = TRUE, x.label = '(PLAND)', y.label = 'SES')
+effect_plot(FS_fbsim.mod.red, pred = lpi, interval = TRUE, partial.residuals = TRUE, x.label = 'Largest patch Index (LPI)', y.label = '')
 
 
 FS_fbsim.mod.null <- glm(SES_fbsim ~ 1, family = gaussian, data = FS_comps)
@@ -2667,8 +2677,8 @@ outlierTest(VL_fbsim.mod.red)
 influenceIndexPlot(VL_fbsim.mod.red, vars = c("Cook"), id = list(n = 3))
 
 Anova(VL_fbsim.mod.red)
-effect_plot(VL_fbsim.mod.red, pred = pland, interval = TRUE, partial.residuals = TRUE, x.label = '', y.label = '(PLAND)')
-effect_plot(VL_fbsim.mod.red, pred = enn, interval = TRUE, partial.residuals = TRUE, x.label = '', y.label = ' (ENN)')
+effect_plot(VL_fbsim.mod.red, pred = pland, interval = TRUE, partial.residuals = TRUE, x.label = '(PLAND)', y.label = '')
+effect_plot(VL_fbsim.mod.red, pred = enn, interval = TRUE, partial.residuals = TRUE, x.label = '(ENN)', y.label = ' ')
 
 
 VL_fbsim.mod.null <- glm(SES_fbsim ~ 1, family = gaussian, data = VL_comps)
@@ -2742,7 +2752,7 @@ outlierTest(VL_fbsne.mod.red)
 influenceIndexPlot(VL_fbsne.mod.red, vars = c("Cook"), id = list(n = 3))
 
 Anova(VL_fbsne.mod.red)
-effect_plot(VL_fbsne.mod.red, pred = lpi, interval = TRUE, partial.residuals = TRUE, x.label = '', y.label = '(PLAND)')
+effect_plot(VL_fbsne.mod.red, pred = lpi, interval = TRUE, partial.residuals = TRUE, x.label = '(LPI)', y.label = '')
 
 
 VL_fbsne.mod.null <- glm(SES_fbsne ~ 1, family = gaussian, data = VL_comps)
