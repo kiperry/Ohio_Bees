@@ -1638,28 +1638,23 @@ AICctab(FS_soc_2.mod.full,  FS_soc_2.mod.null)
 
 
 
-KT_soc_2.mod.full <- glm(SES_soc_2 ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
+KT_soc_2.mod.full <- glm(SES_soc_2 ~ trmt + pland + enn, family = gaussian, data = KT_comps)
 summary(KT_soc_2.mod.full)
 step(KT_soc_2.mod.full)
 
-KT_soc_2.mod.red <- glm(SES_soc_2 ~ lpi, family = gaussian, data = KT_comps)
-summary(KT_soc_2.mod.red)
-qqnorm(resid(KT_soc_2.mod.red))
-qqline(resid(KT_soc_2.mod.red))
-plot(simulateResiduals(KT_soc_2.mod.red))
-densityPlot(rstudent(KT_soc_2.mod.red)) # check density estimate of the distribution of residuals
-outlierTest(KT_soc_2.mod.red)
-influenceIndexPlot(KT_soc_2.mod.red, vars = c("Cook"), id = list(n = 3))
-
-Anova(KT_soc_2.mod.red)
-
-effect_plot(KT_soc_2.mod.red, pred = lpi, interval = TRUE, partial.residuals = TRUE, x.label = 'Largest Patch Index (LPI)', y.label = 'Standardized Effect Sizes (SES)')
-
 KT_soc_2.mod.null <- glm(SES_soc_2 ~ 1, family = gaussian, data = KT_comps)
+summary(KT_soc_2.mod.null)
+qqnorm(resid(KT_soc_2.mod.null))
+qqline(resid(KT_soc_2.mod.null))
+plot(simulateResiduals(KT_soc_2.mod.null))
+densityPlot(rstudent(KT_soc_2.mod.null)) # check density estimate of the distribution of residuals
+outlierTest(KT_soc_2.mod.null)
+influenceIndexPlot(KT_soc_2.mod.null, vars = c("Cook"), id = list(n = 3))
+
 
 # model comparison techniques
-anova(KT_soc_2.mod.full, KT_soc_2.mod.red, KT_soc_2.mod.null)
-AICctab(KT_soc_2.mod.full, KT_soc_2.mod.red, KT_soc_2.mod.null)
+anova(KT_soc_2.mod.full, KT_soc_2.mod.null)
+AICctab(KT_soc_2.mod.full, KT_soc_2.mod.null)
 
 
 #Just testing trt because normality violated
