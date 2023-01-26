@@ -586,11 +586,11 @@ with(FS_comps, ad.test(SES_bl))
 with(KT_comps, ad.test(SES_bl))
 with(VL_comps, ad.test(SES_bl))
 
-FS_bl.mod.full <- glm(SES_bl ~ trmt + pland + lpi + enn, family = gaussian, data = FS_comps)
+FS_bl.mod.full <- glm(SES_bl ~ trmt + pland + enn, family = gaussian, data = FS_comps)
 summary(FS_bl.mod.full)
 step(FS_bl.mod.full)
 
-FS_bl.mod.red <- glm(SES_bl ~ pland + lpi + enn, family = gaussian, data = FS_comps)
+FS_bl.mod.red <- glm(SES_bl ~ pland + enn, family = gaussian, data = FS_comps)
 summary(FS_bl.mod.red)
 qqnorm(resid(FS_bl.mod.red))
 qqline(resid(FS_bl.mod.red))
