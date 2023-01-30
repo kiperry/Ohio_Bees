@@ -1723,21 +1723,18 @@ KT_soc_3.mod.full <- glm(SES_soc_3 ~ trmt + pland + lpi + enn, family = gaussian
 summary(KT_soc_3.mod.full)
 step(KT_soc_3.mod.full)
 
-KT_soc_3.mod.red <- glm(SES_soc_3 ~ pland+lpi, family = gaussian, data = KT_comps)
+KT_soc_3.mod.red <- glm(SES_soc_3 ~ pland, family = gaussian, data = KT_comps)
 summary(KT_soc_3.mod.red)
 qqnorm(resid(KT_soc_3.mod.red))
 qqline(resid(KT_soc_3.mod.red))
 plot(simulateResiduals(KT_soc_3.mod.red))
-#There are significant quantile deviations identified
-#Not sure what to do about that, but it could explain the AIC disagreement
 densityPlot(rstudent(KT_soc_3.mod.red)) # check density estimate of the distribution of residuals
 outlierTest(KT_soc_3.mod.red)
 influenceIndexPlot(KT_soc_3.mod.red, vars = c("Cook"), id = list(n = 3))
 
 Anova(KT_soc_3.mod.red)
 
-effect_plot(KT_soc_3.mod.red, pred = pland, interval = TRUE, partial.residuals = TRUE, x.label = '', y.label = 'Standardized Effect Sizes (SES)')
-effect_plot(KT_soc_3.mod.red, pred = lpi, interval = TRUE, partial.residuals = TRUE, x.label = '', y.label = 'Standardized Effect Sizes (SES)')
+effect_plot(KT_soc_3.mod.red, pred = pland, interval = TRUE, partial.residuals = TRUE, x.label = 'Percentage Greenspace (PLAND)', y.label = 'Standardized Effect Sizes (SES)')
 
 
 KT_soc_3.mod.null <- glm(SES_soc_3 ~ 1, family = gaussian, data = KT_comps)
@@ -1846,32 +1843,24 @@ anova(KT_soc_4.mod.full, KT_soc_4.mod.red, KT_soc_4.mod.null, test = "F")
 AICctab(KT_soc_4.mod.full, KT_soc_4.mod.red, KT_soc_4.mod.null)
 
 
-VL_soc_4.mod.full <- glm(SES_soc_4 ~ trmt + pland + lpi + enn, family = gaussian, data = VL_comps)
+VL_soc_4.mod.full <- glm(SES_soc_4 ~ trmt + pland + enn, family = gaussian, data = VL_comps)
 summary(VL_soc_4.mod.full)
 step(VL_soc_4.mod.full)
 
-VL_soc_4.mod.red <- glm(SES_soc_4 ~ trmt+lpi+enn, family = gaussian, data = VL_comps)
-summary(VL_soc_4.mod.red)
-qqnorm(resid(VL_soc_4.mod.red))
-qqline(resid(VL_soc_4.mod.red))
-plot(simulateResiduals(VL_soc_4.mod.red))
-densityPlot(rstudent(VL_soc_4.mod.red)) # check density estimate of the distribution of residuals
-outlierTest(VL_soc_4.mod.red)
-influenceIndexPlot(VL_soc_4.mod.red, vars = c("Cook"), id = list(n = 3))
-
-
-Anova(VL_soc_4.mod.red)
-
-effect_plot(VL_soc_4.mod.red, pred = trmt, interval = TRUE, partial.residuals = TRUE, x.label = '', y.label = 'Standardized Effect Sizes (SES)')
-effect_plot(VL_soc_4.mod.red, pred = lpi, interval = TRUE, partial.residuals = TRUE, x.label = '', y.label = 'Standardized Effect Sizes (SES)')
-effect_plot(VL_soc_4.mod.red, pred = enn, interval = TRUE, partial.residuals = TRUE, x.label = '', y.label = 'Standardized Effect Sizes (SES)')
-
-
 VL_soc_4.mod.null <- glm(SES_soc_4 ~ 1, family = gaussian, data = VL_comps)
+summary(VL_soc_4.mod.null)
+qqnorm(resid(VL_soc_4.mod.null))
+qqline(resid(VL_soc_4.mod.null))
+plot(simulateResiduals(VL_soc_4.mod.null))
+densityPlot(rstudent(VL_soc_4.mod.null)) # check density estimate of the distribution of residuals
+outlierTest(VL_soc_4.mod.null)
+influenceIndexPlot(VL_soc_4.mod.null, vars = c("Cook"), id = list(n = 3))
+
+
 
 # model comparison techniques
-anova(VL_soc_4.mod.full, VL_soc_4.mod.red, VL_soc_4.mod.null, test = "F")
-AICctab(VL_soc_4.mod.full, VL_soc_4.mod.red, VL_soc_4.mod.null)
+anova(VL_soc_4.mod.full,  VL_soc_4.mod.null, test = "F")
+AICctab(VL_soc_4.mod.full, VL_soc_4.mod.null)
 
 
 ##Origin----
@@ -1923,42 +1912,38 @@ compareCoefs(FS_ori_0.mod.red2, FS_ori_0.mod.red) # compares estimated coefficie
 #It doesn't look like they change much
 
 Anova(FS_ori_0.mod.red)
-Anova(FS_ori_0.mod.red2)
-#Which should I use?
+
 
 effect_plot(FS_ori_0.mod.red, pred = enn, interval = TRUE, partial.residuals = TRUE, x.label = ' (ENN)', y.label = 'Standardized Effect Sizes (SES)')
 
 FS_ori_0.mod.null <- glm(SES_ori_0 ~ 1, family = gaussian, data = FS_comps)
-FS_ori_0.mod.null2 <- update(FS_ori_0.mod.null, subset = -c(13))
 
 
 # model comparison techniques
 anova(FS_ori_0.mod.full, FS_ori_0.mod.red, FS_ori_0.mod.null)
 AICctab(FS_ori_0.mod.full, FS_ori_0.mod.red, FS_ori_0.mod.null)
-AICctab( FS_ori_0.mod.red2, FS_ori_0.mod.null2)
 
 
-KT_ori_0.mod.full <- glm(SES_ori_0 ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
+
+KT_ori_0.mod.full <- glm(SES_ori_0 ~ trmt + pland + enn, family = gaussian, data = KT_comps)
 summary(KT_ori_0.mod.full)
 step(KT_ori_0.mod.full)
 
-#absolutely nothing was reduced, but just for fun I am running this code anyway)
-KT_ori_0.mod.red <- glm(SES_ori_0 ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
-summary(KT_ori_0.mod.red)
-qqnorm(resid(KT_ori_0.mod.red))
-qqline(resid(KT_ori_0.mod.red))
-plot(simulateResiduals(KT_ori_0.mod.red))
-densityPlot(rstudent(KT_ori_0.mod.red)) # check density estimate of the distribution of residuals
-outlierTest(KT_ori_0.mod.red)
-influenceIndexPlot(KT_ori_0.mod.red, vars = c("Cook"), id = list(n = 3))
+KT_ori_0.mod.null <- glm(SES_ori_0 ~ 1, family = gaussian, data = KT_comps)
+summary(KT_ori_0.mod.null)
+qqnorm(resid(KT_ori_0.mod.null))
+qqline(resid(KT_ori_0.mod.null))
+plot(simulateResiduals(KT_ori_0.mod.null))
+densityPlot(rstudent(KT_ori_0.mod.null)) # check density estimate of the distribution of residuals
+outlierTest(KT_ori_0.mod.null)
+influenceIndexPlot(KT_ori_0.mod.null, vars = c("Cook"), id = list(n = 3))
 
-Anova(KT_ori_0.mod.red)
 
 KT_ori_0.mod.null <- glm(SES_ori_0 ~ 1, family = gaussian, data = KT_comps)
 
 # model comparison techniques
-anova(KT_ori_0.mod.full, KT_ori_0.mod.red, KT_ori_0.mod.null)
-AICctab(KT_ori_0.mod.full, KT_ori_0.mod.red, KT_ori_0.mod.null)
+anova(KT_ori_0.mod.full, KT_ori_0.mod.null)
+AICctab(KT_ori_0.mod.full,  KT_ori_0.mod.null)
 
 
 VL_ori_0.mod.full <- glm(SES_ori_0 ~ trmt + pland + lpi + enn, family = gaussian, data = VL_comps)
@@ -2046,32 +2031,24 @@ anova(FS_ori_1.mod.full, FS_ori_1.mod.red, FS_ori_1.mod.null)
 AICctab(FS_ori_1.mod.full, FS_ori_1.mod.red, FS_ori_1.mod.null)
 
 
-KT_ori_1.mod.full <- glm(SES_ori_1 ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
+KT_ori_1.mod.full <- glm(SES_ori_1 ~ trmt + pland + enn, family = gaussian, data = KT_comps)
 summary(KT_ori_1.mod.full)
 step(KT_ori_1.mod.full)
 
 
-KT_ori_1.mod.red <- glm(SES_ori_1 ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
-summary(KT_ori_1.mod.red)
-qqnorm(resid(KT_ori_1.mod.red))
-qqline(resid(KT_ori_1.mod.red))
-plot(simulateResiduals(KT_ori_1.mod.red))
-densityPlot(rstudent(KT_ori_1.mod.red)) # check density estimate of the distribution of residuals
-outlierTest(KT_ori_1.mod.red)
-influenceIndexPlot(KT_ori_1.mod.red, vars = c("Cook"), id = list(n = 3))
-
-Anova(KT_ori_1.mod.red)
-
-effect_plot(KT_ori_1.mod.red, pred = trmt, interval = TRUE, partial.residuals = TRUE, x.label = '', y.label = 'Standardized Effect Sizes (SES)')
-effect_plot(KT_ori_1.mod.red, pred = pland, interval = TRUE, partial.residuals = TRUE, x.label = '', y.label = 'Standardized Effect Sizes (SES)')
-effect_plot(KT_ori_1.mod.red, pred = lpi, interval = TRUE, partial.residuals = TRUE, x.label = 'L', y.label = 'Standardized Effect Sizes (SES)')
-effect_plot(KT_ori_1.mod.red, pred = enn, interval = TRUE, partial.residuals = TRUE, x.label = '', y.label = 'Standardized Effect Sizes (SES)')
-
 KT_ori_1.mod.null <- glm(SES_ori_0 ~ 1, family = gaussian, data = KT_comps)
+summary(KT_ori_1.mod.null)
+qqnorm(resid(KT_ori_1.mod.null))
+qqline(resid(KT_ori_1.mod.null))
+plot(simulateResiduals(KT_ori_1.mod.null))
+densityPlot(rstudent(KT_ori_1.mod.null)) # check density estimate of the distribution of residuals
+outlierTest(KT_ori_1.mod.null)
+influenceIndexPlot(KT_ori_1.mod.null, vars = c("Cook"), id = list(n = 3))
+
 
 # model comparison techniques
-anova(KT_ori_1.mod.full, KT_ori_1.mod.red, KT_ori_1.mod.null)
-AICctab(KT_ori_1.mod.full, KT_ori_1.mod.red, KT_ori_1.mod.null)
+anova(KT_ori_1.mod.full, KT_ori_1.mod.null)
+AICctab(KT_ori_1.mod.full,  KT_ori_1.mod.null)
 
 VL_ori_1.mod.full <- glm(SES_ori_1 ~ trmt + pland + lpi + enn, family = gaussian, data = VL_comps)
 summary(VL_ori_1.mod.full)
@@ -2083,6 +2060,7 @@ summary(VL_ori_1.mod.red)
 qqnorm(resid(VL_ori_1.mod.red))
 qqline(resid(VL_ori_1.mod.red))
 plot(simulateResiduals(VL_ori_1.mod.red))
+#quantile deviations detected
 densityPlot(rstudent(VL_ori_1.mod.red)) # check density estimate of the distribution of residuals
 outlierTest(VL_ori_1.mod.red)
 influenceIndexPlot(VL_ori_1.mod.red, vars = c("Cook"), id = list(n = 3))
@@ -2171,24 +2149,18 @@ Anova(KT_bsor.mod.red)
 effect_plot(KT_bsor.mod.red, pred = enn, interval = TRUE, partial.residuals = TRUE, x.label = 'Greenspace Isolation (ENN)', y.label = 'Standardized Effect Sizes (SES)')
 
 
-VL_bsor.mod.full <- glm(SES_bsor ~ trmt + pland + lpi + enn, family = gaussian, data = VL_comps)
+VL_bsor.mod.full <- glm(SES_bsor ~ trmt + pland + enn, family = gaussian, data = VL_comps)
 summary(VL_bsor.mod.full)
 step(VL_bsor.mod.full)
 
-VL_bsor.mod.red <- glm(SES_bsor ~ lpi+enn, family = gaussian, data = VL_comps)
+VL_bsor.mod.red <- glm(SES_bsor ~ enn, family = gaussian, data = VL_comps)
 summary(VL_bsor.mod.red)
 qqnorm(resid(VL_bsor.mod.red))
 qqline(resid(VL_bsor.mod.red))
 plot(simulateResiduals(VL_bsor.mod.red))
-#Quantile deviations detected again
 densityPlot(rstudent(VL_bsor.mod.red)) # check density estimate of the distribution of residuals
 outlierTest(VL_bsor.mod.red)
 influenceIndexPlot(VL_bsor.mod.red, vars = c("Cook"), id = list(n = 3))
-#Cook's distance over .8. Not officially an outlier, but I wonder if its removal would remove the quantile deviation
-VL_bsor.mod.red2 <- update(VL_bsor.mod.red, subset = -c(32))
-plot(simulateResiduals(VL_bsor.mod.red2))
-influenceIndexPlot(VL_bsor.mod.red2, vars = c("Cook"), id = list(n = 3))
-#The point didn't go away. Which is weird
 
 VL_bsor.mod.null <- glm(SES_bsor ~ 1, family = gaussian, data = VL_comps)
 
@@ -2199,7 +2171,6 @@ AICctab(VL_bsor.mod.full, VL_bsor.mod.red, VL_bsor.mod.null)
 #Finding effect values of model
 Anova(VL_bsor.mod.red)
 
-effect_plot(VL_bsor.mod.red, pred = lpi, interval = TRUE, partial.residuals = TRUE, x.label = 'Largest Patch Index (LPI)', y.label = 'Standardized Effect Sizes (SES)')
 effect_plot(VL_bsor.mod.red, pred = enn, interval = TRUE, partial.residuals = TRUE, x.label = 'Greenspace Isolation (ENN)', y.label = 'Standardized Effect Sizes (SES)')
 
 
@@ -2582,11 +2553,11 @@ with(FS_comps, ad.test(SES_fbsim))
 with(KT_comps, ad.test(SES_fbsim))
 with(VL_comps, ad.test(SES_fbsim))
  
-FS_fbsim.mod.full <- glm(SES_fbsim ~ trmt + pland + lpi + enn, family = gaussian, data = FS_comps)
+FS_fbsim.mod.full <- glm(SES_fbsim ~ trmt + pland + enn, family = gaussian, data = FS_comps)
 summary(FS_fbsim.mod.full)
 step(FS_fbsim.mod.full)
 
-FS_fbsim.mod.red <- glm(SES_fbsim ~ pland + lpi, family = gaussian, data = FS_comps)
+FS_fbsim.mod.red <- glm(SES_fbsim ~ pland , family = gaussian, data = FS_comps)
 summary(FS_fbsim.mod.red)
 qqnorm(resid(FS_fbsim.mod.red))
 qqline(resid(FS_fbsim.mod.red))
@@ -2597,7 +2568,6 @@ influenceIndexPlot(FS_fbsim.mod.red, vars = c("Cook"), id = list(n = 3))
 
 Anova(FS_fbsim.mod.red)
 effect_plot(FS_fbsim.mod.red, pred = pland, interval = TRUE, partial.residuals = TRUE, x.label = '(PLAND)', y.label = 'SES')
-effect_plot(FS_fbsim.mod.red, pred = lpi, interval = TRUE, partial.residuals = TRUE, x.label = 'Largest patch Index (LPI)', y.label = '')
 
 
 FS_fbsim.mod.null <- glm(SES_fbsim ~ 1, family = gaussian, data = FS_comps)
@@ -2699,28 +2669,22 @@ anova(KT_fbsne.mod.full, KT_fbsne.mod.null)
 AICctab(KT_fbsne.mod.full, KT_fbsne.mod.null)
 
 
-VL_fbsne.mod.full <- glm(SES_fbsne ~ trmt + pland + lpi + enn, family = gaussian, data = VL_comps)
+VL_fbsne.mod.full <- glm(SES_fbsne ~ trmt + pland + enn, family = gaussian, data = VL_comps)
 summary(VL_fbsne.mod.full)
 step(VL_fbsne.mod.full)
 
-VL_fbsne.mod.red <- glm(SES_fbsne ~ lpi, family = gaussian, data = VL_comps)
-summary(VL_fbsne.mod.red)
-qqnorm(resid(VL_fbsne.mod.red))
-qqline(resid(VL_fbsne.mod.red))
-plot(simulateResiduals(VL_fbsne.mod.red))
-#quantile deviations detected
-densityPlot(rstudent(VL_fbsne.mod.red)) # check density estimate of the distribution of residuals
-outlierTest(VL_fbsne.mod.red)
-influenceIndexPlot(VL_fbsne.mod.red, vars = c("Cook"), id = list(n = 3))
-
-Anova(VL_fbsne.mod.red)
-effect_plot(VL_fbsne.mod.red, pred = lpi, interval = TRUE, partial.residuals = TRUE, x.label = '(LPI)', y.label = '')
-
-
 VL_fbsne.mod.null <- glm(SES_fbsne ~ 1, family = gaussian, data = VL_comps)
+summary(VL_fbsne.mod.null)
+qqnorm(resid(VL_fbsne.mod.null))
+qqline(resid(VL_fbsne.mod.null))
+plot(simulateResiduals(VL_fbsne.mod.null))
+densityPlot(rstudent(VL_fbsne.mod.null)) # check density estimate of the distribution of residuals
+outlierTest(VL_fbsne.mod.null)
+influenceIndexPlot(VL_fbsne.mod.null, vars = c("Cook"), id = list(n = 3))
+
 
 # model comparison techniques
-anova(VL_fbsne.mod.full, VL_fbsne.mod.red, VL_fbsne.mod.null)
-AICtab(VL_fbsne.mod.full, VL_fbsne.mod.red, VL_fbsne.mod.null)
+anova(VL_fbsne.mod.full, VL_fbsne.mod.null)
+AICtab(VL_fbsne.mod.full, VL_fbsne.mod.null)
 
 
