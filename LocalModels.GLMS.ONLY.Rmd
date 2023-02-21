@@ -2813,3 +2813,39 @@ AICtab(VL_fbsne.mod.full, VL_fbsne.mod.null)
 
 ```
 
+#Creating a species list for all of Cleveland
+```{r}
+q <- read.csv("./btraits_final.csv", row.names=1)
+r <- read.csv("./bcomm_final.csv", row.names=1)
+
+str(r)
+r1 <- r #save the original dataset
+r <- r[2:360]
+str(r)
+
+rowSums(r)
+
+str(q)
+names(q)
+colnames(q) <- c("body_length", "lecty", "nesting", "sociality", "origin")
+names(q)
+
+q1 <- q #save the original dataset
+
+spr <- colSums(r)
+spr
+
+# removes any columns (i.e. species) that are not found in Cleveland
+r <- r[, colSums(r != 0) > 0]
+colSums(r)
+
+q$sp <- spr
+q
+
+q <- q[q$sp != 0, ]
+q <- q[,-6]
+
+q
+rownames(q)
+```
+

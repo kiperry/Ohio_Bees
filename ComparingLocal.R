@@ -14,8 +14,8 @@
 ###################################################################################
 #Creating the datasets----
 
-t <- read.csv("./btraits_final.csv", row.names=1)
-a <- read.csv("./bcomm_final.localanalysis.csv", row.names=1)
+t <- read.csv("./btraits_23.csv", row.names=1)
+a <- read.csv("./bcomm_23.localanalysis.csv", row.names=1)
 
 
 str(a)
@@ -35,9 +35,9 @@ str(T8)
 a <- rbind(farm, Control,T1, T8)
 str(a)
 
-a <- a[2:360]
+a <- a[2:361]
 str(a)
-rowSums(a1[2:360])
+rowSums(a1[2:361])
 
 # create a vector with the column sums for each species
 # species not found in Cleveland will have a 0
@@ -130,7 +130,7 @@ attr(tdis, "correls")
 attr(tdis, "weights")
 
 # save trait weights for the null model
-wt <- c(0.38, 0.18, 0.11, 0.12, 0.20)
+wt <- c(0.38, 0.19, 0.11, 0.12, 0.20)
 
 #now run a principal coordinates analysis (PCoA) so we can collapse these traits into 
 #a few continuous axes for the functional diversity calculations
@@ -615,7 +615,7 @@ effect_plot(FS_bl.mod.red, pred = enn, interval = TRUE, partial.residuals = TRUE
 
 
 
-KT_bl.mod.full <- glm(SES_bl ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
+KT_bl.mod.full <- glm(SES_bl ~ trmt + pland + enn, family = gaussian, data = KT_comps)
 summary(KT_bl.mod.full)
 step(KT_bl.mod.full)
 

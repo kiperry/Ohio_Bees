@@ -8,15 +8,16 @@
 #
 # KI Perry; 20 July 2021
 # CA Shepard: 26 September 2022 
+#CA Shepard: 20 February 2023 (Updated)
 ###################################################################################
 
-t <- read.csv("./btraits_final.csv", row.names=1)
-a <- read.csv("./bcomm_final.csv", row.names=1)
+t <- read.csv("./btraits_23.csv", row.names=1)
+a <- read.csv("./bcomm_23.localanalysis.csv", row.names=1)
 
 
 str(a)
 a1 <- a #save the original dataset
-a <- a[2:360]
+a <- a[2:361]
 str(a)
 
 rowSums(a) #all sites have at least 10 species
@@ -95,7 +96,7 @@ attr(tdis, "correls")
 attr(tdis, "weights")
 
 # save trait weights for the null model
-wt <- c(0.37, 0.15, 0.10, 0.10, 0.26)
+wt <- c(0.38, 0.15, 0.11, 0.10, 0.26)
 
 #now run a principal coordinates analysis (PCoA) so we can collapse these traits into 
 #a few continuous axes for the functional diversity calculations
@@ -926,12 +927,14 @@ abline(v = 0.0, col = "black", lwd = 3, lty=2)
 ### figure panel - all diversity indices
 
 library(ggplot2)
+#install.packages("ggthemes")
 library(ggthemes)
 
 SES_TBeta$metric <- rep(c("Taxonomic"),each = 49)
 SES_FBeta$metric <- rep(c("Functional"),each = 49)
 
-
+names(SES_TBeta) <- names(SES_FBeta) 
+#The above code was added to get rid of the "names do not match" error
 SES_div <- rbind(SES_TBeta, SES_FBeta)
 SES_div.m <- melt(SES_div)
 colnames(SES_div.m) <- c("metric", "var", "ses")
@@ -969,10 +972,10 @@ png("SES_Diversity_Indices.png", width = 2500, height = 1000, pointsize = 20)
 par(mfrow=c(1,2)) # indicates one row, two columns
 par(mar=c(5,15,4,2))
 
-boxplot(ses ~ tbeta, data = SES_TBeta, col = viridis(3, alpha = 0.6),
+boxplot(ses ~ fbeta, data = SES_TBeta, col = viridis(3, alpha = 0.6),
         xlab = "Standardized Effect Sizes (SES)", ylab = "",
         horizontal = TRUE, las = 1, range = 0, cex.lab = 2, cex.axis = 1.7)
-stripchart(ses ~ tbeta, data = SES_TBeta, col = viridis(3),
+stripchart(ses ~ fbeta, data = SES_TBeta, col = viridis(3),
            pch = 19, cex = 1, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
 text(52, 3.4, "A", pos = 4, font = 2, cex = 2.6)
