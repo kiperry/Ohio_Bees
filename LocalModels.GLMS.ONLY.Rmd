@@ -2815,12 +2815,12 @@ AICtab(VL_fbsne.mod.full, VL_fbsne.mod.null)
 
 #Creating a species list for all of Cleveland
 ```{r}
-q <- read.csv("./btraits_final.csv", row.names=1)
-r <- read.csv("./bcomm_final.csv", row.names=1)
+q <- read.csv("./btraits_23.csv", row.names=1)
+r <- read.csv("./bcomm_23.localanalysis.csv", row.names=1)
 
 str(r)
 r1 <- r #save the original dataset
-r <- r[2:360]
+r <- r[2:361]
 str(r)
 
 rowSums(r)
@@ -2847,5 +2847,12 @@ q <- q[,-6]
 
 q
 rownames(q)
+```
+
+#Creating a species list for local sites
+```{r}
+a
+colnames(a)
+
 ```
 
