@@ -59,7 +59,7 @@ setdiff(rownames (t2), colnames(a))
 rownames(t2) == colnames(a) # we are good to go!
 
 ##############################################################################
-## Observed Community Metrics
+## Observed Community Metrics----
 
 if (!suppressWarnings(require(FD))) install.packages("FD")
 citation("FD")
@@ -96,7 +96,7 @@ attr(tdis, "correls")
 attr(tdis, "weights")
 
 # save trait weights for the null model
-wt <- c(0.38, 0.15, 0.11, 0.10, 0.26)
+wt <- c(0.37, 0.15, 0.11, 0.10, 0.26)
 
 #now run a principal coordinates analysis (PCoA) so we can collapse these traits into 
 #a few continuous axes for the functional diversity calculations
@@ -291,7 +291,7 @@ nfsor <- read.csv("Regional to Urban_Null Models_HillSmith_3 Axes/fbeta_sor.csv"
 # Community weighted means
 cwm.obs.m <- as.matrix(t(colMeans(cwm.obs)))
 
-## body length
+## body length----
 SES_bl <- (cwm.obs$bl - apply(nbl, MARGIN = 1, mean)) / apply(nbl, MARGIN = 1, sd, na.rm=T)
 SES_bl
 
@@ -316,7 +316,7 @@ w.bl <- wilcox.test(SES_bl, y = NULL, mu = 0, alternative = c("two.sided"), conf
 w.bl
 
 
-## lec_0 - Kleptoparasitic
+## lec_0 - Kleptoparasitic----
 SES_lec_0 <- (cwm.obs$lec_0 - apply(nlec_0, MARGIN = 1, mean)) / apply(nlec_0, MARGIN = 1, sd, na.rm=T)
 SES_lec_0
 
@@ -340,7 +340,7 @@ w.lec_0 <- wilcox.test(SES_lec_0, y = NULL, mu = 0, alternative = c("two.sided")
 w.lec_0
 
 
-## lec_1 - Generalist
+## lec_1 - Generalist----
 SES_lec_1 <- (cwm.obs$lec_1 - apply(nlec_1, MARGIN = 1, mean)) / apply(nlec_1, MARGIN = 1, sd, na.rm=T)
 SES_lec_1
 
@@ -364,7 +364,7 @@ w.lec_1 <- wilcox.test(SES_lec_1, y = NULL, mu = 0, alternative = c("two.sided")
 w.lec_1
 
 
-## lec_2 - Specialist
+## lec_2 - Specialist----
 SES_lec_2 <- (cwm.obs$lec_2 - apply(nlec_2, MARGIN = 1, mean)) / apply(nlec_2, MARGIN = 1, sd, na.rm=T)
 SES_lec_2
 
@@ -388,7 +388,7 @@ w.lec_2 <- wilcox.test(SES_lec_2, y = NULL, mu = 0, alternative = c("two.sided")
 w.lec_2
 
 
-## nest_1 - Soil
+## nest_1 - Soil----
 SES_nest_1 <- (cwm.obs$nest_1 - apply(nnest_1, MARGIN = 1, mean)) / apply(nnest_1, MARGIN = 1, sd, na.rm=T)
 SES_nest_1
 
@@ -412,7 +412,7 @@ w.nest_1 <- wilcox.test(SES_nest_1, y = NULL, mu = 0, alternative = c("two.sided
 w.nest_1
 
 
-## nest_2 - Cavity
+## nest_2 - Cavity----
 SES_nest_2 <- (cwm.obs$nest_2 - apply(nnest_2, MARGIN = 1, mean)) / apply(nnest_2, MARGIN = 1, sd, na.rm=T)
 SES_nest_2
 
@@ -436,7 +436,7 @@ w.nest_2 <- wilcox.test(SES_nest_2, y = NULL, mu = 0, alternative = c("two.sided
 w.nest_2
 
 
-## nest_3 - Hive
+## nest_3 - Hive----
 SES_nest_3 <- (cwm.obs$nest_3 - apply(nnest_3, MARGIN = 1, mean)) / apply(nnest_3, MARGIN = 1, sd, na.rm=T)
 SES_nest_3
 
@@ -460,7 +460,7 @@ w.nest_3 <- wilcox.test(SES_nest_3, y = NULL, mu = 0, alternative = c("two.sided
 w.nest_3
 
 
-## nest_4 - Pithy Stems
+## nest_4 - Pithy Stems----
 SES_nest_4 <- (cwm.obs$nest_4 - apply(nnest_4, MARGIN = 1, mean)) / apply(nnest_4, MARGIN = 1, sd, na.rm=T)
 SES_nest_4
 
@@ -485,7 +485,7 @@ w.nest_4
 
 
 
-## nest_5 - Wood
+## nest_5 - Wood----
 SES_nest_5 <- (cwm.obs$nest_5 - apply(nnest_5, MARGIN = 1, mean)) / apply(nnest_5, MARGIN = 1, sd, na.rm=T)
 SES_nest_5
 
@@ -509,7 +509,7 @@ w.nest_5 <- wilcox.test(SES_nest_5, y = NULL, mu = 0, alternative = c("two.sided
 w.nest_5
 
 
-## soc_1 - Subsocial
+## soc_1 - Subsocial----
 SES_soc_1 <- (cwm.obs$soc_1 - apply(nsoc_1, MARGIN = 1, mean)) / apply(nsoc_1, MARGIN = 1, sd, na.rm=T)
 SES_soc_1
 
@@ -533,7 +533,7 @@ w.soc_1 <- wilcox.test(SES_soc_1, y = NULL, mu = 0, alternative = c("two.sided")
 w.soc_1
 
 
-## soc_2 - Solitary
+## soc_2 - Solitary----
 SES_soc_2 <- (cwm.obs$soc_2 - apply(nsoc_2, MARGIN = 1, mean)) / apply(nsoc_2, MARGIN = 1, sd, na.rm=T)
 SES_soc_2
 
@@ -557,7 +557,7 @@ w.soc_2 <- wilcox.test(SES_soc_2, y = NULL, mu = 0, alternative = c("two.sided")
 w.soc_2
 
 
-## soc_3 - Eusocial
+## soc_3 - Eusocial----
 SES_soc_3 <- (cwm.obs$soc_3 - apply(nsoc_3, MARGIN = 1, mean)) / apply(nsoc_3, MARGIN = 1, sd, na.rm=T)
 SES_soc_3
 
@@ -581,7 +581,7 @@ w.soc_3 <- wilcox.test(SES_soc_3, y = NULL, mu = 0, alternative = c("two.sided")
 w.soc_3
 
 
-## soc_4 - Parasitic
+## soc_4 - Parasitic----
 SES_soc_4 <- (cwm.obs$soc_4 - apply(nsoc_4, MARGIN = 1, mean)) / apply(nsoc_4, MARGIN = 1, sd, na.rm=T)
 SES_soc_4
 
@@ -605,7 +605,7 @@ w.soc_4 <- wilcox.test(SES_soc_4, y = NULL, mu = 0, alternative = c("two.sided")
 w.soc_4
 
 
-## ori_0 - Native
+## ori_0 - Native----
 SES_ori_0 <- (cwm.obs$ori_0 - apply(nori_0, MARGIN = 1, mean)) / apply(nori_0, MARGIN = 1, sd, na.rm=T)
 SES_ori_0
 
@@ -629,7 +629,7 @@ w.ori_0 <- wilcox.test(SES_ori_0, y = NULL, mu = 0, alternative = c("two.sided")
 w.ori_0
 
 
-## ori_2 - Exotic
+## ori_2 - Exotic----
 SES_ori_1 <- (cwm.obs$ori_1 - apply(nori_1, MARGIN = 1, mean)) / apply(nori_1, MARGIN = 1, sd, na.rm=T)
 SES_ori_1
 
@@ -656,7 +656,7 @@ w.ori_1
 ###############################################
 ## Diversity Indices##
 
-# Taxonomic diversity
+# Taxonomic diversity----
 
 beta.sor <- as.matrix(b.dist$beta.sor)
 beta.sor <- colMeans(beta.sor)
@@ -670,7 +670,7 @@ beta.sne <- colMeans(beta.sne)
 beta.t <- data.frame(beta.sor, beta.sim, beta.sne)
 beta.t.m <- as.matrix(t(colMeans(beta.t)))
 
-## taxonomic diveristy - beta sor
+## taxonomic diveristy - beta sor----
 SES_bsor <- (beta.t$beta.sor - apply(nbsor, MARGIN = 1, mean)) / apply(nbsor, MARGIN = 1, sd, na.rm=T)
 SES_bsor
 
@@ -695,7 +695,7 @@ w.bsor <- wilcox.test(SES_bsor, y = NULL, mu = 0, alternative = c("two.sided"), 
 w.bsor
 
 
-## taxonomic diversity - beta sim
+## taxonomic diversity - beta sim----
 SES_bsim <- (beta.t$beta.sim - apply(nbsim, MARGIN = 1, mean)) / apply(nbsim, MARGIN = 1, sd, na.rm=T)
 SES_bsim
 
@@ -720,7 +720,7 @@ w.bsim <- wilcox.test(SES_bsim, y = NULL, mu = 0, alternative = c("two.sided"), 
 w.bsim
 
 
-## taxonomic diversity - beta sne
+## taxonomic diversity - beta sne----
 SES_bsne <- (beta.t$beta.sne - apply(nbsne, MARGIN = 1, mean)) / apply(nbsne, MARGIN = 1, sd, na.rm=T)
 SES_bsne
 
@@ -745,7 +745,7 @@ w.bsne <- wilcox.test(SES_bsne, y = NULL, mu = 0, alternative = c("two.sided"), 
 w.bsne
 
 
-# Functional Diversity
+# Functional Diversity----
 fbeta.sor <- as.matrix(b.fun$funct.beta.sor)
 fbeta.sor <- colMeans(fbeta.sor)
 
@@ -762,7 +762,7 @@ plot(fbeta.sor, pch = 19, cex = 1.5)
 plot(fbeta.sim, pch = 19, cex = 1.5)
 plot(fbeta.sne, pch = 19, cex = 1.5)
 
-## functional diversity - beta sor
+## functional diversity - beta sor-----
 SES_fbsor <- (beta.f$fbeta.sor - apply(nfsor, MARGIN = 1, mean)) / apply(nfsor, MARGIN = 1, sd, na.rm=T)
 SES_fbsor
 
@@ -786,7 +786,7 @@ w.fbsor <- wilcox.test(SES_fbsor, y = NULL, mu = 0, alternative = c("two.sided")
 w.fbsor
 
 
-## functional diversity - beta sim
+## functional diversity - beta sim----
 SES_fbsim <- (beta.f$fbeta.sim - apply(nfsim, MARGIN = 1, mean)) / apply(nfsim, MARGIN = 1, sd, na.rm=T)
 SES_fbsim
 
@@ -810,7 +810,7 @@ w.fbsim <- wilcox.test(SES_fbsim, y = NULL, mu = 0, alternative = c("two.sided")
 w.fbsim
 
 
-## functional diversity - beta sne
+## functional diversity - beta sne----
 SES_fbsne <- (beta.f$fbeta.sne - apply(nfsne, MARGIN = 1, mean)) / apply(nfsne, MARGIN = 1, sd, na.rm=T)
 SES_fbsne
 
@@ -836,7 +836,7 @@ w.fbsne
 
 
 ###################################################################################
-# combine the SES values from each trait type into a matrix so we can graph the results
+# combine the SES values from each trait type into a matrix so we can graph the results----
 
 if (!suppressWarnings(require(viridis))) install.packages("viridis")
 citation("viridis")

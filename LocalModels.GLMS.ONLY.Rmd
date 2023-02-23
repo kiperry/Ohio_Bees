@@ -1011,8 +1011,8 @@ with(VL_comps, ad.test(SES_lec_1))
 
 ```{r}
 #Fixing normality with outlier removal
-FS_comps$SES_lec_1 #Did that to see the row with the outlier. Looks like its #1
-FSwOUT.out<-FS_comps[-10,]
+FS_comps$SES_lec_1 #Did that to see the row with the outlier. Looks like its #9
+FSwOUT.out<-FS_comps[-9,]
 FSwOUT.out$SES_lec_1
 with(FSwOUT.out, bartlett.test(SES_lec_1 ~ trmt))
 with(FSwOUT.out, ad.test(SES_lec_1))
@@ -1322,11 +1322,12 @@ step(KT_nest_2.mod.full)
 ```
 
 ```{r}
+KT_nest_2.mod.red <- glm(SES_nest_2 ~ pland, family = gaussian, data = KT_comps)
 KT_nest_2.mod.null <- glm(SES_nest_2 ~ 1, family = gaussian, data = KT_comps)
 
 # model comparison techniques
-anova(KT_nest_2.mod.full, KT_nest_2.mod.null, test = "F")
-AICctab(KT_nest_2.mod.full, KT_nest_2.mod.null)
+anova(KT_nest_2.mod.full, KT_nest_2.mod.red, KT_nest_2.mod.null, test = "F")
+AICctab(KT_nest_2.mod.full,KT_nest_2.mod.red, KT_nest_2.mod.null)
 
 ```
 
@@ -1469,6 +1470,7 @@ with(KT_comps, bartlett.test(SES_nest_4 ~ trmt))
 with(VL_comps, bartlett.test(SES_nest_4 ~ trmt))
 #Violation for VL- KW test will be used instead
 with(FS_comps, ad.test(SES_nest_4))
+#violates normality
 with(KT_comps, ad.test(SES_nest_4))
 with(VL_comps, ad.test(SES_nest_4))
 ```
@@ -1757,13 +1759,7 @@ with(VL_comps, bartlett.test(SES_soc_2 ~ trmt))
 with(FS_comps, ad.test(SES_soc_2))
 with(KT_comps, ad.test(SES_soc_2))
 with(VL_comps, ad.test(SES_soc_2))
-#Normality violated- Are there any outliers though?
-VL_comps$SES_soc_2 
-mean(VL_comps$SES_soc_2)
-sd(VL_comps$SES_soc_2)
--0.8309074+(3*1.116523)
-#nope. looks like data point 9 is close, but not technically an outlier
-#so we will do KW test
+
 ```
 
 ####Frances
@@ -1774,18 +1770,22 @@ step(FS_soc_2.mod.full)
 ```
 
 ```{r}
+FS_soc_2.mod.red <- glm(SES_soc_2 ~ trmt, family = gaussian, data = FS_comps)
 FS_soc_2.mod.null <- glm(SES_soc_2 ~ 1, family = gaussian, data = FS_comps)
-summary(FS_soc_2.mod.null)
-qqnorm(resid(FS_soc_2.mod.null))
-qqline(resid(FS_soc_2.mod.null))
-plot(simulateResiduals(FS_soc_2.mod.null))
-densityPlot(rstudent(FS_soc_2.mod.null)) # check density estimate of the distribution of residuals
-outlierTest(FS_soc_2.mod.null)
-influenceIndexPlot(FS_soc_2.mod.null, vars = c("Cook"), id = list(n = 3))
+summary(FS_soc_2.mod.red)
+qqnorm(resid(FS_soc_2.mod.red))
+qqline(resid(FS_soc_2.mod.red))
+plot(simulateResiduals(FS_soc_2.mod.red))
+densityPlot(rstudent(FS_soc_2.mod.red)) # check density estimate of the distribution of residuals
+outlierTest(FS_soc_2.mod.red)
+influenceIndexPlot(FS_soc_2.mod.red, vars = c("Cook"), id = list(n = 3))
+
+Anova(FS_soc_2.mod.red)
+emmeans(FS_soc_2.mod.red, pairwise ~ trmt)
 
 # model comparison techniques
-anova(FS_soc_2.mod.full,  FS_soc_2.mod.null, test = "F")
-AICctab(FS_soc_2.mod.full,  FS_soc_2.mod.null)
+anova(FS_soc_2.mod.full, FS_soc_2.mod.red, FS_soc_2.mod.null, test = "F")
+AICctab(FS_soc_2.mod.full,FS_soc_2.mod.red,  FS_soc_2.mod.null)
 
 ```
 
@@ -2595,20 +2595,26 @@ step(FS_fbsor.mod.full)
 
 
 ```{r}
+FS_fbsor.mod.red <- glm(SES_fbsor ~ trmt, family = gaussian, data = FS_comps)
+summary(FS_fbsor.mod.red)
+qqnorm(resid(FS_fbsor.mod.red))
+qqline(resid(FS_fbsor.mod.red))
+plot(simulateResiduals(FS_fbsor.mod.red))
+densityPlot(rstudent(FS_fbsor.mod.red)) # check density estimate of the distribution of residuals
+outlierTest(FS_fbsor.mod.red)
+influenceIndexPlot(FS_fbsor.mod.red, vars = c("Cook"), id = list(n = 3))
+
+
+Anova(FS_fbsor.mod.red)
+emmeans(FS_fbsor.mod.red, pairwise ~ trmt)
+effect_plot(FS_fbsor.mod.red, pred = trmt, interval = TRUE, partial.residuals = TRUE, x.label = '(trmt)', y.label = 'SES beta')
+
+
 FS_fbsor.mod.null <- glm(SES_fbsor ~ 1, family = gaussian, data = FS_comps)
-summary(FS_fbsor.mod.null)
-qqnorm(resid(FS_fbsor.mod.null))
-qqline(resid(FS_fbsor.mod.null))
-plot(simulateResiduals(FS_fbsor.mod.null))
-densityPlot(rstudent(FS_fbsor.mod.null)) # check density estimate of the distribution of residuals
-outlierTest(FS_fbsor.mod.null)
-#there is an outlier
-influenceIndexPlot(FS_fbsor.mod.null, vars = c("Cook"), id = list(n = 3))
-#It isn't much of an influence, and also this is a null model, so I won't remove 13
 
 # model comparison techniques
-anova(FS_fbsor.mod.full, FS_fbsor.mod.null)
-AICtab(FS_fbsor.mod.full, FS_fbsor.mod.null)
+anova(FS_fbsor.mod.full,FS_fbsor.mod.red, FS_fbsor.mod.null)
+AICtab(FS_fbsor.mod.full,FS_fbsor.mod.red, FS_fbsor.mod.null)
 
 ```
 
@@ -2676,24 +2682,20 @@ step(FS_fbsim.mod.full)
 ```
 
 ```{r}
-FS_fbsim.mod.red <- glm(SES_fbsim ~ pland , family = gaussian, data = FS_comps)
-summary(FS_fbsim.mod.red)
-qqnorm(resid(FS_fbsim.mod.red))
-qqline(resid(FS_fbsim.mod.red))
-plot(simulateResiduals(FS_fbsim.mod.red))
-densityPlot(rstudent(FS_fbsim.mod.red)) # check density estimate of the distribution of residuals
-outlierTest(FS_fbsim.mod.red)
-influenceIndexPlot(FS_fbsim.mod.red, vars = c("Cook"), id = list(n = 3))
-
-Anova(FS_fbsim.mod.red)
-effect_plot(FS_fbsim.mod.red, pred = pland, interval = TRUE, partial.residuals = TRUE, x.label = '(PLAND)', y.label = 'SES')
-
-
 FS_fbsim.mod.null <- glm(SES_fbsim ~ 1, family = gaussian, data = FS_comps)
+summary(FS_fbsim.mod.null)
+qqnorm(resid(FS_fbsim.mod.null))
+qqline(resid(FS_fbsim.mod.null))
+plot(simulateResiduals(FS_fbsim.mod.null))
+densityPlot(rstudent(FS_fbsim.mod.null)) # check density estimate of the distribution of residuals
+outlierTest(FS_fbsim.mod.null)
+influenceIndexPlot(FS_fbsim.mod.null, vars = c("Cook"), id = list(n = 3))
+
+
 
 # model comparison techniques
-anova(FS_fbsim.mod.full, FS_fbsim.mod.red, FS_fbsim.mod.null)
-AICtab(FS_fbsim.mod.full, FS_fbsim.mod.red, FS_fbsim.mod.null)
+anova(FS_fbsim.mod.full,  FS_fbsim.mod.null)
+AICtab(FS_fbsim.mod.full, FS_fbsim.mod.null)
 
 ```
 

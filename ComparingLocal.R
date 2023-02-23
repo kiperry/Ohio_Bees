@@ -130,7 +130,7 @@ attr(tdis, "correls")
 attr(tdis, "weights")
 
 # save trait weights for the null model
-wt <- c(0.38, 0.19, 0.11, 0.12, 0.20)
+wt <- c(0.39, 0.18, 0.11, 0.12, 0.19)
 
 #now run a principal coordinates analysis (PCoA) so we can collapse these traits into 
 #a few continuous axes for the functional diversity calculations
@@ -879,7 +879,7 @@ AICctab(lec_1.mod.full, lec_1.mod.red, lec_1.mod.null)
 
 
 
-## lec_2 - Specialist
+### lec_2 - Specialist----
 hist(SES$SES_lec_2)
 SES$SES_lec_2
 plot(SES$SES_lec_2)
@@ -1082,7 +1082,7 @@ kruskal.test(SES_nest_1 ~ trmt, data = VL_comps)
 
 
 
-## nest_2 - Cavity
+### nest_2 - Cavity----
 hist(SES$SES_nest_2)
 plot(SES$SES_nest_2)
 abline(h = 0.0, col = "black", lwd = 3, lty=2)
