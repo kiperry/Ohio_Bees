@@ -831,6 +831,7 @@ qqnorm(resid(FS_bl.mod.red))
 qqline(resid(FS_bl.mod.red))
 plot(simulateResiduals(FS_bl.mod.red))
 densityPlot(rstudent(FS_bl.mod.red)) # check density estimate of the distribution of residuals
+#Kayla -there were significant quantile deviations detected here
 outlierTest(FS_bl.mod.red)
 influenceIndexPlot(FS_bl.mod.red, vars = c("Cook"), id = list(n = 3))
 
@@ -955,7 +956,7 @@ plot(simulateResiduals(KT_lec_0.mod.red))
 #I am adding the below code to look at the graphs individually. the second one has red lines
 plotQQunif(KT_lec_0.mod.red)
 plotResiduals(KT_lec_0.mod.red)
-#It says that there are significant quantile deviations
+#Kayla- It says that there are significant quantile deviations
 
 densityPlot(rstudent(KT_lec_0.mod.red)) # check density estimate of the distribution of residuals
 outlierTest(KT_lec_0.mod.red)
@@ -1111,7 +1112,9 @@ summary(FS_lec_2.mod.red)
 qqnorm(resid(FS_lec_2.mod.red))
 qqline(resid(FS_lec_2.mod.red))
 plot(simulateResiduals(FS_lec_2.mod.red))
+#Kayla- an error -missing true false value error appears here
 densityPlot(rstudent(FS_lec_2.mod.red)) # check density estimate of the distribution of residuals
+
 outlierTest(FS_lec_2.mod.red)
 influenceIndexPlot(FS_lec_2.mod.red, vars = c("Cook"), id = list(n = 3))
 
@@ -1141,6 +1144,7 @@ summary(KT_lec_2.mod.red)
 qqnorm(resid(KT_lec_2.mod.red))
 qqline(resid(KT_lec_2.mod.red))
 plot(simulateResiduals(KT_lec_2.mod.red))
+#Kayla- the same missing value error appeared here
 densityPlot(rstudent(KT_lec_2.mod.red)) # check density estimate of the distribution of residuals
 outlierTest(KT_lec_2.mod.red)
 influenceIndexPlot(KT_lec_2.mod.red, vars = c("Cook"), id = list(n = 3))
@@ -1249,6 +1253,7 @@ summary(KT_nest_1.mod.red)
 qqnorm(resid(KT_nest_1.mod.red))
 qqline(resid(KT_nest_1.mod.red))
 plot(simulateResiduals(KT_nest_1.mod.red))
+#Kayla - missing true false value error
 densityPlot(rstudent(KT_nest_1.mod.red)) # check density estimate of the distribution of residuals
 outlierTest(KT_nest_1.mod.red)
 influenceIndexPlot(KT_nest_1.mod.red, vars = c("Cook"), id = list(n = 3))
@@ -1387,6 +1392,7 @@ plot(simulateResiduals(FS_nest_3.mod.red))
 #I am adding the below code to look at the graphs individually. the second one has red lines
 plotQQunif(FS_nest_3.mod.red)
 plotResiduals(FS_nest_3.mod.red)
+#Kayla- quantile deviations detected
 densityPlot(rstudent(FS_nest_3.mod.red)) # check density estimate of the distribution of residuals
 outlierTest(FS_nest_3.mod.red)
 influenceIndexPlot(FS_nest_3.mod.red, vars = c("Cook"), id = list(n = 3))
@@ -1471,6 +1477,7 @@ with(VL_comps, bartlett.test(SES_nest_4 ~ trmt))
 #Violation for VL- KW test will be used instead
 with(FS_comps, ad.test(SES_nest_4))
 #violates normality
+#kayla
 with(KT_comps, ad.test(SES_nest_4))
 with(VL_comps, ad.test(SES_nest_4))
 ```
@@ -1484,18 +1491,20 @@ step(FS_nest_4.mod.full)
 ```
 
 ```{r}
+FS_nest_4.mod.red <- glm(SES_nest_4 ~ pland+enn, family = gaussian, data = FS_comps)
+summary(FS_nest_4.mod.red)
+qqnorm(resid(FS_nest_4.mod.red))
+qqline(resid(FS_nest_4.mod.red))
+plot(simulateResiduals(FS_nest_4.mod.red))
+densityPlot(rstudent(FS_nest_4.mod.red)) # check density estimate of the distribution of residuals
+outlierTest(FS_nest_4.mod.red)
+influenceIndexPlot(FS_nest_4.mod.red, vars = c("Cook"), id = list(n = 3))
+
 FS_nest_4.mod.null <- glm(SES_nest_4 ~ 1, family = gaussian, data = FS_comps)
-summary(FS_nest_4.mod.null)
-qqnorm(resid(FS_nest_4.mod.null))
-qqline(resid(FS_nest_4.mod.null))
-plot(simulateResiduals(FS_nest_4.mod.null))
-densityPlot(rstudent(FS_nest_4.mod.null)) # check density estimate of the distribution of residuals
-outlierTest(FS_nest_4.mod.null)
-influenceIndexPlot(FS_nest_4.mod.null, vars = c("Cook"), id = list(n = 3))
 
 # model comparison techniques
-anova(FS_nest_4.mod.full,  FS_nest_4.mod.null, test = "F")
-AICctab(FS_nest_4.mod.full, FS_nest_4.mod.null)
+anova(FS_nest_4.mod.full,  FS_nest_4.mod.red, FS_nest_4.mod.null, test = "F")
+AICctab(FS_nest_4.mod.full, FS_nest_4.mod.red, FS_nest_4.mod.null)
 
 ```
 
@@ -1512,6 +1521,7 @@ summary(KT_nest_4.mod.red)
 qqnorm(resid(KT_nest_4.mod.red))
 qqline(resid(KT_nest_4.mod.red))
 plot(simulateResiduals(KT_nest_4.mod.red))
+#Kayla missing value error
 densityPlot(rstudent(KT_nest_4.mod.red)) # check density estimate of the distribution of residuals
 outlierTest(KT_nest_4.mod.red)
 influenceIndexPlot(KT_nest_4.mod.red, vars = c("Cook"), id = list(n = 3))
@@ -1665,6 +1675,7 @@ summary(FS_soc_1.mod.red)
 qqnorm(resid(FS_soc_1.mod.red))
 qqline(resid(FS_soc_1.mod.red))
 plot(simulateResiduals(FS_soc_1.mod.red))
+#kayla quantile deviations detected
 densityPlot(rstudent(FS_soc_1.mod.red)) # check density estimate of the distribution of residuals
 outlierTest(FS_soc_1.mod.red)
 influenceIndexPlot(FS_soc_1.mod.red, vars = c("Cook"), id = list(n = 3))
@@ -1697,6 +1708,7 @@ summary(KT_soc_1.mod.red)
 qqnorm(resid(KT_soc_1.mod.red))
 qqline(resid(KT_soc_1.mod.red))
 plot(simulateResiduals(KT_soc_1.mod.red))
+#kayla missing value error
 densityPlot(rstudent(KT_soc_1.mod.red)) # check density estimate of the distribution of residuals
 outlierTest(KT_soc_1.mod.red)
 influenceIndexPlot(KT_soc_1.mod.red, vars = c("Cook"), id = list(n = 3))
@@ -1875,6 +1887,7 @@ summary(KT_soc_3.mod.red)
 qqnorm(resid(KT_soc_3.mod.red))
 qqline(resid(KT_soc_3.mod.red))
 plot(simulateResiduals(KT_soc_3.mod.red))
+#Kayla- significant deviations detected
 densityPlot(rstudent(KT_soc_3.mod.red)) # check density estimate of the distribution of residuals
 outlierTest(KT_soc_3.mod.red)
 influenceIndexPlot(KT_soc_3.mod.red, vars = c("Cook"), id = list(n = 3))
@@ -2272,7 +2285,7 @@ summary(KT_bsor.mod.red)
 qqnorm(resid(KT_bsor.mod.red))
 qqline(resid(KT_bsor.mod.red))
 plot(simulateResiduals(KT_bsor.mod.red))
-#Quantile deviations detected
+#Kayla-Quantile deviations detected
 densityPlot(rstudent(KT_bsor.mod.red)) # check density estimate of the distribution of residuals
 outlierTest(KT_bsor.mod.red)
 influenceIndexPlot(KT_bsor.mod.red, vars = c("Cook"), id = list(n = 3))
