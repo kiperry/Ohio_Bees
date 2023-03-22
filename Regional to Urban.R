@@ -291,7 +291,7 @@ nfsor <- read.csv("Regional to Urban_Null Models_HillSmith_3 Axes/fbeta_sor.csv"
 # Community weighted means
 cwm.obs.m <- as.matrix(t(colMeans(cwm.obs)))
 
-## body length----
+ ## body length----
 SES_bl <- (cwm.obs$bl - apply(nbl, MARGIN = 1, mean)) / apply(nbl, MARGIN = 1, sd, na.rm=T)
 SES_bl
 

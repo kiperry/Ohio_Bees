@@ -765,7 +765,7 @@ citation("interactions")
 ```
 
 ```{r}
-check relationships among landscape variables----
+#check relationships among landscape variables----
 dotchart(land$pland, pch = 19)
 dotchart(land$lpi, pch = 19)
 dotchart(land$enn, pch = 19)
