@@ -680,7 +680,6 @@ AICctab(FS_bl.mod.full, FS_bl.mod.red, FS_bl.mod.null)
 Anova(FS_bl.mod.red)
 
 effect_plot(FS_bl.mod.red, pred = pland, interval = TRUE, partial.residuals = TRUE, x.label = '(PLAND)', y.label = 'Standardized Effect Sizes (SES)')
-effect_plot(FS_bl.mod.red, pred = lpi, interval = TRUE, partial.residuals = TRUE, x.label = 'Largest Patch Index (LPI)', y.label = 'Standardized Effect Sizes (SES)')
 effect_plot(FS_bl.mod.red, pred = enn, interval = TRUE, partial.residuals = TRUE, x.label = '(ENN)', y.label = 'Standardized Effect Sizes (SES)')
 
 
@@ -751,7 +750,7 @@ with(KT_comps, ad.test(SES_lec_0))
 with(VL_comps, ad.test(SES_lec_0))
 
 
-FS_lec_0.mod.full <- glm(SES_lec_0 ~ trmt + pland + lpi + enn, family = gaussian, data = FS_comps)
+FS_lec_0.mod.full <- glm(SES_lec_0 ~ trmt + pland + enn, family = gaussian, data = FS_comps)
 summary(FS_lec_0.mod.full)
 step(FS_lec_0.mod.full)
 
@@ -774,7 +773,7 @@ compareCoefs(FS_lec_0.mod.null, FS_lec_0.mod.null2) # compares estimated coeffic
 anova(FS_lec_0.mod.full, FS_lec_0.mod.null,  test = "F")
 AICctab(FS_lec_0.mod.full, FS_lec_0.mod.null)
 
-KT_lec_0.mod.full <- glm(SES_lec_0 ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
+KT_lec_0.mod.full <- glm(SES_lec_0 ~ trmt + pland + enn, family = gaussian, data = KT_comps)
 summary(KT_lec_0.mod.full)
 step(KT_lec_0.mod.full)
 
@@ -798,7 +797,7 @@ KT_lec_0.mod.null <- glm(SES_lec_0 ~ 1, family = gaussian, data = KT_comps)
 anova(KT_lec_0.mod.full, KT_lec_0.mod.red, KT_lec_0.mod.null,  test = "F")
 AICctab(KT_lec_0.mod.full, KT_lec_0.mod.red, KT_lec_0.mod.null)
 
-VL_lec_0.mod.full <- glm(SES_lec_0 ~ trmt + pland + lpi + enn, family = gaussian, data = VL_comps)
+VL_lec_0.mod.full <- glm(SES_lec_0 ~ trmt + pland + enn, family = gaussian, data = VL_comps)
 summary(VL_lec_0.mod.full)
 step(VL_lec_0.mod.full)
 
@@ -857,7 +856,7 @@ with(FSwOUT.out, bartlett.test(SES_lec_1 ~ trmt))
 with(FSwOUT.out, ad.test(SES_lec_1))
 #Okay normality test not failed now. 
 #Outlier removed- Time to make a model
-FS_lec_1.mod.full<-glm(SES_lec_1 ~ trmt + pland + lpi + enn, family = gaussian, data = FSwOUT.out)
+FS_lec_1.mod.full<-glm(SES_lec_1 ~ trmt + pland + enn, family = gaussian, data = FSwOUT.out)
 summary(FS_lec_1.mod.full)
 step(FS_lec_1.mod.full)
 #null model is best comparison
@@ -877,7 +876,7 @@ anova(FS_lec_1.mod.full, FS_lec_1.mod.null,  test = "F")
 AICctab(FS_lec_1.mod.full, FS_lec_1.mod.null)
 
 
-KT_lec_1.mod.full <- glm(SES_lec_1 ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
+KT_lec_1.mod.full <- glm(SES_lec_1 ~ trmt + pland + enn, family = gaussian, data = KT_comps)
 summary(KT_lec_1.mod.full)
 step(KT_lec_1.mod.full)
 
@@ -896,24 +895,24 @@ anova(KT_lec_1.mod.full, KT_lec_1.mod.null,  test = "F")
 AICctab(KT_lec_1.mod.full, KT_lec_1.mod.null)
 
 
-VL_lec_1.mod.full <- glm(SES_lec_1 ~ trmt + pland + lpi + enn, family = gaussian, data = VL_comps)
+VL_lec_1.mod.full <- glm(SES_lec_1 ~ trmt + pland  + enn, family = gaussian, data = VL_comps)
 summary(VL_lec_1.mod.full)
 step(VL_lec_1.mod.full)
 
-VL_lec_1.mod.red <- glm(SES_lec_1 ~ lpi, family = gaussian, data = VL_comps)
-summary(VL_lec_1.mod.red)
-qqnorm(resid(VL_lec_1.mod.red))
-qqline(resid(VL_lec_1.mod.red))
-plot(simulateResiduals(VL_lec_1.mod.red))
-densityPlot(rstudent(VL_lec_1.mod.red)) # check density estimate of the distribution of residuals
-outlierTest(VL_lec_1.mod.red)
-influenceIndexPlot(VL_lec_1.mod.red, vars = c("Cook"), id = list(n = 3))
+VL_lec_1.mod.null <- glm(SES_lec_1 ~ 1, family = gaussian, data = VL_comps)
+summary(VL_lec_1.mod.null)
+qqnorm(resid(VL_lec_1.mod.null))
+qqline(resid(VL_lec_1.mod.null))
+plot(simulateResiduals(VL_lec_1.mod.null))
+densityPlot(rstudent(VL_lec_1.mod.null)) # check density estimate of the distribution of residuals
+outlierTest(VL_lec_1.mod.null)
+influenceIndexPlot(VL_lec_1.mod.null, vars = c("Cook"), id = list(n = 3))
 
 VL_lec_1.mod.null <- glm(SES_lec_1 ~ 1, family = gaussian, data = VL_comps)
 
 # model comparison techniques
-anova(VL_lec_1.mod.full, VL_lec_1.mod.red, VL_lec_1.mod.null,  test = "F")
-AICctab(VL_lec_1.mod.full, VL_lec_1.mod.red, VL_lec_1.mod.null)
+anova(VL_lec_1.mod.full, VL_lec_1.mod.null, VL_lec_1.mod.null,  test = "F")
+AICctab(VL_lec_1.mod.full, VL_lec_1.mod.null, VL_lec_1.mod.null)
 
 
 #I am leaving in the following code because it has outlier removal
@@ -978,7 +977,7 @@ with(KT_comps, ad.test(SES_lec_2))
 with(VL_comps, ad.test(SES_lec_2))
 
 
-FS_lec_2.mod.full <- glm(SES_lec_2 ~ trmt + pland + lpi + enn, family = gaussian, data = FS_comps)
+FS_lec_2.mod.full <- glm(SES_lec_2 ~ trmt + pland + enn, family = gaussian, data = FS_comps)
 summary(FS_lec_2.mod.full)
 step(FS_lec_2.mod.full)
 
@@ -1029,7 +1028,7 @@ anova(KT_lec_2.mod.full, KT_lec_2.mod.red, KT_lec_2.mod.null, test = "F")
 AICctab(KT_lec_2.mod.full, KT_lec_2.mod.red, KT_lec_2.mod.null)
 
 
-VL_lec_2.mod.full <- glm(SES_lec_2 ~ trmt + pland + lpi + enn, family = gaussian, data = VL_comps)
+VL_lec_2.mod.full <- glm(SES_lec_2 ~ trmt + pland + enn, family = gaussian, data = VL_comps)
 summary(VL_lec_2.mod.full)
 step(VL_lec_2.mod.full)
 
@@ -1089,7 +1088,7 @@ with(KT_comps, ad.test(SES_nest_1))
 with(VL_comps, ad.test(SES_nest_1))
 
 
-FS_nest_1.mod.full <- glm(SES_nest_1 ~ trmt + pland + lpi + enn, family = gaussian, data = FS_comps)
+FS_nest_1.mod.full <- glm(SES_nest_1 ~ trmt + pland + enn, family = gaussian, data = FS_comps)
 summary(FS_nest_1.mod.full)
 step(FS_nest_1.mod.full)
 
@@ -1119,7 +1118,7 @@ anova(FS_nest_1.mod.full, FS_nest_1.mod.red, FS_nest_1.mod.null, test = "F")
 AICctab(FS_nest_1.mod.full, FS_nest_1.mod.red, FS_nest_1.mod.null)
 
 
-KT_nest_1.mod.full <- glm(SES_nest_1 ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
+KT_nest_1.mod.full <- glm(SES_nest_1 ~ trmt + pland + enn, family = gaussian, data = KT_comps)
 summary(KT_nest_1.mod.full)
 step(KT_nest_1.mod.full)
 
@@ -1180,7 +1179,7 @@ with(KT_comps, ad.test(SES_nest_2))
 with(VL_comps, ad.test(SES_nest_2))
 
 
-FS_nest_2.mod.full <- glm(SES_nest_2 ~ trmt + pland + lpi + enn, family = gaussian, data = FS_comps)
+FS_nest_2.mod.full <- glm(SES_nest_2 ~ trmt + pland + enn, family = gaussian, data = FS_comps)
 summary(FS_nest_2.mod.full)
 step(FS_nest_2.mod.full)
 
@@ -1205,7 +1204,7 @@ anova(FS_nest_2.mod.full, FS_nest_2.mod.red, FS_nest_2.mod.null, test = "F")
 AICctab(FS_nest_2.mod.full, FS_nest_2.mod.red, FS_nest_2.mod.null)
 
 
-KT_nest_2.mod.full <- glm(SES_nest_2 ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
+KT_nest_2.mod.full <- glm(SES_nest_2 ~ trmt + pland  + enn, family = gaussian, data = KT_comps)
 summary(KT_nest_2.mod.full)
 step(KT_nest_2.mod.full)
 
@@ -1270,7 +1269,7 @@ with(KT_comps, ad.test(SES_nest_3))
 with(VL_comps, ad.test(SES_nest_3))
 
 
-FS_nest_3.mod.full <- glm(SES_nest_3 ~ trmt + pland + lpi + enn, family = gaussian, data = FS_comps)
+FS_nest_3.mod.full <- glm(SES_nest_3 ~ trmt + pland  + enn, family = gaussian, data = FS_comps)
 summary(FS_nest_3.mod.full)
 step(FS_nest_3.mod.full)
 
@@ -1299,7 +1298,7 @@ anova(FS_nest_3.mod.full, FS_nest_3.mod.red, FS_nest_3.mod.null, test = "F")
 AICctab(FS_nest_3.mod.full, FS_nest_3.mod.red, FS_nest_3.mod.null)
 
 
-KT_nest_3.mod.full <- glm(SES_nest_3 ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
+KT_nest_3.mod.full <- glm(SES_nest_3 ~ trmt + pland  + enn, family = gaussian, data = KT_comps)
 summary(KT_nest_3.mod.full)
 step(KT_nest_3.mod.full)
 
@@ -1325,7 +1324,7 @@ anova(KT_nest_3.mod.full, KT_nest_3.mod.red, KT_nest_3.mod.null, test = "F")
 AICctab(KT_nest_3.mod.full, KT_nest_3.mod.red, KT_nest_3.mod.null)
 
 
-VL_nest_3.mod.full <- glm(SES_nest_3 ~ trmt + pland + lpi + enn, family = gaussian, data = VL_comps)
+VL_nest_3.mod.full <- glm(SES_nest_3 ~ trmt + pland  + enn, family = gaussian, data = VL_comps)
 summary(VL_nest_3.mod.full)
 step(VL_nest_3.mod.full)
 
@@ -1474,7 +1473,7 @@ anova(FS_nest_5.mod.full,  FS_nest_5.mod.null, test = "F")
 AICctab(FS_nest_5.mod.full,  FS_nest_5.mod.null)
 
 
-KT_nest_5.mod.full <- glm(SES_nest_5 ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
+KT_nest_5.mod.full <- glm(SES_nest_5 ~ trmt + pland  + enn, family = gaussian, data = KT_comps)
 summary(KT_nest_5.mod.full)
 step(KT_nest_5.mod.full)
 
@@ -1499,7 +1498,7 @@ KT_nest_5.mod.null <- glm(SES_nest_5 ~ 1, family = gaussian, data = KT_comps)
 anova(KT_nest_5.mod.full, KT_nest_5.mod.red, KT_nest_5.mod.null, test = "F")
 AICctab(KT_nest_5.mod.full, KT_nest_5.mod.red, KT_nest_5.mod.null)
 
-VL_nest_5.mod.full <- glm(SES_nest_5 ~ trmt + pland + lpi + enn, family = gaussian, data = VL_comps)
+VL_nest_5.mod.full <- glm(SES_nest_5 ~ trmt + pland + enn, family = gaussian, data = VL_comps)
 summary(VL_nest_5.mod.full)
 step(VL_nest_5.mod.full)
 
@@ -1555,7 +1554,7 @@ with(KT_comps, ad.test(SES_soc_1))
 with(VL_comps, ad.test(SES_soc_1))
 
 
-FS_soc_1.mod.full <- glm(SES_soc_1 ~ trmt + pland + lpi + enn, family = gaussian, data = FS_comps)
+FS_soc_1.mod.full <- glm(SES_soc_1 ~ trmt + pland  + enn, family = gaussian, data = FS_comps)
 summary(FS_soc_1.mod.full)
 step(FS_soc_1.mod.full)
 
@@ -1583,7 +1582,7 @@ anova(FS_soc_1.mod.full, FS_soc_1.mod.red, FS_soc_1.mod.null, test = "F")
 AICctab(FS_soc_1.mod.full, FS_soc_1.mod.red, FS_soc_1.mod.null)
 
 
-KT_soc_1.mod.full <- glm(SES_soc_1 ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
+KT_soc_1.mod.full <- glm(SES_soc_1 ~ trmt + pland  + enn, family = gaussian, data = KT_comps)
 summary(KT_soc_1.mod.full)
 step(KT_soc_1.mod.full)
 
@@ -1674,7 +1673,7 @@ sd(VL_comps$SES_soc_2)
 #nope. looks like data point 9 is close, but not technically an outlier
 #so we will do KW test
 
-FS_soc_2.mod.full <- glm(SES_soc_2 ~ trmt + pland + lpi + enn, family = gaussian, data = FS_comps)
+FS_soc_2.mod.full <- glm(SES_soc_2 ~ trmt + pland  + enn, family = gaussian, data = FS_comps)
 summary(FS_soc_2.mod.full)
 step(FS_soc_2.mod.full)
 
@@ -1762,7 +1761,7 @@ with(KT_comps, ad.test(SES_soc_3))
 with(VL_comps, ad.test(SES_soc_3))
 
 
-FS_soc_3.mod.full <- glm(SES_soc_3 ~ trmt + pland + lpi + enn, family = gaussian, data = FS_comps)
+FS_soc_3.mod.full <- glm(SES_soc_3 ~ trmt + pland  + enn, family = gaussian, data = FS_comps)
 summary(FS_soc_3.mod.full)
 step(FS_soc_3.mod.full)
 
@@ -1789,7 +1788,7 @@ anova(FS_soc_3.mod.full, FS_soc_3.mod.red, FS_soc_3.mod.null, test = "F")
 AICctab(FS_soc_3.mod.full, FS_soc_3.mod.red, FS_soc_3.mod.null)
 
 
-KT_soc_3.mod.full <- glm(SES_soc_3 ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
+KT_soc_3.mod.full <- glm(SES_soc_3 ~ trmt + pland  + enn, family = gaussian, data = KT_comps)
 summary(KT_soc_3.mod.full)
 step(KT_soc_3.mod.full)
 
@@ -1814,7 +1813,7 @@ anova(KT_soc_3.mod.full, KT_soc_3.mod.red, KT_soc_3.mod.null, test = "F")
 AICctab(KT_soc_3.mod.full, KT_soc_3.mod.red, KT_soc_3.mod.null)
 
 
-VL_soc_3.mod.full <- glm(SES_soc_3 ~ trmt + pland + lpi + enn, family = gaussian, data = VL_comps)
+VL_soc_3.mod.full <- glm(SES_soc_3 ~ trmt + pland  + enn, family = gaussian, data = VL_comps)
 summary(VL_soc_3.mod.full)
 step(VL_soc_3.mod.full)
 
@@ -1863,7 +1862,7 @@ with(KT_comps, ad.test(SES_soc_4))
 with(VL_comps, ad.test(SES_soc_4))
 
 
-FS_soc_4.mod.full <- glm(SES_soc_4 ~ trmt + pland + lpi + enn, family = gaussian, data = FS_comps)
+FS_soc_4.mod.full <- glm(SES_soc_4 ~ trmt + pland  + enn, family = gaussian, data = FS_comps)
 summary(FS_soc_4.mod.full)
 step(FS_soc_4.mod.full)
 
@@ -1882,7 +1881,7 @@ anova(FS_soc_4.mod.full, FS_soc_4.mod.null, test = "F")
 AICctab(FS_soc_4.mod.full, FS_soc_4.mod.null)
 
 
-KT_soc_4.mod.full <- glm(SES_soc_4 ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
+KT_soc_4.mod.full <- glm(SES_soc_4 ~ trmt + pland  + enn, family = gaussian, data = KT_comps)
 summary(KT_soc_4.mod.full)
 step(KT_soc_4.mod.full)
 
@@ -1962,7 +1961,7 @@ with(KT_comps, ad.test(SES_ori_0))
 with(VL_comps, ad.test(SES_ori_0))
 
 
-FS_ori_0.mod.full <- glm(SES_ori_0 ~ trmt + pland + lpi + enn, family = gaussian, data = FS_comps)
+FS_ori_0.mod.full <- glm(SES_ori_0 ~ trmt + pland + enn, family = gaussian, data = FS_comps)
 summary(FS_ori_0.mod.full)
 step(FS_ori_0.mod.full)
 
@@ -2016,7 +2015,7 @@ anova(KT_ori_0.mod.full, KT_ori_0.mod.null)
 AICctab(KT_ori_0.mod.full,  KT_ori_0.mod.null)
 
 
-VL_ori_0.mod.full <- glm(SES_ori_0 ~ trmt + pland + lpi + enn, family = gaussian, data = VL_comps)
+VL_ori_0.mod.full <- glm(SES_ori_0 ~ trmt + pland  + enn, family = gaussian, data = VL_comps)
 summary(VL_ori_0.mod.full)
 step(VL_ori_0.mod.full)
 
@@ -2071,7 +2070,7 @@ with(KT_comps, ad.test(SES_ori_1))
 with(VL_comps, ad.test(SES_ori_1))
 
 
-FS_ori_1.mod.full <- glm(SES_ori_1 ~ trmt + pland + lpi + enn, family = gaussian, data = FS_comps)
+FS_ori_1.mod.full <- glm(SES_ori_1 ~ trmt + pland + enn, family = gaussian, data = FS_comps)
 summary(FS_ori_1.mod.full)
 step(FS_ori_1.mod.full)
 
@@ -2120,7 +2119,7 @@ influenceIndexPlot(KT_ori_1.mod.null, vars = c("Cook"), id = list(n = 3))
 anova(KT_ori_1.mod.full, KT_ori_1.mod.null)
 AICctab(KT_ori_1.mod.full,  KT_ori_1.mod.null)
 
-VL_ori_1.mod.full <- glm(SES_ori_1 ~ trmt + pland + lpi + enn, family = gaussian, data = VL_comps)
+VL_ori_1.mod.full <- glm(SES_ori_1 ~ trmt + pland + enn, family = gaussian, data = VL_comps)
 summary(VL_ori_1.mod.full)
 step(VL_ori_1.mod.full)
 
@@ -2174,7 +2173,7 @@ with(KT_comps, ad.test(SES_bsor))
 with(VL_comps, ad.test(SES_bsor))
 
 
-FS_bsor.mod.full <- glm(SES_bsor ~ trmt + pland + lpi + enn, family = gaussian, data = FS_comps)
+FS_bsor.mod.full <- glm(SES_bsor ~ trmt + pland + enn, family = gaussian, data = FS_comps)
 summary(FS_bsor.mod.full)
 step(FS_bsor.mod.full)
 
@@ -2193,7 +2192,7 @@ anova(FS_bsor.mod.full, FS_bsor.mod.null)
 AICctab(FS_bsor.mod.full, FS_bsor.mod.null)
 
 
-KT_bsor.mod.full <- glm(SES_bsor ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
+KT_bsor.mod.full <- glm(SES_bsor ~ trmt + pland  + enn, family = gaussian, data = KT_comps)
 summary(KT_bsor.mod.full)
 step(KT_bsor.mod.full)
 
@@ -2272,7 +2271,7 @@ with(KT_comps, ad.test(SES_bsim))
 with(VL_comps, ad.test(SES_bsim))
 
 
-FS_bsim.mod.full <- glm(SES_bsim ~ trmt + pland + lpi + enn, family = gaussian, data = FS_comps)
+FS_bsim.mod.full <- glm(SES_bsim ~ trmt + pland  + enn, family = gaussian, data = FS_comps)
 summary(FS_bsim.mod.full)
 step(FS_bsim.mod.full)
 
@@ -2292,7 +2291,7 @@ anova(FS_bsim.mod.full, FS_bsim.mod.red, FS_bsim.mod.null)
 AICctab(FS_bsim.mod.full, FS_bsim.mod.red, FS_bsim.mod.null)
 #null was best model
 
-KT_bsim.mod.full <- glm(SES_bsim ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
+KT_bsim.mod.full <- glm(SES_bsim ~ trmt + pland  + enn, family = gaussian, data = KT_comps)
 summary(KT_bsim.mod.full)
 step(KT_bsim.mod.full)
 
@@ -2314,7 +2313,7 @@ AICctab(KT_bsim.mod.full, KT_bsim.mod.red, KT_bsim.mod.null)
 
 #null is best model
 
-VL_bsim.mod.full <- glm(SES_bsim ~ trmt + pland + lpi + enn, family = gaussian, data = VL_comps)
+VL_bsim.mod.full <- glm(SES_bsim ~ trmt + pland + enn, family = gaussian, data = VL_comps)
 summary(VL_bsim.mod.full)
 step(VL_bsim.mod.full)
 
@@ -2364,7 +2363,7 @@ with(KT_comps, ad.test(SES_bsne))
 with(VL_comps, ad.test(SES_bsne))
 #VL fails Anderson Darling normality test. KW test instead
 
-FS_bsne.mod.full <- glm(SES_bsne ~ trmt + pland + lpi + enn, family = gaussian, data = FS_comps)
+FS_bsne.mod.full <- glm(SES_bsne ~ trmt + pland  + enn, family = gaussian, data = FS_comps)
 summary(FS_bsne.mod.full)
 step(FS_bsne.mod.full)
 
@@ -2385,7 +2384,7 @@ AICctab(FS_bsne.mod.full, FS_bsne.mod.red, FS_bsne.mod.null)
 
 #Null was best model fit
 
-KT_bsne.mod.full <- glm(SES_bsne ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
+KT_bsne.mod.full <- glm(SES_bsne ~ trmt + pland  + enn, family = gaussian, data = KT_comps)
 summary(KT_bsne.mod.full)
 step(KT_bsne.mod.full)
 
@@ -2439,7 +2438,7 @@ with(KT_comps, ad.test(SES_falpha))
 with(VL_comps, ad.test(SES_falpha))
 
 
-FS_falpha.mod.full <- glm(SES_falpha ~ trmt + pland + lpi + enn, family = gaussian, data = FS_comps)
+FS_falpha.mod.full <- glm(SES_falpha ~ trmt + pland  + enn, family = gaussian, data = FS_comps)
 summary(FS_falpha.mod.full)
 step(FS_falpha.mod.full)
 
@@ -2457,7 +2456,7 @@ anova(FS_falpha.mod.full, FS_falpha.mod.null)
 AICtab(FS_falpha.mod.full, FS_falpha.mod.null)
 
 
-KT_falpha.mod.full <- glm(SES_falpha ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
+KT_falpha.mod.full <- glm(SES_falpha ~ trmt + pland  + enn, family = gaussian, data = KT_comps)
 summary(KT_falpha.mod.full)
 step(KT_falpha.mod.full)
 
@@ -2482,7 +2481,7 @@ anova(KT_falpha.mod.full, KT_falpha.mod.red, KT_falpha.mod.null)
 AICtab(KT_falpha.mod.full, KT_falpha.mod.red, KT_falpha.mod.null)
 
 
-VL_falpha.mod.full <- glm(SES_falpha ~ trmt + pland + lpi + enn, family = gaussian, data = VL_comps)
+VL_falpha.mod.full <- glm(SES_falpha ~ trmt + pland  + enn, family = gaussian, data = VL_comps)
 summary(VL_falpha.mod.full)
 step(VL_falpha.mod.full)
 
@@ -2540,27 +2539,33 @@ with(KT_comps, ad.test(SES_fbsor))
 with(VL_comps, ad.test(SES_fbsor))
 
 
-FS_fbsor.mod.full <- glm(SES_fbsor ~ trmt + pland + lpi + enn, family = gaussian, data = FS_comps)
+FS_fbsor.mod.full <- glm(SES_fbsor ~ trmt + pland + enn, family = gaussian, data = FS_comps)
 summary(FS_fbsor.mod.full)
 step(FS_fbsor.mod.full)
 
+FS_fbsor.mod.red<-glm(SES_fbsor ~ trmt, family = gaussian, data = FS_comps)
 FS_fbsor.mod.null <- glm(SES_fbsor ~ 1, family = gaussian, data = FS_comps)
-summary(FS_fbsor.mod.null)
-qqnorm(resid(FS_fbsor.mod.null))
-qqline(resid(FS_fbsor.mod.null))
-plot(simulateResiduals(FS_fbsor.mod.null))
-densityPlot(rstudent(FS_fbsor.mod.null)) # check density estimate of the distribution of residuals
-outlierTest(FS_fbsor.mod.null)
-#there is an outlier
-influenceIndexPlot(FS_fbsor.mod.null, vars = c("Cook"), id = list(n = 3))
-#It isn't much of an influence, and also this is a null model, so I won't remove 13
+summary(FS_fbsor.mod.red)
+qqnorm(resid(FS_fbsor.mod.red))
+qqline(resid(FS_fbsor.mod.red))
+plot(simulateResiduals(FS_fbsor.mod.red))
+densityPlot(rstudent(FS_fbsor.mod.red)) # check density estimate of the distribution of residuals
+outlierTest(FS_fbsor.mod.red)
+
+influenceIndexPlot(FS_fbsor.mod.red, vars = c("Cook"), id = list(n = 3))
 
 # model comparison techniques
-anova(FS_fbsor.mod.full, FS_fbsor.mod.null)
-AICtab(FS_fbsor.mod.full, FS_fbsor.mod.null)
+anova(FS_fbsor.mod.full,FS_fbsor.mod.red, FS_fbsor.mod.null)
+AICtab(FS_fbsor.mod.full, FS_fbsor.mod.red, FS_fbsor.mod.null)
+
+Anova(FS_fbsor.mod.red)
+
+png("Figure trmt fbsor.png", width = 1500, height = 1000, pointsize = 20)
+effect_plot(FS_fbsor.mod.red, pred = trmt, interval = TRUE, partial.residuals = TRUE, x.label = 'Treatment Comparison', y.label = 'Standardized Effect Sizes (SES)')
+dev.off()
 
 
-KT_fbsor.mod.full <- glm(SES_fbsor ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
+KT_fbsor.mod.full <- glm(SES_fbsor ~ trmt + pland  + enn, family = gaussian, data = KT_comps)
 summary(KT_fbsor.mod.full)
 step(KT_fbsor.mod.full)
 
@@ -2578,7 +2583,7 @@ anova(KT_fbsor.mod.full, KT_fbsor.mod.null)
 AICtab(KT_fbsor.mod.full, KT_fbsor.mod.null)
 
 
-VL_fbsor.mod.full <- glm(SES_fbsor ~ trmt + pland + lpi + enn, family = gaussian, data = VL_comps)
+VL_fbsor.mod.full <- glm(SES_fbsor ~ trmt + pland  + enn, family = gaussian, data = VL_comps)
 summary(VL_fbsor.mod.full)
 step(VL_fbsor.mod.full)
 
@@ -2647,7 +2652,7 @@ anova(FS_fbsim.mod.full, FS_fbsim.mod.red, FS_fbsim.mod.null)
 AICtab(FS_fbsim.mod.full, FS_fbsim.mod.red, FS_fbsim.mod.null)
 
 
-KT_fbsim.mod.full <- glm(SES_fbsim ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
+KT_fbsim.mod.full <- glm(SES_fbsim ~ trmt + pland  + enn, family = gaussian, data = KT_comps)
 summary(KT_fbsim.mod.full)
 step(KT_fbsim.mod.full)
 
@@ -2665,7 +2670,7 @@ anova(KT_fbsim.mod.full, KT_fbsim.mod.null)
 AICtab(KT_fbsim.mod.full, KT_fbsim.mod.null)
 
 
-VL_fbsim.mod.full <- glm(SES_fbsim ~ trmt + pland + lpi + enn, family = gaussian, data = VL_comps)
+VL_fbsim.mod.full <- glm(SES_fbsim ~ trmt + pland  + enn, family = gaussian, data = VL_comps)
 summary(VL_fbsim.mod.full)
 step(VL_fbsim.mod.full)
 
@@ -2721,7 +2726,7 @@ with(VL_comps, ad.test(SES_fbsne))
 
 #Skipping FS because of failed normality test
 
-KT_fbsne.mod.full <- glm(SES_fbsne ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
+KT_fbsne.mod.full <- glm(SES_fbsne ~ trmt + pland  + enn, family = gaussian, data = KT_comps)
 summary(KT_fbsne.mod.full)
 step(KT_fbsne.mod.full)
 
