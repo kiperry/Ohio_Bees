@@ -291,7 +291,7 @@ nfsor <- read.csv("Regional to Urban_Null Models_HillSmith_3 Axes/fbeta_sor.csv"
 # Community weighted means
 cwm.obs.m <- as.matrix(t(colMeans(cwm.obs)))
 
-## body length----
+ ## body length----
 SES_bl <- (cwm.obs$bl - apply(nbl, MARGIN = 1, mean)) / apply(nbl, MARGIN = 1, sd, na.rm=T)
 SES_bl
 
@@ -1030,4 +1030,130 @@ text(4.5, 4.2, "C", pos = 4, font = 2, cex = 2.6)
 
 dev.off()
 
+#length and origin
+SES_lengthandorigin <- as.data.frame(cbind( SES_ori_1, SES_ori_0, SES_bl ))
+colnames(SES_lengthandorigin) <- c( "Exotic", "Native", "Body Length")
+SES_lengthandorigin <- melt(SES_lengthandorigin)
+colnames(SES_lengthandorigin) <- c("trait","ses")
 
+par(mar = c(5,9,4,2))
+boxplot(ses ~ trait, data = SES_lengthandorigin, col = viridis(5, alpha = 0.6),
+        xlab = "Standardized Effect Sizes (SES)", ylab = "",
+        horizontal = TRUE, las = 1, range = 0, ylim= c(-8,8))
+stripchart(ses ~ trait, data = SES_lengthandorigin, col = viridis(5),
+           pch = 19, cex = 1, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+abline(v = 0.0, col = "black", lwd = 3, lty=2)
+
+#lecty
+SES_lect <- as.data.frame(cbind( SES_lec_2, SES_lec_1, SES_lec_0))
+colnames(SES_lect) <- c( "Specialist", "Generalist", "Kleptoparasitic" )
+SES_lect <- melt(SES_lect)
+colnames(SES_lect) <- c("trait","ses")
+
+par(mar = c(5,9,4,2))
+boxplot(ses ~ trait, data = SES_lect, col = viridis(6, alpha = 0.6),
+        xlab = "Standardized Effect Sizes (SES)", ylab = "",
+        horizontal = TRUE, las = 1, range = 0, ylim= c(-8,8))
+stripchart(ses ~ trait, data = SES_lect, col = viridis(6),
+           pch = 19, cex = 1, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+abline(v = 0.0, col = "black", lwd = 3, lty=2)
+
+
+
+## Nesting Traits
+
+SES_Nest <- as.data.frame(cbind(SES_nest_5, SES_nest_4, SES_nest_3, SES_nest_2, SES_nest_1))
+colnames(SES_Nest) <- c("Wood","Pithy Stems", "Hive", "Cavity", "Soil")
+SES_Nest <- melt(SES_Nest)
+colnames(SES_Nest) <- c("nest","ses")
+
+par(mar = c(5,9,4,2))
+boxplot(ses ~ nest, data = SES_Nest, col = viridis(5, alpha = 0.6),
+        xlab = "Standardized Effect Sizes (SES)", ylab = "",
+        horizontal = TRUE, las = 1, range = 0, ylim= c(-8,8))
+stripchart(ses ~ nest, data = SES_Nest, col = viridis(5),
+           pch = 19, cex = 1, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+abline(v = 0.0, col = "black", lwd = 3, lty=2)
+
+
+
+## Sociality Traits
+SES_Soc <- as.data.frame(cbind(SES_soc_4, SES_soc_3, SES_soc_1, SES_soc_2))
+colnames(SES_Soc) <- c("Parasitic","Eusocial", "Subsocial", "Solitary")
+SES_Soc <- melt(SES_Soc)
+colnames(SES_Soc) <- c("soc","ses")
+
+par(mar = c(5,9,4,2))
+boxplot(ses ~ soc, data = SES_Soc, col = viridis(4, alpha = 0.6),
+        xlab = "Standardized Effect Sizes (SES)", ylab = "",
+        horizontal = TRUE, las = 1, range = 0, ylim= c(-8,8))
+stripchart(ses ~ soc, data = SES_Soc, col = viridis(4),
+           pch = 19, cex = 1, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+abline(v = 0.0, col = "black", lwd = 3, lty=2)
+
+
+
+#Same graphs but Put in figure order for making paper figures----
+png("Figure 2 all regional sp traits.png", width = 1500, height = 1000, pointsize = 20)
+
+par(mfrow=c(2,2)) # indicates two rows, two columns
+par(mar = c(5,9,4,2)) # sets the margins around the figure
+
+#length and origin
+SES_lengthandorigin <- as.data.frame(cbind( SES_ori_1, SES_ori_0, SES_bl ))
+colnames(SES_lengthandorigin) <- c( "Non-Native", "Native", "Body Length")
+SES_lengthandorigin <- melt(SES_lengthandorigin)
+colnames(SES_lengthandorigin) <- c("trait","ses")
+
+
+
+boxplot(ses ~ trait, data = SES_lengthandorigin, col = viridis(5, alpha = 0.6),
+        xlab = "Standardized Effect Sizes (SES)", ylab = "",
+        horizontal = TRUE, las = 1, range = 0, ylim= c(-8,8))
+stripchart(ses ~ trait, data = SES_lengthandorigin, col = viridis(5),
+           pch = 19, cex = 1, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+abline(v = 0.0, col = "black", lwd = 3, lty=2)
+
+## Nesting Traits
+
+SES_Nest <- as.data.frame(cbind(SES_nest_5, SES_nest_4, SES_nest_3, SES_nest_2, SES_nest_1))
+colnames(SES_Nest) <- c("Wood","Pithy Stems", "Colony", "Cavity", "Soil")
+SES_Nest <- melt(SES_Nest)
+colnames(SES_Nest) <- c("nest","ses")
+
+boxplot(ses ~ nest, data = SES_Nest, col = viridis(5, alpha = 0.6),
+        xlab = "Standardized Effect Sizes (SES)", ylab = "",
+        horizontal = TRUE, las = 1, range = 0, ylim= c(-8,8))
+stripchart(ses ~ nest, data = SES_Nest, col = viridis(5),
+           pch = 19, cex = 1, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+abline(v = 0.0, col = "black", lwd = 3, lty=2)
+
+#lecty
+SES_lect <- as.data.frame(cbind( SES_lec_2, SES_lec_1, SES_lec_0))
+colnames(SES_lect) <- c( "Specialist", "Generalist", "Kleptoparasitic" )
+SES_lect <- melt(SES_lect)
+colnames(SES_lect) <- c("trait","ses")
+
+
+boxplot(ses ~ trait, data = SES_lect, col = viridis(6, alpha = 0.6),
+        xlab = "Standardized Effect Sizes (SES)", ylab = "",
+        horizontal = TRUE, las = 1, range = 0, ylim= c(-8,8))
+stripchart(ses ~ trait, data = SES_lect, col = viridis(6),
+           pch = 19, cex = 1, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+abline(v = 0.0, col = "black", lwd = 3, lty=2)
+
+## Sociality Traits
+SES_Soc <- as.data.frame(cbind(SES_soc_4, SES_soc_3, SES_soc_1, SES_soc_2))
+colnames(SES_Soc) <- c("Parasitic","Eusocial", "Subsocial", "Solitary")
+SES_Soc <- melt(SES_Soc)
+colnames(SES_Soc) <- c("soc","ses")
+
+
+boxplot(ses ~ soc, data = SES_Soc, col = viridis(4, alpha = 0.6),
+        xlab = "Standardized Effect Sizes (SES)", ylab = "",
+        horizontal = TRUE, las = 1, range = 0, ylim= c(-8,8))
+stripchart(ses ~ soc, data = SES_Soc, col = viridis(4),
+           pch = 19, cex = 1, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+abline(v = 0.0, col = "black", lwd = 3, lty=2)
+
+dev.off()

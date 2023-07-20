@@ -1,0 +1,113 @@
+---
+title: "Graphing the models"
+author: "Carlee"
+date: "2023-01-13"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+Below is library things
+```{r}
+
+if (!suppressWarnings(require(nortest))) install.packages("nortest")
+citation("nortest")
+
+if (!suppressWarnings(require(car))) install.packages("car")
+citation("car")
+
+if (!suppressWarnings(require(emmeans))) install.packages("emmeans")
+citation("emmeans")
+
+if (!suppressWarnings(require(bbmle))) install.packages("bbmle")
+citation("bbmle")
+
+if (!suppressWarnings(require(DHARMa))) install.packages("DHARMa")
+citation("DHARMa")
+
+if (!suppressWarnings(require(lme4))) install.packages("lme4")
+citation("lme4")
+
+if (!suppressWarnings(require(ggplot2))) install.packages("ggplot2")
+citation("ggplot2")
+
+if (!suppressWarnings(require(sjPlot))) install.packages("sjPlot")
+citation("sjPlot")
+
+if (!suppressWarnings(require(jtools))) install.packages("jtools")
+citation("jtools")
+
+if (!suppressWarnings(require(interactions))) install.packages("interactions")
+citation("interactions")
+
+```
+
+```{r}
+#making our comparison groups
+
+FS_comps<-SES[1:29,]
+FS_comps<-FS_comps[-3,]
+FS_comps<-FS_comps[-3,]
+FS_comps<-FS_comps[-13,]
+FS_comps<-FS_comps[-13,]
+FS_comps<-FS_comps[-13,]
+FS_comps<-FS_comps[-13,]
+
+FS_comps<-FS_comps[-14,]
+FS_comps<-FS_comps[-14,]
+FS_comps<-FS_comps[-15,]
+FS_comps<-FS_comps[-15,]
+FS_comps<-FS_comps[-15,]
+FS_comps<-FS_comps[-15,]
+FS_comps
+
+
+#Okay so the above created a matrix of Francis' results
+with(FS_comps, bartlett.test(SES_bl ~ trmt))
+#####IT WORKS!!!!!
+#Okay so to do
+#1- make a matrix of Katie results
+KT_comps<-SES[3:33,]
+KT_comps<-KT_comps[-3,]
+KT_comps<-KT_comps[-3,]
+KT_comps<-KT_comps[-3,]
+KT_comps<-KT_comps[-3,]
+KT_comps<-KT_comps[-3,]
+KT_comps<-KT_comps[-3,]
+KT_comps<-KT_comps[-3,]
+KT_comps<-KT_comps[-3,]
+KT_comps<-KT_comps[-3,]
+KT_comps<-KT_comps[-3,]
+KT_comps<-KT_comps[-7,]
+KT_comps<-KT_comps[-9,]
+KT_comps<-KT_comps[-13,]
+KT_comps<-KT_comps[-13,]
+KT_comps<-KT_comps[-13,]
+#2- Make a matrix of both vacant lot results
+VL_comps<-SES[3:32,]
+VL_comps<-VL_comps[-2,]
+VL_comps<-VL_comps[-2,]
+VL_comps<-VL_comps[-12,]
+VL_comps<-VL_comps[-13,]
+VL_comps<-VL_comps[-20,]
+VL_comps<-VL_comps[-20,]
+VL_comps<-VL_comps[-20,]
+VL_comps<-VL_comps[-20,]
+VL_comps<-VL_comps[-13,]
+VL_comps<-VL_comps[-14,]
+VL_comps<-VL_comps[-14,]
+VL_comps<-VL_comps[-18,]
+VL_comps<-VL_comps[-15,]
+
+```
+
+
+Okay this is going to be graph of the functional beta diversity sne
+```{r}
+VL_fbsne.mod.red <- glm(SES_fbsne ~ lpi, family = gaussian, data = VL_comps)
+
+effect_plot(VL_fbsne.mod.red, pred = lpi, interval = TRUE, partial.residuals = TRUE, x.label = '', y.label = '(PLAND)')
+
+```
+
