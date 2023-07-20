@@ -127,6 +127,8 @@ dev.off()
 #But with both urban farms and vacant lots. 
 
 
+#Below is one attempt to make that figure. Will determine if a different version is preferable
+
 library(ggplot2)
 
 
@@ -141,24 +143,22 @@ SES_lengthandorigin.FC<- data.frame(
   ordered=TRUE)
 
 
-png("Figure 5A all FS local sp traits.png", width = 1500, height = 1000, pointsize = 20)
 
-ggplot(SES_lengthandorigin.FC, aes(x = factor(variable,levels = c("Body Length", "Native", "Non-Native"), ordered=TRUE), y = value, fill = trmt)) +
+fig5a<- ggplot(SES_lengthandorigin.FC, aes(x = factor(variable,levels = c("Body Length", "Native", "Non-Native"), ordered=TRUE), y = value, fill = trmt)) +
   geom_boxplot(position = position_dodge(width = 0.75), alpha = 0.6, coef = 0, width = 0.6) +
   geom_point(position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.75), 
-             shape = 19, size = 5, show.legend = FALSE) +
+             shape = 19, size = 5) +
   scale_fill_viridis_d(option = "C", end = 0.3, direction = -1, alpha = 0.6) +
   ylab("Standardized Effect Sizes (SES)") +
   xlab("") +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 0, hjust = 1, size=25)) +
-  theme(axis.text.y = element_text(size=39))+
+  theme(axis.text.x = element_text(angle = 0, hjust = 1, size=15)) +
+  theme(axis.text.y = element_text(size=25))+
   ylim(c(-8, 8)) +
   geom_hline(yintercept = 0, col = "black", lwd = 2, linetype = "dashed") +
   coord_flip() +guides(fill = FALSE)
 
 
-dev.off()
 
 #Nesting traits
 
@@ -168,22 +168,21 @@ SES_nesting.FC<- data.frame(
   value = c(fc$SES_nest_1, fc$SES_nest_2, fc$SES_nest_3, fc$SES_nest_4, fc$SES_nest_5)
 )
 
-png("Figure 5B all FS local sp traits.png", width = 1500, height = 1000, pointsize = 20)
 
-ggplot(SES_nesting.FC, aes(x = variable, y = value, fill = trmt)) +
+fig5b<- ggplot(SES_nesting.FC, aes(x = variable, y = value, fill = trmt)) +
   geom_boxplot(position = position_dodge(width = 0.75), alpha = 0.6, coef = 0, width = 0.6) +
   geom_point(position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.75), 
-             shape = 19, size = 5, show.legend = FALSE) +
+             shape = 19, size = 5) +
   scale_fill_viridis_d(option = "C", end = 0.3, direction = -1, alpha = 0.6) +
   ylab("Standardized Effect Sizes (SES)") +
   xlab("") +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 0, hjust = 1,size=25)) +
-  theme(axis.text.y = element_text(size=39))+
+  theme(axis.text.x = element_text(angle = 0, hjust = 1,size=15)) +
+  theme(axis.text.y = element_text(size=25))+
   ylim(c(-8, 8)) +
   geom_hline(yintercept = 0, col = "black", lwd = 2, linetype = "dashed") +
   coord_flip()+ guides(fill = FALSE)
-dev.off()
+
 
 #Lecty
 SES_lecty.FC<- data.frame(
@@ -192,22 +191,21 @@ SES_lecty.FC<- data.frame(
   value = c(fc$SES_lec_0, fc$SES_lec_1, fc$SES_lec_2)
 )
 
-png("Figure 5C all FS local sp traits.png", width = 1500, height = 1000, pointsize = 20)
 
- ggplot(SES_lecty.FC, aes(x = variable, y = value, fill = trmt)) +
+ fig5c<- ggplot(SES_lecty.FC, aes(x = variable, y = value, fill = trmt)) +
   geom_boxplot(position = position_dodge(width = 0.75), alpha = 0.6, coef = 0, width = 0.6) +
   geom_point(position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.75), 
-             shape = 19, size = 5, show.legend = FALSE) +
+             shape = 19, size = 5) +
   scale_fill_viridis_d(option = "C", end = 0.3, direction = -1, alpha = 0.6) +
   ylab("Standardized Effect Sizes (SES)") +
   xlab("") +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 0, hjust = 1, size=25)) +
-   theme(axis.text.y = element_text(size=39))+
+  theme(axis.text.x = element_text(angle = 0, hjust = 1, size=15)) +
+   theme(axis.text.y = element_text(size=25))+
   ylim(c(-8, 8)) +
   geom_hline(yintercept = 0, col = "black", lwd = 2, linetype = "dashed") +
   coord_flip()+ guides(fill = FALSE)
-dev.off()
+
 
 #Sociality
 SES_sociality.FC<- data.frame(
@@ -216,26 +214,102 @@ SES_sociality.FC<- data.frame(
   value = c(fc$SES_soc_1, fc$SES_soc_2, fc$SES_soc_3, fc$SES_soc_4)
 )
 
-png("Figure 5D all FS local sp traits.png", width = 1500, height = 1000, pointsize = 20)
 
-ggplot(SES_sociality.FC, aes(x = variable, y = value, fill = trmt)) +
+fig5d<- ggplot(SES_sociality.FC, aes(x = variable, y = value, fill = trmt)) +
   geom_boxplot(position = position_dodge(width = .75), alpha = 0.6, coef = 0, width = 0.6) +
   geom_point(position = position_jitterdodge(jitter.width = 0.2, dodge.width = .75), 
-             shape = 19, size = 5, show.legend = FALSE) +
+             shape = 19, size = 5) +
   scale_fill_viridis_d(option = "C", end = 0.3, direction = -1, alpha = 0.6) +
   ylab("Standardized Effect Sizes (SES)") + 
   xlab("") +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 0, hjust = 1, size=25)) +
-  theme(axis.text.y = element_text(size=39))+
+  theme(axis.text.x = element_text(angle = 0, hjust = 1, size=15)) +
+  theme(axis.text.y = element_text(size=25))+
   ylim(c(-8, 8)) +
   geom_hline(yintercept = 0, col = "black", lwd = 2, linetype = "dashed") +
   coord_flip() +guides(fill = FALSE)
 
 
+fig5 <- plot_grid(fig5a,fig5b,fig5c,fig5d, labels= c('A','B','C','D'))
+png("Figure 5 all FS local sp traits.png", width = 1500, height = 1000, pointsize = 20)
+
+fig5
 
 dev.off()
 
+#The below code is used in tandem with the ComparingLocal.R file, which had the code for the plots already written
+
+
+a6<- effect_plot(FS_bl.mod.red, pred = pland, interval = TRUE, partial.residuals = TRUE, x.label = 'Percentage Greenspace', y.label = 'SES', main.title = 'Body Length')
+b6<- effect_plot(FS_bl.mod.red, pred = enn, interval = TRUE, partial.residuals = TRUE, x.label = 'Greenspace Isolation',y.label ='', main.title = 'Body Length')
+c6<- effect_plot(FS_ori_0.mod.red, pred = enn, interval = TRUE, partial.residuals = TRUE, x.label = ' Greenspace Isolation',y.label ='', main.title = 'Native Species')
+d6<- effect_plot(FS_ori_1.mod.red, pred = enn, interval = TRUE, partial.residuals = TRUE, x.label = 'Greenspace Isolation ', y.label ='SES', main.title = 'Alien Species')
+e6<- effect_plot(FS_nest_1.mod.red, pred = trmt, interval = TRUE, partial.residuals = TRUE, x.label = 'Treatment', y.label ='', main.title = 'Soil Nesting')
+f6<- effect_plot(FS_nest_2.mod.red, pred = trmt, interval = TRUE, partial.residuals = TRUE, x.label = 'Treatment', y.label ='', main.title = 'Cavity Nesting')
+g6<- effect_plot(FS_lec_2.mod.red, pred = pland, interval = TRUE, partial.residuals = TRUE, x.label = ' Percentage Greenspace', y.label ='SES', main.title = 'Specialist')
+
+
+install.packages("cowplot")
+library(cowplot)
+fig6 <- plot_grid(a6,b6,c6,d6,e6,f6,g6, labels= c('A','B','C','D','E','F','G'))
+
+png("Figure 6 All functional predictions.png", width = 1500, height = 1000, pointsize = 20)
+
+fig6
+dev.off()
+
+
+#Next making figure of vacant lot and pocket prairie diversity metrics
+
+t1t8 <- rbind(T1, T8)
+str(t1t8)
+t1t8 <- droplevels(t1t8) #drops farm and control
+str(t1t8)
+
+# changes the treatment names for the figure
+levels(t1t8$trmt)[levels(t1t8$trmt)=='T1'] <- 'Vacant Lot'
+levels(t1t8$trmt)[levels(t1t8$trmt)=='T8'] <- 'Pocket Prairie'
+levels(t1t8$trmt)
+
+#step one- create a dataframe for all of the tax and funct diversity metrics I want to graph
+SES_ALLdivvl <- as.data.frame(rbind( T1$SES_fbsim, T1$SES_fbsne, T1$SES_fbsor, T1$SES_bsim, T1$SES_bsne, T1$SES_bsor, T1$SES_falpha))
+str(SES_ALLdivvl)
+SES_ALLdivvl <- data.frame(t(SES_ALLdivvl)) #t function switches columns with rows
+str(SES_ALLdivvl)
+colnames(SES_ALLdivvl) <- c( "Funct. Turnover", "Funct. Nestedness",  "Total Funct. Beta-Diversity","Tax. Turnover", "Tax. Nestedness", "Total Tax. Beta-Diversity", "Funct. Alpha" )
+
+
+SES_ALLdivvl <- melt(SES_ALLdivvl)
+colnames(SES_ALLdivvl) <- c("diversity","ses")
 
 
 
+SES_ALLdivprai <- as.data.frame(rbind( T8$SES_fbsim, T8$SES_fbsne, T8$SES_fbsor, T8$SES_bsim, T8$SES_bsne, T8$SES_bsor, T8$SES_falpha))
+str(SES_ALLdivprai)
+SES_ALLdivprai <- data.frame(t(SES_ALLdivprai))
+str(SES_ALLdivprai)
+colnames(SES_ALLdivprai) <- c( "Funct. Turnover", "Funct. Nestedness",  "Total Funct. Beta-Diversity","Tax. Turnover", "Tax. Nestedness", "Total Tax. Beta-Diversity", "Funct. Alpha")
+
+SES_ALLdivprai <- melt(SES_ALLdivprai)
+colnames(SES_ALLdivprai) <- c("diversity","ses")
+
+
+#Now I should be able to plot it in a nice graph
+png("Local Diversity Metrics Figure7.png", width = 1500, height = 1000, pointsize = 20)
+par(mfrow=c(1,2)) # indicates one row, two columns
+par(mar = c(5,7,4,2)) # sets the margins around the figure
+
+boxplot(ses ~ diversity, data = SES_ALLdivvl, col = viridis(6, alpha = 0.6),
+        xlab = "Standardized Effect Sizes (SES)", ylab = "",
+        horizontal = TRUE, las = 1, range = 0, main = "Vacant Lot Diversity")
+stripchart(ses ~ diversity, data = SES_ALLdivvl, col = viridis(6),
+           pch = 19, cex = 1, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+abline(v = 0.0, col = "black", lwd = 3, lty=2)
+
+boxplot(ses ~ diversity, data = SES_ALLdivprai, col = viridis(6, alpha = 0.6),
+        xlab = "Standardized Effect Sizes (SES)", ylab = "",
+        horizontal = TRUE, las = 1, range = 0, main = "Pocket Prairie Diversity")
+stripchart(ses ~ diversity, data = SES_ALLdivprai, col = viridis(6),
+           pch = 19, cex = 1, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+abline(v = 0.0, col = "black", lwd = 3, lty=2)
+dev.off()
