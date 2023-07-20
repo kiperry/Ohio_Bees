@@ -138,16 +138,18 @@ library(ggplot2)
 #Length and Origin
 SES_lengthandorigin.FC<- data.frame(
   trmt=rep(fc$trmt,3),
-  variable=rep(c("Body Length", "Native", "Non-Native"), each = nrow(fc)),
-  value = c(fc$SES_bl, fc$SES_ori_0, fc$SES_ori_1),
-  ordered=TRUE)
+  variable=rep(c("Alien", "Native", "Body Length"), each = nrow(fc)),
+  value = c(fc$SES_ori_1, fc$SES_ori_0, fc$SES_bl)
+  )
+SES_lengthandorigin.FC$variable<-factor(SES_lengthandorigin.FC$variable, c("Alien", "Native", "Body Length"))
+#The above code puts the funct. traits as "factors" which is necessary for us to keep the order we want in our box plots
 
 
 
-fig5a<- ggplot(SES_lengthandorigin.FC, aes(x = factor(variable,levels = c("Body Length", "Native", "Non-Native"), ordered=TRUE), y = value, fill = trmt)) +
+fig5a<- ggplot(SES_lengthandorigin.FC, aes(x = variable, y = value, fill = trmt)) +
   geom_boxplot(position = position_dodge(width = 0.75), alpha = 0.6, coef = 0, width = 0.6) +
   geom_point(position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.75), 
-             shape = 19, size = 5) +
+             shape = 19, size = 3, show.legend = TRUE) +
   scale_fill_viridis_d(option = "C", end = 0.3, direction = -1, alpha = 0.6) +
   ylab("Standardized Effect Sizes (SES)") +
   xlab("") +
@@ -164,15 +166,17 @@ fig5a<- ggplot(SES_lengthandorigin.FC, aes(x = factor(variable,levels = c("Body 
 
 SES_nesting.FC<- data.frame(
   trmt=rep(fc$trmt,5),
-  variable=rep(c("Soil","Cavity", "Colony", "Pithy Stems", "Wood"), each = nrow(fc)),
-  value = c(fc$SES_nest_1, fc$SES_nest_2, fc$SES_nest_3, fc$SES_nest_4, fc$SES_nest_5)
+  variable=rep(c("Wood","Pithy Stems", "Colony", "Cavity", "Soil"), each = nrow(fc)),
+  value = c(fc$SES_nest_5, fc$SES_nest_4, fc$SES_nest_3, fc$SES_nest_2, fc$SES_nest_1)
 )
+SES_nesting.FC$variable<-factor(SES_nesting.FC$variable, c("Wood", "Pithy Stems","Colony", "Cavity", "Soil"))
+#The above code puts the funct. traits as "factors" which is necessary for us to keep the order we want in our box plots
 
 
 fig5b<- ggplot(SES_nesting.FC, aes(x = variable, y = value, fill = trmt)) +
   geom_boxplot(position = position_dodge(width = 0.75), alpha = 0.6, coef = 0, width = 0.6) +
   geom_point(position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.75), 
-             shape = 19, size = 5) +
+             shape = 19, size = 3, show.legend = TRUE) +
   scale_fill_viridis_d(option = "C", end = 0.3, direction = -1, alpha = 0.6) +
   ylab("Standardized Effect Sizes (SES)") +
   xlab("") +
@@ -187,15 +191,17 @@ fig5b<- ggplot(SES_nesting.FC, aes(x = variable, y = value, fill = trmt)) +
 #Lecty
 SES_lecty.FC<- data.frame(
   trmt=rep(fc$trmt,3),
-  variable=rep(c("Kleptoparasitic","Generalist", "Specialist"), each = nrow(fc)),
-  value = c(fc$SES_lec_0, fc$SES_lec_1, fc$SES_lec_2)
+  variable=rep(c("Specialist","Generalist", "Kleptoparasitic"), each = nrow(fc)),
+  value = c(fc$SES_lec_2, fc$SES_lec_1, fc$SES_lec_0)
 )
+SES_lecty.FC$variable<-factor(SES_lecty.FC$variable, c("Specialist", "Generalist","Kleptoparasitic"))
+#The above code puts the funct. traits as "factors" which is necessary for us to keep the order we want in our box plots
 
 
  fig5c<- ggplot(SES_lecty.FC, aes(x = variable, y = value, fill = trmt)) +
   geom_boxplot(position = position_dodge(width = 0.75), alpha = 0.6, coef = 0, width = 0.6) +
   geom_point(position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.75), 
-             shape = 19, size = 5) +
+             shape = 19, size = 3, show.legend = TRUE) +
   scale_fill_viridis_d(option = "C", end = 0.3, direction = -1, alpha = 0.6) +
   ylab("Standardized Effect Sizes (SES)") +
   xlab("") +
@@ -210,15 +216,16 @@ SES_lecty.FC<- data.frame(
 #Sociality
 SES_sociality.FC<- data.frame(
   trmt=rep(fc$trmt,4),
-  variable=rep(c("Solitary","Subsocial", "Eusocial", "Parasitic"), each = nrow(fc)),
-  value = c(fc$SES_soc_1, fc$SES_soc_2, fc$SES_soc_3, fc$SES_soc_4)
-)
-
+  variable=rep(c("Parasitic", "Eusocial","Subsocial", "Solitary"), each = nrow(fc)),
+  value = c(fc$SES_soc_4, fc$SES_soc_3, fc$SES_soc_2, fc$SES_soc_1)
+) #Note that we have to put our funct traits in the reverse order of how we want them to appear on our graph
+SES_sociality.FC$variable<-factor(SES_sociality.FC$variable, c("Parasitic", "Eusocial","Subsocial", "Solitary"))
+#The above code puts the funct. traits as "factors" which is necessary for us to keep the order we want in our box plots
 
 fig5d<- ggplot(SES_sociality.FC, aes(x = variable, y = value, fill = trmt)) +
   geom_boxplot(position = position_dodge(width = .75), alpha = 0.6, coef = 0, width = 0.6) +
   geom_point(position = position_jitterdodge(jitter.width = 0.2, dodge.width = .75), 
-             shape = 19, size = 5) +
+             shape = 19, size = 3) +
   scale_fill_viridis_d(option = "C", end = 0.3, direction = -1, alpha = 0.6) +
   ylab("Standardized Effect Sizes (SES)") + 
   xlab("") +
