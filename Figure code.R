@@ -25,7 +25,7 @@ boxplot(SES_nest_3 ~ trmt, data = fc, col = viridis(3, alpha = 0.6),
         xlab = "Standardized Effect Sizes (SES)", ylab = "", 
         ylim = c(-2,3), cex.lab = 1.2, cex.axis = 1.1, cex.main = 1.5,
         horizontal = TRUE, las = 1, range = 0, main = "Hive Nesting")
-stripchart(SES_ori_0 ~ trmt, data = fc, col = viridis(3),
+stripchart(SES_nest_3 ~ trmt, data = fc, col = viridis(3),
            pch = 19, cex = 2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
 
@@ -43,7 +43,7 @@ boxplot(SES_lec_2 ~ trmt, data = fc, col = viridis(3, alpha = 0.6),
         xlab = "Standardized Effect Sizes (SES)", ylab = "", 
         ylim = c(-2,3), cex.lab = 1.2, cex.axis = 1.1, cex.main = 1.5,
         horizontal = TRUE, las = 1, range = 0, main = "Specialists")
-stripchart(SES_ori_0 ~ trmt, data = fc, col = viridis(3),
+stripchart(SES_lec_2 ~ trmt, data = fc, col = viridis(3),
            pch = 19, cex = 2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
 
@@ -130,7 +130,7 @@ dev.off()
 #Below is one attempt to make that figure. Will determine if a different version is preferable
 
 library(ggplot2)
-
+library(cowplot)
 
 
 
@@ -319,4 +319,156 @@ boxplot(ses ~ diversity, data = SES_ALLdivprai, col = viridis(6, alpha = 0.6),
 stripchart(ses ~ diversity, data = SES_ALLdivprai, col = viridis(6),
            pch = 19, cex = 1, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
+dev.off()
+
+
+
+#Making Figure 8
+
+library(ggplot2)
+
+
+
+
+
+#Length and Origin
+SES_lengthandorigin.t1t8<- data.frame(
+  trmt=rep(t1t8$trmt,3),
+  variable=rep(c("Alien", "Native", "Body Length"), each = nrow(t1t8)),
+  value = c(t1t8$SES_ori_1, t1t8$SES_ori_0, t1t8$SES_bl)
+)
+SES_lengthandorigin.t1t8$variable<-factor(SES_lengthandorigin.t1t8$variable, c("Alien", "Native", "Body Length"))
+#The above code puts the funct. traits as "factors" which is necessary for us to keep the order we want in our box plots
+
+
+
+fig8a<- ggplot(SES_lengthandorigin.t1t8, aes(x = variable, y = value, fill = trmt)) +
+  geom_boxplot(position = position_dodge(width = 0.75), alpha = 0.6, coef = 0, width = 0.6) +
+  geom_point(position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.75), 
+             shape = 19, size = 3, show.legend = TRUE) +
+  scale_fill_viridis_d(option = "C", end = 0.3, direction = -1, alpha = 0.6) +
+  ylab("Standardized Effect Sizes (SES)") +
+  xlab("") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 0, hjust = 1, size=15)) +
+  theme(axis.text.y = element_text(size=25))+
+  ylim(c(-8, 8)) +
+  geom_hline(yintercept = 0, col = "black", lwd = 2, linetype = "dashed") +
+  coord_flip() 
+
+
+
+#Nesting traits
+
+SES_nesting.t1t8<- data.frame(
+  trmt=rep(t1t8$trmt,5),
+  variable=rep(c("Wood","Pithy Stems", "Colony", "Cavity", "Soil"), each = nrow(t1t8)),
+  value = c(t1t8$SES_nest_5, t1t8$SES_nest_4, t1t8$SES_nest_3, t1t8$SES_nest_2, t1t8$SES_nest_1)
+)
+SES_nesting.t1t8$variable<-factor(SES_nesting.t1t8$variable, c("Wood", "Pithy Stems","Colony", "Cavity", "Soil"))
+#The above code puts the funct. traits as "factors" which is necessary for us to keep the order we want in our box plots
+
+
+fig8b<- ggplot(SES_nesting.t1t8, aes(x = variable, y = value, fill = trmt)) +
+  geom_boxplot(position = position_dodge(width = 0.75), alpha = 0.6, coef = 0, width = 0.6) +
+  geom_point(position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.75), 
+             shape = 19, size = 3, show.legend = TRUE) +
+  scale_fill_viridis_d(option = "C", end = 0.3, direction = -1, alpha = 0.6) +
+  ylab("Standardized Effect Sizes (SES)") +
+  xlab("") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 0, hjust = 1,size=15)) +
+  theme(axis.text.y = element_text(size=25))+
+  ylim(c(-8, 8)) +
+  geom_hline(yintercept = 0, col = "black", lwd = 2, linetype = "dashed") +
+  coord_flip()
+
+
+#Lecty
+SES_lecty.t1t8<- data.frame(
+  trmt=rep(t1t8$trmt,3),
+  variable=rep(c("Specialist","Generalist", "Kleptoparasitic"), each = nrow(t1t8)),
+  value = c(t1t8$SES_lec_2, t1t8$SES_lec_1, t1t8$SES_lec_0)
+)
+SES_lecty.t1t8$variable<-factor(SES_lecty.t1t8$variable, c("Specialist", "Generalist","Kleptoparasitic"))
+#The above code puts the funct. traits as "factors" which is necessary for us to keep the order we want in our box plots
+
+
+fig8c<- ggplot(SES_lecty.t1t8, aes(x = variable, y = value, fill = trmt)) +
+  geom_boxplot(position = position_dodge(width = 0.75), alpha = 0.6, coef = 0, width = 0.6) +
+  geom_point(position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.75), 
+             shape = 19, size = 3, show.legend = TRUE) +
+  scale_fill_viridis_d(option = "C", end = 0.3, direction = -1, alpha = 0.6) +
+  ylab("Standardized Effect Sizes (SES)") +
+  xlab("") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 0, hjust = 1, size=15)) +
+  theme(axis.text.y = element_text(size=25))+
+  ylim(c(-8, 8)) +
+  geom_hline(yintercept = 0, col = "black", lwd = 2, linetype = "dashed") +
+  coord_flip()
+
+
+#Sociality
+SES_sociality.t1t8<- data.frame(
+  trmt=rep(t1t8$trmt,4),
+  variable=rep(c("Parasitic", "Eusocial","Subsocial", "Solitary"), each = nrow(t1t8)),
+  value = c(t1t8$SES_soc_4, t1t8$SES_soc_3, t1t8$SES_soc_2, t1t8$SES_soc_1)
+) #Note that we have to put our funct traits in the reverse order of how we want them to appear on our graph
+SES_sociality.t1t8$variable<-factor(SES_sociality.t1t8$variable, c("Parasitic", "Eusocial","Subsocial", "Solitary"))
+#The above code puts the funct. traits as "factors" which is necessary for us to keep the order we want in our box plots
+
+fig8d<- ggplot(SES_sociality.t1t8, aes(x = variable, y = value, fill = trmt)) +
+  geom_boxplot(position = position_dodge(width = .75), alpha = 0.6, coef = 0, width = 0.6) +
+  geom_point(position = position_jitterdodge(jitter.width = 0.2, dodge.width = .75), 
+             shape = 19, size = 3) +
+  scale_fill_viridis_d(option = "C", end = 0.3, direction = -1, alpha = 0.6) +
+  ylab("Standardized Effect Sizes (SES)") + 
+  xlab("") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 0, hjust = 1, size=15)) +
+  theme(axis.text.y = element_text(size=25))+
+  ylim(c(-8, 8)) +
+  geom_hline(yintercept = 0, col = "black", lwd = 2, linetype = "dashed") +
+  coord_flip() 
+
+
+fig8 <- plot_grid(fig8a,fig8b,fig8c,fig8d, labels= c('A','B','C','D'))
+png("Figure 8 all FS local sp traits.png", width = 1500, height = 1000, pointsize = 20)
+
+fig8
+
+dev.off()
+
+#figure 9
+
+
+
+a9<- effect_plot(KT_falpha.mod.red, pred = trmt, interval = TRUE, partial.residuals = TRUE, x.label = 'Treatment', y.label = 'Standardized Effect Sizes (SES)')
+b9<- effect_plot(KT_bsor.mod.red, pred = enn, interval = TRUE, partial.residuals = TRUE, x.label = 'Greenspace Isolation (ENN)', y.label = 'Standardized Effect Sizes (SES)')
+
+
+install.packages("cowplot")
+library(cowplot)
+fig9 <- plot_grid(a9,b9, labels= c('A','B'))
+png("Figures/Figure 9.png", width = 1500, height = 1000, pointsize = 20)
+
+fig9
+dev.off()
+
+
+
+#fig 10
+
+a10<- effect_plot(KT_nest_3.mod.red, pred = trmt, interval = TRUE, partial.residuals = TRUE, x.label = 'Treatment', y.label = 'Standardized Effect Sizes (SES)', main.title = 'Colony Nesting')
+b10<- effect_plot(KT_nest_5.mod.red, pred = trmt, interval = TRUE, partial.residuals = TRUE, x.label = 'Treatment', y.label = 'Standardized Effect Sizes (SES)', main.title = 'Wood Nesting')
+c10<- effect_plot(KT_nest_4.mod.red, pred = pland, interval = TRUE, partial.residuals = TRUE, x.label = 'Percentage Greenspace', y.label = 'Standardized Effect Sizes (SES)', main.title = 'Pithy Stem Nesting')
+d10<- effect_plot(KT_nest_4.mod.red, pred = enn, interval = TRUE, partial.residuals = TRUE, x.label = 'Greenspace Isolation', y.label = 'Standardized Effect Sizes (SES)', main.title = 'Pithy Stem Nesting')
+e10<- effect_plot(KT_soc_1.mod.red, pred = pland, interval = TRUE, partial.residuals = TRUE, x.label = 'Percentage Greenspace', y.label = 'Standardized Effect Sizes (SES)', main.title = 'Subsocial')
+f10<- effect_plot(KT_soc_1.mod.red, pred = enn, interval = TRUE, partial.residuals = TRUE, x.label = 'Greenspace Isolation', y.label = 'Standardized Effect Sizes (SES)', main.title = 'Subsocial')
+
+fig10 <- plot_grid(a10,b10,c10,d10,e10,f10, labels= c('A','B','C','D','E','F'))
+png("Figures/Figure 10.png", width = 1500, height = 1000, pointsize = 20)
+
+fig10
 dev.off()
