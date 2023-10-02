@@ -11,7 +11,7 @@
 # KI Perry; 21 July 2021
 #CA Shepard 07 June 2022
 #CA Shepard; 26 September 2022
-#Edited again C Shepard 27 Sept 2023
+#CA Shepard and KI Perry: 2 October 2023
 ###################################################################################
 #Creating the datasets----
 
@@ -22,6 +22,36 @@ a <- read.csv("./bcomm_23.localanalysis.csv", row.names=1)
 str(a)
 a1 <- a #save the original dataset
 
+a <- a[2:362]
+str(a)
+rowSums(a1[2:362])
+
+# create a vector with the column sums for each species
+# species not found in Cleveland will have a 0
+sp<- colSums(a)
+sp
+
+# add the sp vector as a column in the trait matrix, shows which species
+# are found in Cleveland and which are absent (i.e. with a 0)
+t$sp <- sp
+t
+
+# uses the sp values to remove rows of species not collected in Cleveland
+# then remove the column because we don't need it anymore
+t <- t[t$sp != 0, ]
+t <- t[,-6]
+
+write.csv(t, file = "traits_urbanpool.csv")
+#Create separate r file and folder for each null model- name outputs with code so we know what they are
+
+
+# removes any columns (i.e. species) that are not found in Cleveland
+a <- a[, colSums(a!= 0) > 0]
+
+colSums(a)
+
+
+a$trmt<-a1$trmt
 # pull out treatments that we want to keep
 farm <- a[which(a$trmt == "Farm"),]
 str(farm)
@@ -31,6 +61,10 @@ T1 <- a[which(a$trmt == "T1"),]
 str(T1)
 T8 <- a[which(a$trmt == "T8"),]
 str(T8)
+T6 <- a[which(a$trmt == "T6"),]
+str(T6)
+
+#Add VL and UP for Michelle's
 
 # create new dataset with only farm, Control, t1, and t8 treatments
 #SEPT EDIT:Creating two new datasets. One with Farm and Control, one with T1 and T8
@@ -39,104 +73,51 @@ a.KT<- rbind(T1, T8)
 str(a.FS)
 str(a.KT)
 
-a.FS <- a.FS[2:361]
-a.KT <- a.KT[2:361]
+a.FS <- a.FS[1:130]
+a.KT <- a.KT[1:130]
 str(a.FS)
 str(a.KT)
-rowSums(a1[2:361])
 
-# create a vector with the column sums for each species
-# species not found in Cleveland will have a 0
-sp.FS <- colSums(a.FS)
-sp.KT <- colSums(a.KT)
-sp.FS
-sp.KT
 
+
+
+# removes any columns (i.e. species) that are not found in Cleveland
+a <- a[, colSums(a != 0) > 0]
+colSums(a)
 
 str(t)
 names(t)
 colnames(t) <- c("bl", "lec", "nest", "soc", "ori")
 names(t)
 
-# add the sp vector as a column in the trait matrix, shows which species
-# are found in Cleveland and which are absent (i.e. with a 0)
-t.FS<-t
-t.FS$sp <- sp.FS
-t.FS
 
-t.KT<-t
-t.KT$sp <- sp.KT
-t.KT
 
-# removes any columns (i.e. species) that are not found in Cleveland
-a.FS <- a.FS[, colSums(a.FS != 0) > 0]
-colSums(a.FS)
+plot(t)
+cor(t, method = c("pearson"), use = "complete.obs")
+str(t)
 
-a.KT <- a.KT[, colSums(a.KT != 0) > 0]
-colSums(a.KT)
+t1 <- t #save the original dataset
 
-# uses the sp values to remove rows of species not collected in Cleveland
-# then remove the column because we don't need it anymore
-t.FS <- t.FS[t.FS$sp != 0, ]
-t.FS <- t.FS[,-6]
+t$lec <- as.factor(t$lec)
+t$nest <- as.factor(t$nest)
+t$soc <- as.factor(t$soc)
 
-t.KT <- t.KT[t.KT$sp != 0, ]
-t.KT <- t.KT[,-6]
-
-plot(t.FS)
-cor(t.FS, method = c("pearson"), use = "complete.obs")
-str(t.FS)
-
-t1.FS <- t.FS #save the original dataset
-
-t.FS$lec <- as.factor(t.FS$lec)
-t.FS$nest <- as.factor(t.FS$nest)
-t.FS$soc <- as.factor(t.FS$soc)
-
-str(t.FS) # have to keep origin as a integer for the trait distance matrix to work
+str(t) # have to keep origin as a integer for the trait distance matrix to work
 
 #check body length for normality
-hist(t.FS$bl)
-hist(log(t.FS$bl))
+hist(t$bl)
+hist(log(t$bl))
 
-t2.FS <- t.FS #create another duplicate dataset before we transform
-t2.FS$bl <- log(t2.FS$bl + 1)
-str(t2.FS)
+t2 <- t #create another duplicate dataset before we transform
+t2$bl <- log(t2$bl + 1)
+str(t2)
 
 #Double check that all species are present in both datasets
 #Double check if a species is present in one dataset but not the other
-setdiff(colnames(a.FS), rownames(t2.FS))
-setdiff(rownames (t2.FS), colnames(a.FS))
+setdiff(colnames(a), rownames(t2))
+setdiff(rownames (t2), colnames(a))
 
-rownames(t2.FS) == colnames(a.FS) # we are good to go!
-
-#NOW AGAIN FOR DATA SET 2
-plot(t.KT)
-cor(t.KT, method = c("pearson"), use = "complete.obs")
-str(t.KT)
-
-t1.KT <- t.KT #save the original dataset
-
-t.KT$lec <- as.factor(t.KT$lec)
-t.KT$nest <- as.factor(t.KT$nest)
-t.KT$soc <- as.factor(t.KT$soc)
-
-str(t.KT) # have to keep origin as a integer for the trait distance matrix to work
-
-#check body length for normality
-hist(t.KT$bl)
-hist(log(t.KT$bl))
-
-t2.KT <- t.KT #create another duplicate dataset before we transform
-t2.KT$bl <- log(t2.KT$bl + 1)
-str(t2.KT)
-
-#Double check that all species are present in both datasets
-#Double check if a species is present in one dataset but not the other
-setdiff(colnames(a.KT), rownames(t2.KT))
-setdiff(rownames (t2.KT), colnames(a.KT))
-
-rownames(t2.KT) == colnames(a.KT) # we are good to go!
+rownames(t2) == colnames(a) # we are good to go!
 
 ##############################################################################
 ## Observed Community Metrics----
@@ -154,106 +135,56 @@ citation("gawdis")
 if (!suppressWarnings(require(betapart))) install.packages("betapart")
 citation("betapart")
 
-rowSums(a.FS)
-rowSums(a.KT)
+rowSums(a)
 
-#observed CWM----
-###FS ROUND----
-cwm.obs.FS <- functcomp(t2.FS, as.matrix(a.FS), CWM.type = "all")
-cwm.obs.FS
+#observed CWM
+cwm.obs <- functcomp(t2, as.matrix(a), CWM.type = "all")
+cwm.obs
 
 #observed taxonomic beta diversity
 # create beta part object for analyses
-str(a.FS)
-b.core.FS <- betapart.core(a.FS)
+str(a)
+b.core <- betapart.core(a)
 
 # returns three dissimilarity matrices containing 
 # pairwise between-site values of each beta-diversity component
-b.dist.FS <- beta.pair(b.core.FS, index.family = "sorensen")
-str(b.dist.FS)
+b.dist <- beta.pair(b.core, index.family = "sorensen")
+str(b.dist)
 
 #observed functional beta diversity
 #create distance matrix with the traits
 #optimized feature helps to weight the traits equally
-tdis.FS <- gawdis(t2.FS, w.type = "optimized", opti.maxiter = 500)
-attr(tdis.FS, "correls")
-attr(tdis.FS, "weights")
+tdis <- gawdis(t2, w.type = "optimized", opti.maxiter = 500)
+attr(tdis, "correls")
+attr(tdis, "weights")
 
 # save trait weights for the null model
-wt.FS <- c(0.38, 0.19, 0.11, 0.12, 0.20)
+wt <- c(0.39, 0.18, 0.11, 0.12, 0.19)
 
 #now run a principal coordinates analysis (PCoA) so we can collapse these traits into 
 #a few continuous axes for the functional diversity calculations
-pcoB.FS <- dudi.hillsmith(as.matrix(tdis.FS), scannf = FALSE, nf = 4)
-pcoB.FS
+pcoB <- dudi.hillsmith(as.matrix(tdis), scannf = FALSE, nf = 4)
+pcoB
 
 # check correlations among axes and traits
-cor(pcoB.FS$li, t1.FS, use = "complete.obs")
+cor(pcoB$li, t1, use = "complete.obs")
 
+sum(pcoB$eig[1:4]) / sum(pcoB$eig)
+sum(pcoB$eig[1:3]) / sum(pcoB$eig)
+sum(pcoB$eig[1:2]) / sum(pcoB$eig)
 
-sum(pcoB.FS$eig[1:4]) / sum(pcoB.FS$eig)
-sum(pcoB.FS$eig[1:3]) / sum(pcoB.FS$eig)
-sum(pcoB.FS$eig[1:2]) / sum(pcoB.FS$eig)
-
-t.ax.FS <- as.matrix(pcoB.FS$li[1:3])
-b.fun.FS <- functional.beta.pair(a.FS, t.ax.FS, index.family = "sorensen")
-str(b.fun.FS)
-
-###observed CWM TURO ROUND----
-cwm.obs.KT <- functcomp(t2.KT, as.matrix(a.KT), CWM.type = "all")
-cwm.obs.KT
-
-#observed taxonomic beta diversity
-# create beta part object for analyses
-str(a.KT)
-b.core.KT <- betapart.core(a.KT)
-
-# returns three dissimilarity matrices containing 
-# pairwise between-site values of each beta-diversity component
-b.dist.KT <- beta.pair(b.core.KT, index.family = "sorensen")
-str(b.dist.KT)
-
-#observed functional beta diversity
-#create distance matrix with the traits
-#optimized feature helps to weight the traits equally
-tdis.KT <- gawdis(t2.KT, w.type = "optimized", opti.maxiter = 500)
-attr(tdis.KT, "correls")
-attr(tdis.KT, "weights")
-
-# save trait weights for the null model
-wt.KT <- c(0.38, 0.22, 0.10, 0.11, 0.19)
-
-#now run a principal coordinates analysis (PCoA) so we can collapse these traits into 
-#a few continuous axes for the functional diversity calculations
-pcoB.KT <- dudi.hillsmith(as.matrix(tdis.KT), scannf = FALSE, nf = 4)
-pcoB.KT
-
-# check correlations among axes and traits
-cor(pcoB.KT$li, t1.KT, use = "complete.obs")
- 
-
-
-sum(pcoB.KT$eig[1:4]) / sum(pcoB.KT$eig)
-sum(pcoB.KT$eig[1:3]) / sum(pcoB.KT$eig)
-sum(pcoB.KT$eig[1:2]) / sum(pcoB.KT$eig)
-
-t.ax.KT <- as.matrix(pcoB.KT$li[1:3])
-b.fun.KT <- functional.beta.pair(a.KT, t.ax.KT, index.family = "sorensen")
-str(b.fun.KT)
-
+t.ax <- as.matrix(pcoB$li[1:3])
+b.fun <- functional.beta.pair(a, t.ax, index.family = "sorensen")
+str(b.fun)
 
 #observed functional alpha diversity
 #run the rao function first!
-bb.rao.FS <- Rao(sample = t(a.FS), dfunc = tdis.FS, dphyl = NULL, weight = FALSE, Jost = TRUE, structure = NULL)
-falpha.FS <- bb.rao.FS$FD$Alpha
-falpha.FS
+bb.rao <- Rao(sample = t(a), dfunc = tdis, dphyl = NULL, weight = FALSE, Jost = TRUE, structure = NULL)
+falpha <- bb.rao$FD$Alpha
+falpha
 
-
-bb.rao.KT <- Rao(sample = t(a.KT), dfunc = tdis.KT, dphyl = NULL, weight = FALSE, Jost = TRUE, structure = NULL)
-falpha.KT <- bb.rao.KT$FD$Alpha
-falpha.KT
 #We have now calculated all the indices with our observed bee data
-#next, we need to run the null modelS!----
+#next, we need to run the null model!----
 
 #using independent swap method for randomizing the presence/absence matrix
 #this will constrain the null communities by species richness and species frequency
@@ -261,267 +192,133 @@ falpha.KT
 numberReps <- 999
 
 
-#create matrices to store the results of each iteration of the null model, for each trait and index:----
-##FS----
+#create matrices to store the results of each iteration of the null model, for each trait and index:
 # for cwms
-nbl.FS <- nlec_0.FS <- nlec_1.FS <- nlec_2.FS <- nnest_1.FS <- nnest_2.FS <- nnest_3.FS <- nnest_4.FS <- nnest_5.FS <- nsoc_1.FS <- nsoc_2.FS <- nsoc_3.FS <- nsoc_4.FS <- nori_0.FS <- nori_1.FS <- matrix(NA,
-                                                                                                                                                               nrow = nrow(a.FS), ncol = numberReps, dimnames = list(rownames(a.FS), paste0("n", 1:numberReps)))
+nbl <- nlec_0 <- nlec_1 <- nlec_2 <- nnest_1 <- nnest_2 <- nnest_3 <- nnest_4 <- nnest_5 <- nsoc_1 <- nsoc_2 <- nsoc_3 <- nsoc_4 <- nori_0 <- nori_1 <- matrix(NA,
+                                                                                                                                                               nrow = nrow(a), ncol = numberReps, dimnames = list(rownames(a), paste0("n", 1:numberReps)))
 
 # for taxonomic beta diversity
-nbsim.FS <- nbsne.FS <- nbsor.FS <- matrix(NA, nrow = nrow(a.FS), ncol = numberReps, 
-                                  dimnames = list(rownames(a.FS), paste0("n", 1:numberReps)))
+nbsim <- nbsne <- nbsor <- matrix(NA, nrow = nrow(a), ncol = numberReps, 
+                                  dimnames = list(rownames(a), paste0("n", 1:numberReps)))
 
 # for functional beta diversity
-nfalpha.FS <- nfsim.FS <- nfsne.FS <- nfsor.FS <- matrix(NA, nrow = nrow(a.FS), ncol = numberReps, 
-                                  dimnames = list(rownames(a.FS), paste0("n", 1:numberReps)))
+nfalpha <- nfsim <- nfsne <- nfsor <- matrix(NA, nrow = nrow(a), ncol = numberReps, 
+                                  dimnames = list(rownames(a), paste0("n", 1:numberReps)))
 
-##KT----
-# for cwms
-nbl.KT <- nlec_0.KT <- nlec_1.KT <- nlec_2.KT <- nnest_1.KT <- nnest_2.KT <- nnest_3.KT <- nnest_4.KT <- nnest_5.KT <- nsoc_1.KT <- nsoc_2.KT <- nsoc_3.KT <- nsoc_4.KT <- nori_0.KT <- nori_1.KT <- matrix(NA,
-                                                                                                                                                               nrow = nrow(a.KT), ncol = numberReps, dimnames = list(rownames(a.KT), paste0("n", 1:numberReps)))
-
-# for taxonomic beta diversity
-nbsim.KT <- nbsne.KT <- nbsor.KT <- matrix(NA, nrow = nrow(a.KT), ncol = numberReps, 
-                                  dimnames = list(rownames(a.KT), paste0("n", 1:numberReps)))
-
-# for functional beta diversity
-nfalpha.KT <- nfsim.KT <- nfsne.KT <- nfsor.KT <- matrix(NA, nrow = nrow(a.KT), ncol = numberReps, 
-                                             dimnames = list(rownames(a.KT), paste0("n", 1:numberReps)))
-
-#create null model for each repetition:----
-##FS EDITION-----
+#create null model for each repetition:
 
 for(i in 1:numberReps){
   print(i) 
   
   # randomized trait matrix
-  ntraits.FS <- t2.FS[sample(1:nrow(t2.FS)),]
-  rownames(ntraits.FS) <- rownames(t2.FS)
+  ntraits <- t2[sample(1:nrow(t2)),]
+  rownames(ntraits) <- rownames(t2)
   
   # randomized presence/absence matrix
-  nsp.FS <- randomizeMatrix(samp = a.FS, null.model = "independentswap")
+  nsp <- randomizeMatrix(samp = a, null.model = "richness")#richness means it will accept the 0s
   
   # randomized trait distance matrix
-  ntdis.FS <- gawdis(ntraits.FS, w.type = "user", W = wt.FS)
+  ntdis <- gawdis(ntraits, w.type = "user", W = wt)
   
   # CWM calculations
-  cwm.null.FS <- functcomp(x = ntraits.FS, a = as.matrix(nsp.FS), CWM.type = "all")
-  nbl.FS[,i] <- cwm.null.FS$bl
-  nlec_0.FS[,i] <- cwm.null.FS$lec_0
-  nlec_1.FS[,i] <- cwm.null.FS$lec_1
-  nlec_2.FS[,i] <- cwm.null.FS$lec_2
-  nnest_1.FS[,i] <- cwm.null.FS$nest_1
-  nnest_2.FS[,i] <- cwm.null.FS$nest_2
-  nnest_3.FS[,i] <- cwm.null.FS$nest_3
-  nnest_4.FS[,i] <- cwm.null.FS$nest_4
-  nnest_5.FS[,i] <- cwm.null.FS$nest_5
-  nsoc_1.FS[,i] <- cwm.null.FS$soc_1
-  nsoc_2.FS[,i] <- cwm.null.FS$soc_2
-  nsoc_3.FS[,i] <- cwm.null.FS$soc_3
-  nsoc_4.FS[,i] <- cwm.null.FS$soc_4
-  nori_0.FS[,i] <- cwm.null.FS$ori_0
-  nori_1.FS[,i] <- cwm.null.FS$ori_1
+  cwm.null <- functcomp(x = ntraits, a = as.matrix(nsp), CWM.type = "all")
+  nbl[,i] <- cwm.null$bl
+  nlec_0[,i] <- cwm.null$lec_0
+  nlec_1[,i] <- cwm.null$lec_1
+  nlec_2[,i] <- cwm.null$lec_2
+  nnest_1[,i] <- cwm.null$nest_1
+  nnest_2[,i] <- cwm.null$nest_2
+  nnest_3[,i] <- cwm.null$nest_3
+  nnest_4[,i] <- cwm.null$nest_4
+  nnest_5[,i] <- cwm.null$nest_5
+  nsoc_1[,i] <- cwm.null$soc_1
+  nsoc_2[,i] <- cwm.null$soc_2
+  nsoc_3[,i] <- cwm.null$soc_3
+  nsoc_4[,i] <- cwm.null$soc_4
+  nori_0[,i] <- cwm.null$ori_0
+  nori_1[,i] <- cwm.null$ori_1
   
   # Functional alpha diversity
-  nrao.FS <- Rao(sample = t(nsp.FS), dfunc = ntdis.FS, dphyl = NULL, weight = FALSE, Jost = TRUE, structure = NULL)
-  nfalpha.FS[,i] <- nrao.FS$FD$Alpha
+  nrao <- Rao(sample = t(nsp), dfunc = ntdis, dphyl = NULL, weight = FALSE, Jost = TRUE, structure = NULL)
+  nfalpha[,i] <- nrao$FD$Alpha
   
   # Taxonomic beta diversity indices
-  nb.core.FS <- betapart.core(nsp.FS)
-  nb.dist.FS <- beta.pair(nb.core.FS, index.family = "sorensen")
-  nsim.dist.FS <- as.matrix(nb.dist.FS$beta.sim)
-  nsne.dist.FS <- as.matrix(nb.dist.FS$beta.sne)
-  nsor.dist.FS <- as.matrix(nb.dist.FS$beta.sor)
-  nbsim.FS[,i] <- colMeans(nsim.dist.FS)
-  nbsne.FS[,i] <- colMeans(nsne.dist.FS)
-  nbsor.FS[,i] <- colMeans(nsor.dist.FS)
+  nb.core <- betapart.core(nsp)
+  nb.dist <- beta.pair(nb.core, index.family = "sorensen")
+  nsim.dist <- as.matrix(nb.dist$beta.sim)
+  nsne.dist <- as.matrix(nb.dist$beta.sne)
+  nsor.dist <- as.matrix(nb.dist$beta.sor)
+  nbsim[,i] <- colMeans(nsim.dist)
+  nbsne[,i] <- colMeans(nsne.dist)
+  nbsor[,i] <- colMeans(nsor.dist)
   
   # Functional beta diversity indices
-  npco.FS <- dudi.hillsmith(as.matrix(ntdis.FS), scannf = FALSE, nf = 3)
-  nt.FS <- as.matrix(npco.FS$li)
-  nb.fun.FS <- functional.beta.pair(nsp.FS, nt.FS, index.family = "sorensen")
-  nfsim.dist.FS <- as.matrix(nb.fun.FS$funct.beta.sim)
-  nfsne.dist.FS <- as.matrix(nb.fun.FS$funct.beta.sne)
-  nfsor.dist.FS <- as.matrix(nb.fun.FS$funct.beta.sor)
-  nfsim.FS[,i] <- colMeans(nfsim.dist.FS)
-  nfsne.FS[,i] <- colMeans(nfsne.dist.FS)
-  nfsor.FS[,i] <- colMeans(nfsor.dist.FS)
+  npco <- dudi.hillsmith(as.matrix(ntdis), scannf = FALSE, nf = 3)
+  nt <- as.matrix(npco$li)
+  nb.fun <- functional.beta.pair(nsp, nt, index.family = "sorensen")
+  nfsim.dist <- as.matrix(nb.fun$funct.beta.sim)
+  nfsne.dist <- as.matrix(nb.fun$funct.beta.sne)
+  nfsor.dist <- as.matrix(nb.fun$funct.beta.sor)
+  nfsim[,i] <- colMeans(nfsim.dist)
+  nfsne[,i] <- colMeans(nfsne.dist)
+  nfsor[,i] <- colMeans(nfsor.dist)
   
 }
 
 # save the output matrices
-write.csv(nbl.FS, file = "nbl.FS.csv")
-write.csv(nlec_0.FS, file = "nlec_0.FS.csv")
-write.csv(nlec_1.FS, file = "nlec_1.FS.csv")
-write.csv(nlec_2.FS, file = "nlec_2.FS.csv")
-write.csv(nnest_1.FS, file = "nnest_1.FS.csv")
-write.csv(nnest_2.FS, file = "nnest_2.FS.csv")
-write.csv(nnest_3.FS, file = "nnest_3.FS.csv")
-write.csv(nnest_4.FS, file = "nnest_4.FS.csv")
-write.csv(nnest_5.FS, file = "nnest_5.FS.csv")
-write.csv(nsoc_1.FS, file = "nsoc_1.FS.csv")
-write.csv(nsoc_2.FS, file = "nsoc_2.FS.csv")
-write.csv(nsoc_3.FS, file = "nsoc_3.FS.csv")
-write.csv(nsoc_4.FS, file = "nsoc_4.FS.csv")
-write.csv(nori_0.FS, file = "nori_0.FS.csv")
-write.csv(nori_1.FS, file = "nori_1.FS.csv")
+write.csv(nbl, file = "nbl.csv")
+write.csv(nlec_0, file = "nlec_0.csv")
+write.csv(nlec_1, file = "nlec_1.csv")
+write.csv(nlec_2, file = "nlec_2.csv")
+write.csv(nnest_1, file = "nnest_1.csv")
+write.csv(nnest_2, file = "nnest_2.csv")
+write.csv(nnest_3, file = "nnest_3.csv")
+write.csv(nnest_4, file = "nnest_4.csv")
+write.csv(nnest_5, file = "nnest_5.csv")
+write.csv(nsoc_1, file = "nsoc_1.csv")
+write.csv(nsoc_2, file = "nsoc_2.csv")
+write.csv(nsoc_3, file = "nsoc_3.csv")
+write.csv(nsoc_4, file = "nsoc_4.csv")
+write.csv(nori_0, file = "nori_0.csv")
+write.csv(nori_1, file = "nori_1.csv")
 
-write.csv(nbsim.FS, file = "tbeta_sim.FS.csv")
-write.csv(nbsne.FS, file = "tbeta_sne.FS.csv")
-write.csv(nbsor.FS, file = "tbeta_sor.FS.csv")
+write.csv(nbsim, file = "tbeta_sim.csv")
+write.csv(nbsne, file = "tbeta_sne.csv")
+write.csv(nbsor, file = "tbeta_sor.csv")
 
-write.csv(nfalpha.FS, file = "falpha.FS.csv")
+write.csv(nfalpha, file = "falpha.csv")
 
-write.csv(nfsim.FS, file = "fbeta_sim.FS.csv")
-write.csv(nfsne.FS, file = "fbeta_sne.FS.csv")
-write.csv(nfsor.FS, file = "fbeta_sor.FS.csv")
-
-# load the output matrices
-
-#I manually moved all of the csv files to the folder Urban to Local_Null Models_HillSmith_3 Axes.FS
-nbl.FS <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.FS/nbl.FS.csv", row.names=1)
-nlec_0.FS <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.FS/nlec_0.FS.csv", row.names=1)
-nlec_1.FS<- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.FS/nlec_1.FS.csv", row.names=1)
-nlec_2.FS <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.FS/nlec_2.FS.csv", row.names=1)
-nnest_1.FS <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.FS/nnest_1.FS.csv", row.names=1)
-nnest_2.FS <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.FS/nnest_2.FS.csv", row.names=1)
-nnest_3.FS <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.FS/nnest_3.FS.csv", row.names=1)
-nnest_4.FS <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.FS/nnest_4.FS.csv", row.names=1)
-nnest_5.FS <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.FS/nnest_5.FS.csv", row.names=1)
-nsoc_1.FS <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.FS/nsoc_1.FS.csv", row.names=1)
-nsoc_2.FS <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.FS/nsoc_2.FS.csv", row.names=1)
-nsoc_3.FS <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.FS/nsoc_3.FS.csv", row.names=1)
-nsoc_4.FS <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.FS/nsoc_4.FS.csv", row.names=1)
-nori_0.FS <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.FS/nori_0.FS.csv", row.names=1)
-nori_1.FS <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.FS/nori_1.FS.csv", row.names=1)
-
-nfalpha.FS <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.FS/falpha.FS.csv", row.names=1)
-
-nbsim.FS <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.FS/tbeta_sim.FS.csv", row.names=1)
-nbsne.FS <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.FS/tbeta_sne.FS.csv", row.names=1)
-nbsor.FS <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.FS/tbeta_sim.FS.csv", row.names=1)
-
-nfsim.FS <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.FS/fbeta_sim.FS.csv", row.names=1)
-nfsne.FS <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.FS/fbeta_sne.FS.csv", row.names=1)
-nfsor.FS <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.FS/fbeta_sor.FS.csv", row.names=1)
-
-
-##KT EDITION-----
-
-for(i in 1:numberReps){
-  print(i) 
-  
-  # randomized trait matrix
-  ntraits.KT <- t2.KT[sample(1:nrow(t2.KT)),]
-  rownames(ntraits.KT) <- rownames(t2.KT)
-  
-  # randomized presence/absence matrix
-  nsp.KT <- randomizeMatrix(samp = a.KT, null.model = "independentswap")
-  
-  # randomized trait distance matrix
-  ntdis.KT <- gawdis(ntraits.KT, w.type = "user", W = wt.KT)
-  
-  # CWM calculations
-  cwm.null.KT <- functcomp(x = ntraits.KT, a = as.matrix(nsp.KT), CWM.type = "all")
-  nbl.KT[,i] <- cwm.null.KT$bl
-  nlec_0.KT[,i] <- cwm.null.KT$lec_0
-  nlec_1.KT[,i] <- cwm.null.KT$lec_1
-  nlec_2.KT[,i] <- cwm.null.KT$lec_2
-  nnest_1.KT[,i] <- cwm.null.KT$nest_1
-  nnest_2.KT[,i] <- cwm.null.KT$nest_2
-  nnest_3.KT[,i] <- cwm.null.KT$nest_3
-  nnest_4.KT[,i] <- cwm.null.KT$nest_4
-  nnest_5.KT[,i] <- cwm.null.KT$nest_5
-  nsoc_1.KT[,i] <- cwm.null.KT$soc_1
-  nsoc_2.KT[,i] <- cwm.null.KT$soc_2
-  nsoc_3.KT[,i] <- cwm.null.KT$soc_3
-  nsoc_4.KT[,i] <- cwm.null.KT$soc_4
-  nori_0.KT[,i] <- cwm.null.KT$ori_0
-  nori_1.KT[,i] <- cwm.null.KT$ori_1
-  
-  # Functional alpha diversity
-  nrao.KT <- Rao(sample = t(nsp.KT), dfunc = ntdis.KT, dphyl = NULL, weight = FALSE, Jost = TRUE, structure = NULL)
-  nfalpha.KT[,i] <- nrao.KT$FD$Alpha
-  
-  # Taxonomic beta diversity indices
-  nb.core.KT <- betapart.core(nsp.KT)
-  nb.dist.KT <- beta.pair(nb.core.KT, index.family = "sorensen")
-  nsim.dist.KT <- as.matrix(nb.dist.KT$beta.sim)
-  nsne.dist.KT <- as.matrix(nb.dist.KT$beta.sne)
-  nsor.dist.KT <- as.matrix(nb.dist.KT$beta.sor)
-  nbsim.KT[,i] <- colMeans(nsim.dist.KT)
-  nbsne.KT[,i] <- colMeans(nsne.dist.KT)
-  nbsor.KT[,i] <- colMeans(nsor.dist.KT)
-  
-  # Functional beta diversity indices
-  npco.KT <- dudi.hillsmith(as.matrix(ntdis.KT), scannf = FALSE, nf = 3)
-  nt.KT <- as.matrix(npco.KT$li)
-  nb.fun.KT <- functional.beta.pair(nsp.KT, nt.KT, index.family = "sorensen")
-  nfsim.dist.KT <- as.matrix(nb.fun.KT$funct.beta.sim)
-  nfsne.dist.KT <- as.matrix(nb.fun.KT$funct.beta.sne)
-  nfsor.dist.KT <- as.matrix(nb.fun.KT$funct.beta.sor)
-  nfsim.KT[,i] <- colMeans(nfsim.dist.KT)
-  nfsne.KT[,i] <- colMeans(nfsne.dist.KT)
-  nfsor.KT[,i] <- colMeans(nfsor.dist.KT)
-  
-}
-
-# save the output matrices
-write.csv(nbl.KT, file = "nbl.KT.csv")
-write.csv(nlec_0.KT, file = "nlec_0.KT.csv")
-write.csv(nlec_1.KT, file = "nlec_1.KT.csv")
-write.csv(nlec_2.KT, file = "nlec_2.KT.csv")
-write.csv(nnest_1.KT, file = "nnest_1.KT.csv")
-write.csv(nnest_2.KT, file = "nnest_2.KT.csv")
-write.csv(nnest_3.KT, file = "nnest_3.KT.csv")
-write.csv(nnest_4.KT, file = "nnest_4.KT.csv")
-write.csv(nnest_5.KT, file = "nnest_5.KT.csv")
-write.csv(nsoc_1.KT, file = "nsoc_1.KT.csv")
-write.csv(nsoc_2.KT, file = "nsoc_2.KT.csv")
-write.csv(nsoc_3.KT, file = "nsoc_3.KT.csv")
-write.csv(nsoc_4.KT, file = "nsoc_4.KT.csv")
-write.csv(nori_0.KT, file = "nori_0.KT.csv")
-write.csv(nori_1.KT, file = "nori_1.KT.csv")
-
-write.csv(nbsim.KT, file = "tbeta_sim.KT.csv")
-write.csv(nbsne.KT, file = "tbeta_sne.KT.csv")
-write.csv(nbsor.KT, file = "tbeta_sor.KT.csv")
-
-write.csv(nfalpha.KT, file = "falpha.KT.csv")
-
-write.csv(nfsim.KT, file = "fbeta_sim.KT.csv")
-write.csv(nfsne.KT, file = "fbeta_sne.KT.csv")
-write.csv(nfsor.KT, file = "fbeta_sor.KT.csv")
+write.csv(nfsim, file = "fbeta_sim.csv")
+write.csv(nfsne, file = "fbeta_sne.csv")
+write.csv(nfsor, file = "fbeta_sor.csv")
 
 # load the output matrices
 
-#I manually moved all of the csv files to the folder Urban to Local_Null Models_HillSmith_3 Axes.KT
-nbl.KT <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.KT/nbl.KT.csv", row.names=1)
-nlec_0.KT <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.KT/nlec_0.KT.csv", row.names=1)
-nlec_1.KT<- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.KT/nlec_1.KT.csv", row.names=1)
-nlec_2.KT <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.KT/nlec_2.KT.csv", row.names=1)
-nnest_1.KT <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.KT/nnest_1.KT.csv", row.names=1)
-nnest_2.KT <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.KT/nnest_2.KT.csv", row.names=1)
-nnest_3.KT <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.KT/nnest_3.KT.csv", row.names=1)
-nnest_4.KT <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.KT/nnest_4.KT.csv", row.names=1)
-nnest_5.KT <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.KT/nnest_5.KT.csv", row.names=1)
-nsoc_1.KT <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.KT/nsoc_1.KT.csv", row.names=1)
-nsoc_2.KT <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.KT/nsoc_2.KT.csv", row.names=1)
-nsoc_3.KT <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.KT/nsoc_3.KT.csv", row.names=1)
-nsoc_4.KT <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.KT/nsoc_4.KT.csv", row.names=1)
-nori_0.KT <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.KT/nori_0.KT.csv", row.names=1)
-nori_1.KT <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.KT/nori_1.KT.csv", row.names=1)
+nbl <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes/nbl.csv", row.names=1)
+nlec_0 <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes/nlec_0.csv", row.names=1)
+nlec_1 <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes/nlec_1.csv", row.names=1)
+nlec_2 <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes/nlec_2.csv", row.names=1)
+nnest_1 <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes/nnest_1.csv", row.names=1)
+nnest_2 <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes/nnest_2.csv", row.names=1)
+nnest_3 <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes/nnest_3.csv", row.names=1)
+nnest_4 <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes/nnest_4.csv", row.names=1)
+nnest_5 <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes/nnest_5.csv", row.names=1)
+nsoc_1 <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes/nsoc_1.csv", row.names=1)
+nsoc_2 <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes/nsoc_2.csv", row.names=1)
+nsoc_3 <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes/nsoc_3.csv", row.names=1)
+nsoc_4 <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes/nsoc_4.csv", row.names=1)
+nori_0 <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes/nori_0.csv", row.names=1)
+nori_1 <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes/nori_1.csv", row.names=1)
 
-nfalpha.KT <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.KT/falpha.KT.csv", row.names=1)
+nfalpha <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes/falpha.csv", row.names=1)
 
-nbsim.KT <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.KT/tbeta_sim.KT.csv", row.names=1)
-nbsne.KT <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.KT/tbeta_sne.KT.csv", row.names=1)
-nbsor.KT <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.KT/tbeta_sim.KT.csv", row.names=1)
+nbsim <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes/tbeta_sim.csv", row.names=1)
+nbsne <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes/tbeta_sne.csv", row.names=1)
+nbsor <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes/tbeta_sim.csv", row.names=1)
 
-nfsim.KT <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.KT/fbeta_sim.KT.csv", row.names=1)
-nfsne.KT <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.KT/fbeta_sne.KT.csv", row.names=1)
-nfsor.KT <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.KT/fbeta_sor.KT.csv", row.names=1)
-
+nfsim <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes/fbeta_sim.csv", row.names=1)
+nfsne <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes/fbeta_sne.csv", row.names=1)
+nfsor <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes/fbeta_sor.csv", row.names=1)
 
 # SES Calculations----
 #calculate standardized effect sizes (SES) for each trait and index
@@ -531,255 +328,130 @@ nfsor.KT <- read.csv("Urban to Local_Null Models_HillSmith_3 Axes.KT/fbeta_sor.K
 
 
 ## community weighted means----
-###FS VERSION----
 ## body length
-SES_bl.FS <- (cwm.obs.FS$bl - apply(nbl.FS, MARGIN = 1, mean)) / apply(nbl.FS, MARGIN = 1, sd, na.rm=T)
-SES_bl.FS
+SES_bl <- (cwm.obs$bl - apply(nbl, MARGIN = 1, mean)) / apply(nbl, MARGIN = 1, sd, na.rm=T)
+SES_bl
 
 ## lec_0 - Kleptoparasitic
-SES_lec_0.FS <- (cwm.obs.FS$lec_0 - apply(nlec_0.FS, MARGIN = 1, mean)) / apply(nlec_0.FS, MARGIN = 1, sd, na.rm=T)
-SES_lec_0.FS
+SES_lec_0 <- (cwm.obs$lec_0 - apply(nlec_0, MARGIN = 1, mean)) / apply(nlec_0, MARGIN = 1, sd, na.rm=T)
+SES_lec_0
 
 ## lec_1 - Generalist
-SES_lec_1.FS <- (cwm.obs.FS$lec_1 - apply(nlec_1.FS, MARGIN = 1, mean)) / apply(nlec_1.FS, MARGIN = 1, sd, na.rm=T)
-SES_lec_1.FS
+SES_lec_1 <- (cwm.obs$lec_1 - apply(nlec_1, MARGIN = 1, mean)) / apply(nlec_1, MARGIN = 1, sd, na.rm=T)
+SES_lec_1
 
 ## lec_2 - Specialist
-SES_lec_2.FS <- (cwm.obs.FS$lec_2 - apply(nlec_2.FS, MARGIN = 1, mean)) / apply(nlec_2.FS, MARGIN = 1, sd, na.rm=T)
-SES_lec_2.FS
+SES_lec_2 <- (cwm.obs$lec_2 - apply(nlec_2, MARGIN = 1, mean)) / apply(nlec_2, MARGIN = 1, sd, na.rm=T)
+SES_lec_2
 
 ## nest_1 - Soil
-SES_nest_1.FS <- (cwm.obs.FS$nest_1 - apply(nnest_1.FS, MARGIN = 1, mean)) / apply(nnest_1.FS, MARGIN = 1, sd, na.rm=T)
-SES_nest_1.FS
+SES_nest_1 <- (cwm.obs$nest_1 - apply(nnest_1, MARGIN = 1, mean)) / apply(nnest_1, MARGIN = 1, sd, na.rm=T)
+SES_nest_1
 
 ## nest_2 - Cavity
-SES_nest_2.FS<- (cwm.obs.FS$nest_2 - apply(nnest_2.FS, MARGIN = 1, mean)) / apply(nnest_2.FS, MARGIN = 1, sd, na.rm=T)
-SES_nest_2.FS
+SES_nest_2 <- (cwm.obs$nest_2 - apply(nnest_2, MARGIN = 1, mean)) / apply(nnest_2, MARGIN = 1, sd, na.rm=T)
+SES_nest_2
 
 ## nest_3 - Hive
-SES_nest_3.FS <- (cwm.obs.FS$nest_3 - apply(nnest_3.FS, MARGIN = 1, mean)) / apply(nnest_3.FS, MARGIN = 1, sd, na.rm=T)
-SES_nest_3.FS
+SES_nest_3 <- (cwm.obs$nest_3 - apply(nnest_3, MARGIN = 1, mean)) / apply(nnest_3, MARGIN = 1, sd, na.rm=T)
+SES_nest_3
 
 ## nest_4 - Pithy Stems
-SES_nest_4.FS <- (cwm.obs.FS$nest_4 - apply(nnest_4.FS, MARGIN = 1, mean)) / apply(nnest_4.FS, MARGIN = 1, sd, na.rm=T)
-SES_nest_4.FS
+SES_nest_4 <- (cwm.obs$nest_4 - apply(nnest_4, MARGIN = 1, mean)) / apply(nnest_4, MARGIN = 1, sd, na.rm=T)
+SES_nest_4
 
 ## nest_5 - Wood
-SES_nest_5.FS <- (cwm.obs.FS$nest_5 - apply(nnest_5.FS, MARGIN = 1, mean)) / apply(nnest_5.FS, MARGIN = 1, sd, na.rm=T)
-SES_nest_5.FS
+SES_nest_5 <- (cwm.obs$nest_5 - apply(nnest_5, MARGIN = 1, mean)) / apply(nnest_5, MARGIN = 1, sd, na.rm=T)
+SES_nest_5
 
 ## soc_1 - Subsocial
-SES_soc_1.FS <- (cwm.obs.FS$soc_1 - apply(nsoc_1, MARGIN = 1, mean)) / apply(nsoc_1.FS, MARGIN = 1, sd, na.rm=T)
-SES_soc_1.FS
+SES_soc_1 <- (cwm.obs$soc_1 - apply(nsoc_1, MARGIN = 1, mean)) / apply(nsoc_1, MARGIN = 1, sd, na.rm=T)
+SES_soc_1
 
 ## soc_2 - Solitary
-SES_soc_2.FS <- (cwm.obs.FS$soc_2 - apply(nsoc_2.FS, MARGIN = 1, mean)) / apply(nsoc_2.FS, MARGIN = 1, sd, na.rm=T)
-SES_soc_2.FS
+SES_soc_2 <- (cwm.obs$soc_2 - apply(nsoc_2, MARGIN = 1, mean)) / apply(nsoc_2, MARGIN = 1, sd, na.rm=T)
+SES_soc_2
 
 ## soc_3 - Eusocial
-SES_soc_3.FS <- (cwm.obs.FS$soc_3 - apply(nsoc_3.FS, MARGIN = 1, mean)) / apply(nsoc_3.FS, MARGIN = 1, sd, na.rm=T)
-SES_soc_3.FS
+SES_soc_3 <- (cwm.obs$soc_3 - apply(nsoc_3, MARGIN = 1, mean)) / apply(nsoc_3, MARGIN = 1, sd, na.rm=T)
+SES_soc_3
 
 ## soc_4 - Parasitic
-SES_soc_4.FS <- (cwm.obs.FS$soc_4 - apply(nsoc_4.FS, MARGIN = 1, mean)) / apply(nsoc_4.FS, MARGIN = 1, sd, na.rm=T)
-SES_soc_4.FS
+SES_soc_4 <- (cwm.obs$soc_4 - apply(nsoc_4, MARGIN = 1, mean)) / apply(nsoc_4, MARGIN = 1, sd, na.rm=T)
+SES_soc_4
 
 ## ori_0 - Native
-SES_ori_0.FS <- (cwm.obs.FS$ori_0 - apply(nori_0.FS, MARGIN = 1, mean)) / apply(nori_0.FS, MARGIN = 1, sd, na.rm=T)
-SES_ori_0.FS
+SES_ori_0 <- (cwm.obs$ori_0 - apply(nori_0, MARGIN = 1, mean)) / apply(nori_0, MARGIN = 1, sd, na.rm=T)
+SES_ori_0
 
 ## ori_2 - Exotic
-SES_ori_1.FS <- (cwm.obs.FS$ori_1 - apply(nori_1.FS, MARGIN = 1, mean)) / apply(nori_1.FS, MARGIN = 1, sd, na.rm=T)
-SES_ori_1.FS
+SES_ori_1 <- (cwm.obs$ori_1 - apply(nori_1, MARGIN = 1, mean)) / apply(nori_1, MARGIN = 1, sd, na.rm=T)
+SES_ori_1
 
-## taxonomic beta diversity
-beta.sor.FS <- as.matrix(b.dist.FS$beta.sor)
-beta.sor.FS <- colMeans(beta.sor.FS)
+## taxonomic beta diversity----
+beta.sor <- as.matrix(b.dist$beta.sor)
+beta.sor <- colMeans(beta.sor)
 
-beta.sim.FS <- as.matrix(b.dist.FS$beta.sim)
-beta.sim.FS <- colMeans(beta.sim.FS)
+beta.sim <- as.matrix(b.dist$beta.sim)
+beta.sim <- colMeans(beta.sim)
 
-beta.sne.FS <- as.matrix(b.dist.FS$beta.sne)
-beta.sne.FS <- colMeans(beta.sne.FS)
+beta.sne <- as.matrix(b.dist$beta.sne)
+beta.sne <- colMeans(beta.sne)
 
-beta.t.FS <- data.frame(beta.sor.FS, beta.sim.FS, beta.sne.FS)
-
-## taxonomic diveristy - beta sor
-SES_bsor.FS <- (beta.t.FS$beta.sor - apply(nbsor.FS, MARGIN = 1, mean)) / apply(nbsor.FS, MARGIN = 1, sd, na.rm=T)
-SES_bsor.FS
-
-## taxonomic diveristy - beta sim
-SES_bsim.FS <- (beta.t.FS$beta.sim - apply(nbsim.FS, MARGIN = 1, mean)) / apply(nbsim.FS, MARGIN = 1, sd, na.rm=T)
-SES_bsim.FS
-
-## taxonomic diveristy - beta sne
-SES_bsne.FS <- (beta.t.FS$beta.sne - apply(nbsne.FS, MARGIN = 1, mean)) / apply(nbsne.FS, MARGIN = 1, sd, na.rm=T)
-SES_bsne.FS
-
-## functional diversity
-fbeta.sor.FS <- as.matrix(b.fun.FS$funct.beta.sor)
-fbeta.sor.FS <- colMeans(fbeta.sor.FS)
-
-fbeta.sim.FS <- as.matrix(b.fun.FS$funct.beta.sim)
-fbeta.sim.FS <- colMeans(fbeta.sim.FS)
-
-fbeta.sne.FS <- as.matrix(b.fun.FS$funct.beta.sne)
-fbeta.sne.FS <- colMeans(fbeta.sne.FS)
-
-beta.f.FS <- data.frame(falpha.FS, fbeta.sor.FS, fbeta.sim.FS, fbeta.sne.FS)
-
-## functional alpha  - Rao
-SES_falpha.FS <- (beta.f.FS$falpha - apply(nfalpha.FS, MARGIN = 1, mean)) / apply(nfalpha.FS, MARGIN = 1, sd, na.rm=T)
-SES_falpha.FS
-
-## functional diveristy - beta sor
-SES_fbsor.FS <- (beta.f.FS$fbeta.sor - apply(nfsor.FS, MARGIN = 1, mean)) / apply(nfsor.FS, MARGIN = 1, sd, na.rm=T)
-SES_fbsor.FS
-
-## functional diveristy - beta sim
-SES_fbsim.FS <- (beta.f.FS$fbeta.sim - apply(nfsim.FS, MARGIN = 1, mean)) / apply(nfsim.FS, MARGIN = 1, sd, na.rm=T)
-SES_fbsim.FS
-
-## functional diveristy - beta sne
-SES_fbsne.FS <- (beta.f.FS$fbeta.sne - apply(nfsne.FS, MARGIN = 1, mean)) / apply(nfsne.FS, MARGIN = 1, sd, na.rm=T)
-SES_fbsne.FS
-
-## combine all indices into one matrix
-SES.all.FS <- as.data.frame(cbind(SES_bl.FS, SES_lec_0.FS, SES_lec_1.FS, SES_lec_2.FS, SES_ori_0.FS, SES_ori_1.FS, 
-                           SES_nest_1.FS, SES_nest_2.FS, SES_nest_3.FS, SES_nest_4.FS, SES_nest_5.FS,
-                           SES_soc_1.FS, SES_soc_2.FS, SES_soc_3.FS, SES_soc_4.FS, SES_bsor.FS, SES_bsim.FS,
-                           SES_bsne.FS, SES_falpha.FS, SES_fbsor.FS, SES_fbsim.FS, SES_fbsne.FS))
-
-write.csv(SES.all.FS, file = "SES_Local.FS.csv")
-#import the SES data
-SES.all.FS <- read.csv("SES_Local.FS.csv", row.names = 1)
-
-###KT VERSION----
-## body length
-SES_bl.KT <- (cwm.obs.KT$bl - apply(nbl.KT, MARGIN = 1, mean)) / apply(nbl.KT, MARGIN = 1, sd, na.rm=T)
-SES_bl.KT
-
-## lec_0 - Kleptoparasitic
-SES_lec_0.KT <- (cwm.obs.KT$lec_0 - apply(nlec_0.KT, MARGIN = 1, mean)) / apply(nlec_0.KT, MARGIN = 1, sd, na.rm=T)
-SES_lec_0.KT
-
-## lec_1 - Generalist
-SES_lec_1.KT <- (cwm.obs.KT$lec_1 - apply(nlec_1.KT, MARGIN = 1, mean)) / apply(nlec_1.KT, MARGIN = 1, sd, na.rm=T)
-SES_lec_1.KT
-
-## lec_2 - Specialist
-SES_lec_2.KT <- (cwm.obs.KT$lec_2 - apply(nlec_2.KT, MARGIN = 1, mean)) / apply(nlec_2.KT, MARGIN = 1, sd, na.rm=T)
-SES_lec_2.KT
-
-## nest_1 - Soil
-SES_nest_1.KT <- (cwm.obs.KT$nest_1 - apply(nnest_1.KT, MARGIN = 1, mean)) / apply(nnest_1.KT, MARGIN = 1, sd, na.rm=T)
-SES_nest_1.KT
-
-## nest_2 - Cavity
-SES_nest_2.KT <- (cwm.obs.KT$nest_2 - apply(nnest_2.KT, MARGIN = 1, mean)) / apply(nnest_2.KT, MARGIN = 1, sd, na.rm=T)
-SES_nest_2.KT
-
-## nest_3 - Hive
-SES_nest_3.KT <- (cwm.obs.KT$nest_3 - apply(nnest_3.KT, MARGIN = 1, mean)) / apply(nnest_3.KT, MARGIN = 1, sd, na.rm=T)
-SES_nest_3.KT
-
-## nest_4 - Pithy Stems
-SES_nest_4.KT <- (cwm.obs.KT$nest_4 - apply(nnest_4.KT, MARGIN = 1, mean)) / apply(nnest_4.KT, MARGIN = 1, sd, na.rm=T)
-SES_nest_4.KT
-
-## nest_5 - Wood
-SES_nest_5.KT <- (cwm.obs.KT$nest_5 - apply(nnest_5.KT, MARGIN = 1, mean)) / apply(nnest_5.KT, MARGIN = 1, sd, na.rm=T)
-SES_nest_5.KT
-
-## soc_1 - Subsocial
-SES_soc_1.KT <- (cwm.obs.KT$soc_1 - apply(nsoc_1.KT, MARGIN = 1, mean)) / apply(nsoc_1.KT, MARGIN = 1, sd, na.rm=T)
-SES_soc_1.KT
-
-## soc_2 - Solitary
-SES_soc_2.KT <- (cwm.obs.KT$soc_2 - apply(nsoc_2.KT, MARGIN = 1, mean)) / apply(nsoc_2.KT, MARGIN = 1, sd, na.rm=T)
-SES_soc_2.KT
-
-## soc_3 - Eusocial
-SES_soc_3.KT <- (cwm.obs.KT$soc_3 - apply(nsoc_3.KT, MARGIN = 1, mean)) / apply(nsoc_3.KT, MARGIN = 1, sd, na.rm=T)
-SES_soc_3.KT
-
-## soc_4 - Parasitic
-SES_soc_4.KT <- (cwm.ob.KTs$soc_4 - apply(nsoc_4.KT, MARGIN = 1, mean)) / apply(nsoc_4.KT, MARGIN = 1, sd, na.rm=T)
-SES_soc_4.KT
-
-## ori_0 - Native
-SES_ori_0.KT <- (cwm.obs.KT$ori_0 - apply(nori_0.KT, MARGIN = 1, mean)) / apply(nori_0.KT, MARGIN = 1, sd, na.rm=T)
-SES_ori_0.KT
-
-## ori_2 - Exotic
-SES_ori_1.KT <- (cwm.obs.KT$ori_1 - apply(nori_1.KT, MARGIN = 1, mean)) / apply(nori_1.KT, MARGIN = 1, sd, na.rm=T)
-SES_ori_1.KT
-
-## taxonomic beta diversity
-beta.sor.KT <- as.matrix(b.dist.KT$beta.sor)
-beta.sor.KT <- colMeans(beta.sor.KT)
-
-beta.sim.KT <- as.matrix(b.dist.KT$beta.sim)
-beta.sim.KT <- colMeans(beta.sim.KT)
-
-beta.sne.KT <- as.matrix(b.dist.KT$beta.sne)
-beta.sne.KT <- colMeans(beta.sne.KT)
-
-beta.t.KT <- data.frame(beta.sor.KT, beta.sim.KT, beta.sne.KT)
+beta.t <- data.frame(beta.sor, beta.sim, beta.sne)
 
 ## taxonomic diveristy - beta sor
-SES_bsor.KT <- (beta.t.KT$beta.sor - apply(nbsor.KT, MARGIN = 1, mean)) / apply(nbsor.KT, MARGIN = 1, sd, na.rm=T)
-SES_bsor.KT
+SES_bsor <- (beta.t$beta.sor - apply(nbsor, MARGIN = 1, mean)) / apply(nbsor, MARGIN = 1, sd, na.rm=T)
+SES_bsor
 
 ## taxonomic diveristy - beta sim
-SES_bsim.KT<- (beta.t.KT$beta.sim - apply(nbsim.KT, MARGIN = 1, mean)) / apply(nbsim.KT, MARGIN = 1, sd, na.rm=T)
-SES_bsim.KT
+SES_bsim <- (beta.t$beta.sim - apply(nbsim, MARGIN = 1, mean)) / apply(nbsim, MARGIN = 1, sd, na.rm=T)
+SES_bsim
 
 ## taxonomic diveristy - beta sne
-SES_bsne.KT <- (beta.t.KT$beta.sne - apply(nbsne.KT, MARGIN = 1, mean)) / apply(nbsne.KT, MARGIN = 1, sd, na.rm=T)
-SES_bsne.KT
+SES_bsne <- (beta.t$beta.sne - apply(nbsne, MARGIN = 1, mean)) / apply(nbsne, MARGIN = 1, sd, na.rm=T)
+SES_bsne
 
-## functional diversity
-fbeta.sor.KT <- as.matrix(b.fun.KT$funct.beta.sor)
-fbeta.sor.KT <- colMeans(fbeta.sor.KT)
+## functional diversity----
+fbeta.sor <- as.matrix(b.fun$funct.beta.sor)
+fbeta.sor <- colMeans(fbeta.sor)
 
-fbeta.sim.KT <- as.matrix(b.fun.KT$funct.beta.sim)
-fbeta.sim.KT <- colMeans(fbeta.sim.KT)
+fbeta.sim <- as.matrix(b.fun$funct.beta.sim)
+fbeta.sim <- colMeans(fbeta.sim)
 
-fbeta.sne.KT <- as.matrix(b.fun.KT$funct.beta.sne)
-fbeta.sne.KT <- colMeans(fbeta.sne.KT)
+fbeta.sne <- as.matrix(b.fun$funct.beta.sne)
+fbeta.sne <- colMeans(fbeta.sne)
 
-beta.f.KT <- data.frame(falpha.KT, fbeta.sor.KT, fbeta.sim.KT, fbeta.sne.KT)
+beta.f <- data.frame(falpha, fbeta.sor, fbeta.sim, fbeta.sne)
 
 ## functional alpha  - Rao
-SES_falpha.KT <- (beta.f.KT$falpha - apply(nfalpha.KT, MARGIN = 1, mean)) / apply(nfalpha.KT, MARGIN = 1, sd, na.rm=T)
-SES_falpha.KT
+SES_falpha <- (beta.f$falpha - apply(nfalpha, MARGIN = 1, mean)) / apply(nfalpha, MARGIN = 1, sd, na.rm=T)
+SES_falpha
 
 ## functional diveristy - beta sor
-SES_fbsor.KT <- (beta.f.KT$fbeta.sor - apply(nfsor.KT, MARGIN = 1, mean)) / apply(nfsor.KT, MARGIN = 1, sd, na.rm=T)
-SES_fbsor.KT
+SES_fbsor <- (beta.f$fbeta.sor - apply(nfsor, MARGIN = 1, mean)) / apply(nfsor, MARGIN = 1, sd, na.rm=T)
+SES_fbsor
 
 ## functional diveristy - beta sim
-SES_fbsim.KT <- (beta.f.KT$fbeta.sim - apply(nfsim.KT, MARGIN = 1, mean)) / apply(nfsim.KT, MARGIN = 1, sd, na.rm=T)
-SES_fbsim.KT
+SES_fbsim <- (beta.f$fbeta.sim - apply(nfsim, MARGIN = 1, mean)) / apply(nfsim, MARGIN = 1, sd, na.rm=T)
+SES_fbsim
 
 ## functional diveristy - beta sne
-SES_fbsne.KT <- (beta.f.KT$fbeta.sne - apply(nfsne.KT, MARGIN = 1, mean)) / apply(nfsne.KT, MARGIN = 1, sd, na.rm=T)
-SES_fbsne.KT
+SES_fbsne <- (beta.f$fbeta.sne - apply(nfsne, MARGIN = 1, mean)) / apply(nfsne, MARGIN = 1, sd, na.rm=T)
+SES_fbsne
 
 ## combine all indices into one matrix
-SES.all.KT <- as.data.frame(cbind(SES_bl.KT, SES_lec_0.KT, SES_lec_1.KT, SES_lec_2.KT, SES_ori_0.KT, SES_ori_1.KT, 
-                               SES_nest_1.KT, SES_nest_2.KT, SES_nest_3.KT, SES_nest_4.KT, SES_nest_5.KT,
-                               SES_soc_1.KT, SES_soc_2.KT, SES_soc_3.KT, SES_soc_4.KT, SES_bsor.KT, SES_bsim.KT,
-                               SES_bsne.KT, SES_falpha.KT, SES_fbsor.KT, SES_fbsim.KT, SES_fbsne.KT))
+SES.all <- as.data.frame(cbind(SES_bl, SES_lec_0, SES_lec_1, SES_lec_2, SES_ori_0, SES_ori_1, 
+                           SES_nest_1, SES_nest_2, SES_nest_3, SES_nest_4, SES_nest_5,
+                           SES_soc_1, SES_soc_2, SES_soc_3, SES_soc_4, SES_bsor, SES_bsim,
+                           SES_bsne, SES_falpha, SES_fbsor, SES_fbsim, SES_fbsne))
 
-write.csv(SES.all.KT, file = "SES_Local.KT.csv")
+write.csv(SES.all, file = "SES_Local.csv")
 #import the SES data
-SES.all.KT <- read.csv("SES_Local.KT.csv", row.names = 1)
-
+SES.all <- read.csv("./SES_Local.csv", row.names = 1)
 
 # import the landscape data-----
-land <- read.csv("landscape.localanalysis.csv", row.names = 1)
+land <- read.csv("./landscape.localanalysis.csv", row.names = 1)
 str(land)
 
 land$trmt <- as.factor(land$trmt)
@@ -805,73 +477,6 @@ str(T1)
 
 T8 <- SES[which(SES$trmt == "T8"),]
 str(T8)
-
-##################################################################################################
-# Make figures!
-
-library(viridis)
-
-# pull out treatments that you want to include
-fc <- rbind(farm, control)
-str(fc)
-fc <- droplevels(fc) #drops T1 and T8
-str(fc)
-
-# changes the treatment names for the figure
-levels(fc$trmt)[levels(fc$trmt)=='Farm'] <- 'Urban Farm'
-levels(fc$trmt)[levels(fc$trmt)=='Control'] <- 'Vacant Lot'
-levels(fc$trmt)
-
-# this will save the figure as a png, it will be good quality
-png("Figures/Figure 1 v2.png", width = 1500, height = 1000, pointsize = 20)
-
-par(mfrow=c(2,2)) # indicates two rows, two columns
-par(mar = c(5,7,4,2)) # sets the margins around the figure
-
-# hive nesting
-boxplot(SES_nest_3 ~ trmt, data = fc, col = viridis(3, alpha = 0.6),
-        xlab = "Standardized Effect Sizes (SES)", ylab = "", 
-        ylim = c(-2,3), 
-        cex.lab = 1.2, cex.axis = 1.1, cex.main = 1.5,
-        horizontal = TRUE, las = 1, range = 0, main = "Hive Nesting")
-stripchart(SES_ori_0 ~ trmt, data = fc, col = viridis(3),  ylim = c(-2,3),
-           pch = 19, cex = 2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
-abline(v = 0.0, col = "black", lwd = 3, lty=2)
-
-# native
-boxplot(SES_ori_0 ~ trmt, data = fc, col = viridis(3, alpha = 0.6),
-        xlab = "Standardized Effect Sizes (SES)", ylab = "", 
-        #ylim = c(-2,3), 
-        cex.lab = 1.2, cex.axis = 1.1, cex.main = 1.5,
-        horizontal = TRUE, las = 1, range = 0, main = "Native")
-stripchart(SES_ori_0 ~ trmt, data = fc, col = viridis(3),
-           pch = 19, cex = 2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
-abline(v = 0.0, col = "black", lwd = 3, lty=2)
-
-# specialists
-boxplot(SES_lec_2 ~ trmt, data = fc, col = viridis(3, alpha = 0.6),
-        xlab = "Standardized Effect Sizes (SES)", ylab = "", 
-        #ylim = c(-2,3), 
-        cex.lab = 1.2, cex.axis = 1.1, cex.main = 1.5,
-        horizontal = TRUE, las = 1, range = 0, main = "Specialists")
-stripchart(SES_ori_0 ~ trmt, data = fc, col = viridis(3),
-           pch = 19, cex = 2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
-abline(v = 0.0, col = "black", lwd = 3, lty=2)
-
-# non-native
-boxplot(SES_ori_1 ~ trmt, data = fc, col = viridis(3, alpha = 0.6),
-        xlab = "Standardized Effect Sizes (SES)", ylab = "",
-        #ylim = c(-2,3), 
-        cex.lab = 1.2, cex.axis = 1.1, cex.main = 1.5,
-        horizontal = TRUE, las = 1, range = 0, main = "Non-Native")
-stripchart(SES_ori_1 ~ trmt, data = fc, col = viridis(3),
-           pch = 19, cex = 2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
-abline(v = 0.0, col = "black", lwd = 3, lty=2)
-
-
-dev.off()
-
-##################################################################################################
 
 #Loading more needed packages----
 if (!suppressWarnings(require(nortest))) install.packages("nortest")
@@ -1020,9 +625,6 @@ qqnorm(resid(FS_bl.mod.red))
 qqline(resid(FS_bl.mod.red))
 plot(simulateResiduals(FS_bl.mod.red))
 densityPlot(rstudent(FS_bl.mod.red)) # check density estimate of the distribution of residuals
-simout <- simulateResiduals(fittedModel = FS_bl.mod.red, plot = T)
-plotResiduals(simout, form = FS_comps$pland)
-plotResiduals(simout, form = FS_comps$enn)
 outlierTest(FS_bl.mod.red)
 influenceIndexPlot(FS_bl.mod.red, vars = c("Cook"), id = list(n = 3))
 #It doesn't look like there really is an outlier with Bonferroini
@@ -1037,6 +639,7 @@ AICctab(FS_bl.mod.full, FS_bl.mod.red, FS_bl.mod.null)
 Anova(FS_bl.mod.red)
 
 effect_plot(FS_bl.mod.red, pred = pland, interval = TRUE, partial.residuals = TRUE, x.label = '(PLAND)', y.label = 'Standardized Effect Sizes (SES)')
+effect_plot(FS_bl.mod.red, pred = lpi, interval = TRUE, partial.residuals = TRUE, x.label = 'Largest Patch Index (LPI)', y.label = 'Standardized Effect Sizes (SES)')
 effect_plot(FS_bl.mod.red, pred = enn, interval = TRUE, partial.residuals = TRUE, x.label = '(ENN)', y.label = 'Standardized Effect Sizes (SES)')
 
 
@@ -1107,7 +710,7 @@ with(KT_comps, ad.test(SES_lec_0))
 with(VL_comps, ad.test(SES_lec_0))
 
 
-FS_lec_0.mod.full <- glm(SES_lec_0 ~ trmt + pland + enn, family = gaussian, data = FS_comps)
+FS_lec_0.mod.full <- glm(SES_lec_0 ~ trmt + pland + lpi + enn, family = gaussian, data = FS_comps)
 summary(FS_lec_0.mod.full)
 step(FS_lec_0.mod.full)
 
@@ -1130,7 +733,7 @@ compareCoefs(FS_lec_0.mod.null, FS_lec_0.mod.null2) # compares estimated coeffic
 anova(FS_lec_0.mod.full, FS_lec_0.mod.null,  test = "F")
 AICctab(FS_lec_0.mod.full, FS_lec_0.mod.null)
 
-KT_lec_0.mod.full <- glm(SES_lec_0 ~ trmt + pland + enn, family = gaussian, data = KT_comps)
+KT_lec_0.mod.full <- glm(SES_lec_0 ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
 summary(KT_lec_0.mod.full)
 step(KT_lec_0.mod.full)
 
@@ -1154,7 +757,7 @@ KT_lec_0.mod.null <- glm(SES_lec_0 ~ 1, family = gaussian, data = KT_comps)
 anova(KT_lec_0.mod.full, KT_lec_0.mod.red, KT_lec_0.mod.null,  test = "F")
 AICctab(KT_lec_0.mod.full, KT_lec_0.mod.red, KT_lec_0.mod.null)
 
-VL_lec_0.mod.full <- glm(SES_lec_0 ~ trmt + pland + enn, family = gaussian, data = VL_comps)
+VL_lec_0.mod.full <- glm(SES_lec_0 ~ trmt + pland + lpi + enn, family = gaussian, data = VL_comps)
 summary(VL_lec_0.mod.full)
 step(VL_lec_0.mod.full)
 
@@ -1213,7 +816,7 @@ with(FSwOUT.out, bartlett.test(SES_lec_1 ~ trmt))
 with(FSwOUT.out, ad.test(SES_lec_1))
 #Okay normality test not failed now. 
 #Outlier removed- Time to make a model
-FS_lec_1.mod.full<-glm(SES_lec_1 ~ trmt + pland + enn, family = gaussian, data = FSwOUT.out)
+FS_lec_1.mod.full<-glm(SES_lec_1 ~ trmt + pland + lpi + enn, family = gaussian, data = FSwOUT.out)
 summary(FS_lec_1.mod.full)
 step(FS_lec_1.mod.full)
 #null model is best comparison
@@ -1233,7 +836,7 @@ anova(FS_lec_1.mod.full, FS_lec_1.mod.null,  test = "F")
 AICctab(FS_lec_1.mod.full, FS_lec_1.mod.null)
 
 
-KT_lec_1.mod.full <- glm(SES_lec_1 ~ trmt + pland + enn, family = gaussian, data = KT_comps)
+KT_lec_1.mod.full <- glm(SES_lec_1 ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
 summary(KT_lec_1.mod.full)
 step(KT_lec_1.mod.full)
 
@@ -1252,24 +855,24 @@ anova(KT_lec_1.mod.full, KT_lec_1.mod.null,  test = "F")
 AICctab(KT_lec_1.mod.full, KT_lec_1.mod.null)
 
 
-VL_lec_1.mod.full <- glm(SES_lec_1 ~ trmt + pland  + enn, family = gaussian, data = VL_comps)
+VL_lec_1.mod.full <- glm(SES_lec_1 ~ trmt + pland + lpi + enn, family = gaussian, data = VL_comps)
 summary(VL_lec_1.mod.full)
 step(VL_lec_1.mod.full)
 
-VL_lec_1.mod.null <- glm(SES_lec_1 ~ 1, family = gaussian, data = VL_comps)
-summary(VL_lec_1.mod.null)
-qqnorm(resid(VL_lec_1.mod.null))
-qqline(resid(VL_lec_1.mod.null))
-plot(simulateResiduals(VL_lec_1.mod.null))
-densityPlot(rstudent(VL_lec_1.mod.null)) # check density estimate of the distribution of residuals
-outlierTest(VL_lec_1.mod.null)
-influenceIndexPlot(VL_lec_1.mod.null, vars = c("Cook"), id = list(n = 3))
+VL_lec_1.mod.red <- glm(SES_lec_1 ~ lpi, family = gaussian, data = VL_comps)
+summary(VL_lec_1.mod.red)
+qqnorm(resid(VL_lec_1.mod.red))
+qqline(resid(VL_lec_1.mod.red))
+plot(simulateResiduals(VL_lec_1.mod.red))
+densityPlot(rstudent(VL_lec_1.mod.red)) # check density estimate of the distribution of residuals
+outlierTest(VL_lec_1.mod.red)
+influenceIndexPlot(VL_lec_1.mod.red, vars = c("Cook"), id = list(n = 3))
 
 VL_lec_1.mod.null <- glm(SES_lec_1 ~ 1, family = gaussian, data = VL_comps)
 
 # model comparison techniques
-anova(VL_lec_1.mod.full, VL_lec_1.mod.null, VL_lec_1.mod.null,  test = "F")
-AICctab(VL_lec_1.mod.full, VL_lec_1.mod.null, VL_lec_1.mod.null)
+anova(VL_lec_1.mod.full, VL_lec_1.mod.red, VL_lec_1.mod.null,  test = "F")
+AICctab(VL_lec_1.mod.full, VL_lec_1.mod.red, VL_lec_1.mod.null)
 
 
 #I am leaving in the following code because it has outlier removal
@@ -1334,7 +937,7 @@ with(KT_comps, ad.test(SES_lec_2))
 with(VL_comps, ad.test(SES_lec_2))
 
 
-FS_lec_2.mod.full <- glm(SES_lec_2 ~ trmt + pland + enn, family = gaussian, data = FS_comps)
+FS_lec_2.mod.full <- glm(SES_lec_2 ~ trmt + pland + lpi + enn, family = gaussian, data = FS_comps)
 summary(FS_lec_2.mod.full)
 step(FS_lec_2.mod.full)
 
@@ -1385,7 +988,7 @@ anova(KT_lec_2.mod.full, KT_lec_2.mod.red, KT_lec_2.mod.null, test = "F")
 AICctab(KT_lec_2.mod.full, KT_lec_2.mod.red, KT_lec_2.mod.null)
 
 
-VL_lec_2.mod.full <- glm(SES_lec_2 ~ trmt + pland + enn, family = gaussian, data = VL_comps)
+VL_lec_2.mod.full <- glm(SES_lec_2 ~ trmt + pland + lpi + enn, family = gaussian, data = VL_comps)
 summary(VL_lec_2.mod.full)
 step(VL_lec_2.mod.full)
 
@@ -1445,7 +1048,7 @@ with(KT_comps, ad.test(SES_nest_1))
 with(VL_comps, ad.test(SES_nest_1))
 
 
-FS_nest_1.mod.full <- glm(SES_nest_1 ~ trmt + pland + enn, family = gaussian, data = FS_comps)
+FS_nest_1.mod.full <- glm(SES_nest_1 ~ trmt + pland + lpi + enn, family = gaussian, data = FS_comps)
 summary(FS_nest_1.mod.full)
 step(FS_nest_1.mod.full)
 
@@ -1475,7 +1078,7 @@ anova(FS_nest_1.mod.full, FS_nest_1.mod.red, FS_nest_1.mod.null, test = "F")
 AICctab(FS_nest_1.mod.full, FS_nest_1.mod.red, FS_nest_1.mod.null)
 
 
-KT_nest_1.mod.full <- glm(SES_nest_1 ~ trmt + pland + enn, family = gaussian, data = KT_comps)
+KT_nest_1.mod.full <- glm(SES_nest_1 ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
 summary(KT_nest_1.mod.full)
 step(KT_nest_1.mod.full)
 
@@ -1536,7 +1139,7 @@ with(KT_comps, ad.test(SES_nest_2))
 with(VL_comps, ad.test(SES_nest_2))
 
 
-FS_nest_2.mod.full <- glm(SES_nest_2 ~ trmt + pland + enn, family = gaussian, data = FS_comps)
+FS_nest_2.mod.full <- glm(SES_nest_2 ~ trmt + pland + lpi + enn, family = gaussian, data = FS_comps)
 summary(FS_nest_2.mod.full)
 step(FS_nest_2.mod.full)
 
@@ -1561,7 +1164,7 @@ anova(FS_nest_2.mod.full, FS_nest_2.mod.red, FS_nest_2.mod.null, test = "F")
 AICctab(FS_nest_2.mod.full, FS_nest_2.mod.red, FS_nest_2.mod.null)
 
 
-KT_nest_2.mod.full <- glm(SES_nest_2 ~ trmt + pland  + enn, family = gaussian, data = KT_comps)
+KT_nest_2.mod.full <- glm(SES_nest_2 ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
 summary(KT_nest_2.mod.full)
 step(KT_nest_2.mod.full)
 
@@ -1626,7 +1229,7 @@ with(KT_comps, ad.test(SES_nest_3))
 with(VL_comps, ad.test(SES_nest_3))
 
 
-FS_nest_3.mod.full <- glm(SES_nest_3 ~ trmt + pland  + enn, family = gaussian, data = FS_comps)
+FS_nest_3.mod.full <- glm(SES_nest_3 ~ trmt + pland + lpi + enn, family = gaussian, data = FS_comps)
 summary(FS_nest_3.mod.full)
 step(FS_nest_3.mod.full)
 
@@ -1655,7 +1258,7 @@ anova(FS_nest_3.mod.full, FS_nest_3.mod.red, FS_nest_3.mod.null, test = "F")
 AICctab(FS_nest_3.mod.full, FS_nest_3.mod.red, FS_nest_3.mod.null)
 
 
-KT_nest_3.mod.full <- glm(SES_nest_3 ~ trmt + pland  + enn, family = gaussian, data = KT_comps)
+KT_nest_3.mod.full <- glm(SES_nest_3 ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
 summary(KT_nest_3.mod.full)
 step(KT_nest_3.mod.full)
 
@@ -1681,7 +1284,7 @@ anova(KT_nest_3.mod.full, KT_nest_3.mod.red, KT_nest_3.mod.null, test = "F")
 AICctab(KT_nest_3.mod.full, KT_nest_3.mod.red, KT_nest_3.mod.null)
 
 
-VL_nest_3.mod.full <- glm(SES_nest_3 ~ trmt + pland  + enn, family = gaussian, data = VL_comps)
+VL_nest_3.mod.full <- glm(SES_nest_3 ~ trmt + pland + lpi + enn, family = gaussian, data = VL_comps)
 summary(VL_nest_3.mod.full)
 step(VL_nest_3.mod.full)
 
@@ -1830,7 +1433,7 @@ anova(FS_nest_5.mod.full,  FS_nest_5.mod.null, test = "F")
 AICctab(FS_nest_5.mod.full,  FS_nest_5.mod.null)
 
 
-KT_nest_5.mod.full <- glm(SES_nest_5 ~ trmt + pland  + enn, family = gaussian, data = KT_comps)
+KT_nest_5.mod.full <- glm(SES_nest_5 ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
 summary(KT_nest_5.mod.full)
 step(KT_nest_5.mod.full)
 
@@ -1855,7 +1458,7 @@ KT_nest_5.mod.null <- glm(SES_nest_5 ~ 1, family = gaussian, data = KT_comps)
 anova(KT_nest_5.mod.full, KT_nest_5.mod.red, KT_nest_5.mod.null, test = "F")
 AICctab(KT_nest_5.mod.full, KT_nest_5.mod.red, KT_nest_5.mod.null)
 
-VL_nest_5.mod.full <- glm(SES_nest_5 ~ trmt + pland + enn, family = gaussian, data = VL_comps)
+VL_nest_5.mod.full <- glm(SES_nest_5 ~ trmt + pland + lpi + enn, family = gaussian, data = VL_comps)
 summary(VL_nest_5.mod.full)
 step(VL_nest_5.mod.full)
 
@@ -1911,7 +1514,7 @@ with(KT_comps, ad.test(SES_soc_1))
 with(VL_comps, ad.test(SES_soc_1))
 
 
-FS_soc_1.mod.full <- glm(SES_soc_1 ~ trmt + pland  + enn, family = gaussian, data = FS_comps)
+FS_soc_1.mod.full <- glm(SES_soc_1 ~ trmt + pland + lpi + enn, family = gaussian, data = FS_comps)
 summary(FS_soc_1.mod.full)
 step(FS_soc_1.mod.full)
 
@@ -1939,7 +1542,7 @@ anova(FS_soc_1.mod.full, FS_soc_1.mod.red, FS_soc_1.mod.null, test = "F")
 AICctab(FS_soc_1.mod.full, FS_soc_1.mod.red, FS_soc_1.mod.null)
 
 
-KT_soc_1.mod.full <- glm(SES_soc_1 ~ trmt + pland  + enn, family = gaussian, data = KT_comps)
+KT_soc_1.mod.full <- glm(SES_soc_1 ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
 summary(KT_soc_1.mod.full)
 step(KT_soc_1.mod.full)
 
@@ -2030,7 +1633,7 @@ sd(VL_comps$SES_soc_2)
 #nope. looks like data point 9 is close, but not technically an outlier
 #so we will do KW test
 
-FS_soc_2.mod.full <- glm(SES_soc_2 ~ trmt + pland  + enn, family = gaussian, data = FS_comps)
+FS_soc_2.mod.full <- glm(SES_soc_2 ~ trmt + pland + lpi + enn, family = gaussian, data = FS_comps)
 summary(FS_soc_2.mod.full)
 step(FS_soc_2.mod.full)
 
@@ -2118,7 +1721,7 @@ with(KT_comps, ad.test(SES_soc_3))
 with(VL_comps, ad.test(SES_soc_3))
 
 
-FS_soc_3.mod.full <- glm(SES_soc_3 ~ trmt + pland  + enn, family = gaussian, data = FS_comps)
+FS_soc_3.mod.full <- glm(SES_soc_3 ~ trmt + pland + lpi + enn, family = gaussian, data = FS_comps)
 summary(FS_soc_3.mod.full)
 step(FS_soc_3.mod.full)
 
@@ -2145,7 +1748,7 @@ anova(FS_soc_3.mod.full, FS_soc_3.mod.red, FS_soc_3.mod.null, test = "F")
 AICctab(FS_soc_3.mod.full, FS_soc_3.mod.red, FS_soc_3.mod.null)
 
 
-KT_soc_3.mod.full <- glm(SES_soc_3 ~ trmt + pland  + enn, family = gaussian, data = KT_comps)
+KT_soc_3.mod.full <- glm(SES_soc_3 ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
 summary(KT_soc_3.mod.full)
 step(KT_soc_3.mod.full)
 
@@ -2170,7 +1773,7 @@ anova(KT_soc_3.mod.full, KT_soc_3.mod.red, KT_soc_3.mod.null, test = "F")
 AICctab(KT_soc_3.mod.full, KT_soc_3.mod.red, KT_soc_3.mod.null)
 
 
-VL_soc_3.mod.full <- glm(SES_soc_3 ~ trmt + pland  + enn, family = gaussian, data = VL_comps)
+VL_soc_3.mod.full <- glm(SES_soc_3 ~ trmt + pland + lpi + enn, family = gaussian, data = VL_comps)
 summary(VL_soc_3.mod.full)
 step(VL_soc_3.mod.full)
 
@@ -2219,7 +1822,7 @@ with(KT_comps, ad.test(SES_soc_4))
 with(VL_comps, ad.test(SES_soc_4))
 
 
-FS_soc_4.mod.full <- glm(SES_soc_4 ~ trmt + pland  + enn, family = gaussian, data = FS_comps)
+FS_soc_4.mod.full <- glm(SES_soc_4 ~ trmt + pland + lpi + enn, family = gaussian, data = FS_comps)
 summary(FS_soc_4.mod.full)
 step(FS_soc_4.mod.full)
 
@@ -2238,7 +1841,7 @@ anova(FS_soc_4.mod.full, FS_soc_4.mod.null, test = "F")
 AICctab(FS_soc_4.mod.full, FS_soc_4.mod.null)
 
 
-KT_soc_4.mod.full <- glm(SES_soc_4 ~ trmt + pland  + enn, family = gaussian, data = KT_comps)
+KT_soc_4.mod.full <- glm(SES_soc_4 ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
 summary(KT_soc_4.mod.full)
 step(KT_soc_4.mod.full)
 
@@ -2318,7 +1921,7 @@ with(KT_comps, ad.test(SES_ori_0))
 with(VL_comps, ad.test(SES_ori_0))
 
 
-FS_ori_0.mod.full <- glm(SES_ori_0 ~ trmt + pland + enn, family = gaussian, data = FS_comps)
+FS_ori_0.mod.full <- glm(SES_ori_0 ~ trmt + pland + lpi + enn, family = gaussian, data = FS_comps)
 summary(FS_ori_0.mod.full)
 step(FS_ori_0.mod.full)
 
@@ -2372,7 +1975,7 @@ anova(KT_ori_0.mod.full, KT_ori_0.mod.null)
 AICctab(KT_ori_0.mod.full,  KT_ori_0.mod.null)
 
 
-VL_ori_0.mod.full <- glm(SES_ori_0 ~ trmt + pland  + enn, family = gaussian, data = VL_comps)
+VL_ori_0.mod.full <- glm(SES_ori_0 ~ trmt + pland + lpi + enn, family = gaussian, data = VL_comps)
 summary(VL_ori_0.mod.full)
 step(VL_ori_0.mod.full)
 
@@ -2427,7 +2030,7 @@ with(KT_comps, ad.test(SES_ori_1))
 with(VL_comps, ad.test(SES_ori_1))
 
 
-FS_ori_1.mod.full <- glm(SES_ori_1 ~ trmt + pland + enn, family = gaussian, data = FS_comps)
+FS_ori_1.mod.full <- glm(SES_ori_1 ~ trmt + pland + lpi + enn, family = gaussian, data = FS_comps)
 summary(FS_ori_1.mod.full)
 step(FS_ori_1.mod.full)
 
@@ -2476,7 +2079,7 @@ influenceIndexPlot(KT_ori_1.mod.null, vars = c("Cook"), id = list(n = 3))
 anova(KT_ori_1.mod.full, KT_ori_1.mod.null)
 AICctab(KT_ori_1.mod.full,  KT_ori_1.mod.null)
 
-VL_ori_1.mod.full <- glm(SES_ori_1 ~ trmt + pland + enn, family = gaussian, data = VL_comps)
+VL_ori_1.mod.full <- glm(SES_ori_1 ~ trmt + pland + lpi + enn, family = gaussian, data = VL_comps)
 summary(VL_ori_1.mod.full)
 step(VL_ori_1.mod.full)
 
@@ -2530,7 +2133,7 @@ with(KT_comps, ad.test(SES_bsor))
 with(VL_comps, ad.test(SES_bsor))
 
 
-FS_bsor.mod.full <- glm(SES_bsor ~ trmt + pland + enn, family = gaussian, data = FS_comps)
+FS_bsor.mod.full <- glm(SES_bsor ~ trmt + pland + lpi + enn, family = gaussian, data = FS_comps)
 summary(FS_bsor.mod.full)
 step(FS_bsor.mod.full)
 
@@ -2549,7 +2152,7 @@ anova(FS_bsor.mod.full, FS_bsor.mod.null)
 AICctab(FS_bsor.mod.full, FS_bsor.mod.null)
 
 
-KT_bsor.mod.full <- glm(SES_bsor ~ trmt + pland  + enn, family = gaussian, data = KT_comps)
+KT_bsor.mod.full <- glm(SES_bsor ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
 summary(KT_bsor.mod.full)
 step(KT_bsor.mod.full)
 
@@ -2628,7 +2231,7 @@ with(KT_comps, ad.test(SES_bsim))
 with(VL_comps, ad.test(SES_bsim))
 
 
-FS_bsim.mod.full <- glm(SES_bsim ~ trmt + pland  + enn, family = gaussian, data = FS_comps)
+FS_bsim.mod.full <- glm(SES_bsim ~ trmt + pland + lpi + enn, family = gaussian, data = FS_comps)
 summary(FS_bsim.mod.full)
 step(FS_bsim.mod.full)
 
@@ -2648,7 +2251,7 @@ anova(FS_bsim.mod.full, FS_bsim.mod.red, FS_bsim.mod.null)
 AICctab(FS_bsim.mod.full, FS_bsim.mod.red, FS_bsim.mod.null)
 #null was best model
 
-KT_bsim.mod.full <- glm(SES_bsim ~ trmt + pland  + enn, family = gaussian, data = KT_comps)
+KT_bsim.mod.full <- glm(SES_bsim ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
 summary(KT_bsim.mod.full)
 step(KT_bsim.mod.full)
 
@@ -2670,7 +2273,7 @@ AICctab(KT_bsim.mod.full, KT_bsim.mod.red, KT_bsim.mod.null)
 
 #null is best model
 
-VL_bsim.mod.full <- glm(SES_bsim ~ trmt + pland + enn, family = gaussian, data = VL_comps)
+VL_bsim.mod.full <- glm(SES_bsim ~ trmt + pland + lpi + enn, family = gaussian, data = VL_comps)
 summary(VL_bsim.mod.full)
 step(VL_bsim.mod.full)
 
@@ -2720,7 +2323,7 @@ with(KT_comps, ad.test(SES_bsne))
 with(VL_comps, ad.test(SES_bsne))
 #VL fails Anderson Darling normality test. KW test instead
 
-FS_bsne.mod.full <- glm(SES_bsne ~ trmt + pland  + enn, family = gaussian, data = FS_comps)
+FS_bsne.mod.full <- glm(SES_bsne ~ trmt + pland + lpi + enn, family = gaussian, data = FS_comps)
 summary(FS_bsne.mod.full)
 step(FS_bsne.mod.full)
 
@@ -2741,7 +2344,7 @@ AICctab(FS_bsne.mod.full, FS_bsne.mod.red, FS_bsne.mod.null)
 
 #Null was best model fit
 
-KT_bsne.mod.full <- glm(SES_bsne ~ trmt + pland  + enn, family = gaussian, data = KT_comps)
+KT_bsne.mod.full <- glm(SES_bsne ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
 summary(KT_bsne.mod.full)
 step(KT_bsne.mod.full)
 
@@ -2795,7 +2398,7 @@ with(KT_comps, ad.test(SES_falpha))
 with(VL_comps, ad.test(SES_falpha))
 
 
-FS_falpha.mod.full <- glm(SES_falpha ~ trmt + pland  + enn, family = gaussian, data = FS_comps)
+FS_falpha.mod.full <- glm(SES_falpha ~ trmt + pland + lpi + enn, family = gaussian, data = FS_comps)
 summary(FS_falpha.mod.full)
 step(FS_falpha.mod.full)
 
@@ -2813,7 +2416,7 @@ anova(FS_falpha.mod.full, FS_falpha.mod.null)
 AICtab(FS_falpha.mod.full, FS_falpha.mod.null)
 
 
-KT_falpha.mod.full <- glm(SES_falpha ~ trmt + pland  + enn, family = gaussian, data = KT_comps)
+KT_falpha.mod.full <- glm(SES_falpha ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
 summary(KT_falpha.mod.full)
 step(KT_falpha.mod.full)
 
@@ -2838,7 +2441,7 @@ anova(KT_falpha.mod.full, KT_falpha.mod.red, KT_falpha.mod.null)
 AICtab(KT_falpha.mod.full, KT_falpha.mod.red, KT_falpha.mod.null)
 
 
-VL_falpha.mod.full <- glm(SES_falpha ~ trmt + pland  + enn, family = gaussian, data = VL_comps)
+VL_falpha.mod.full <- glm(SES_falpha ~ trmt + pland + lpi + enn, family = gaussian, data = VL_comps)
 summary(VL_falpha.mod.full)
 step(VL_falpha.mod.full)
 
@@ -2896,33 +2499,27 @@ with(KT_comps, ad.test(SES_fbsor))
 with(VL_comps, ad.test(SES_fbsor))
 
 
-FS_fbsor.mod.full <- glm(SES_fbsor ~ trmt + pland + enn, family = gaussian, data = FS_comps)
+FS_fbsor.mod.full <- glm(SES_fbsor ~ trmt + pland + lpi + enn, family = gaussian, data = FS_comps)
 summary(FS_fbsor.mod.full)
 step(FS_fbsor.mod.full)
 
-FS_fbsor.mod.red<-glm(SES_fbsor ~ trmt, family = gaussian, data = FS_comps)
 FS_fbsor.mod.null <- glm(SES_fbsor ~ 1, family = gaussian, data = FS_comps)
-summary(FS_fbsor.mod.red)
-qqnorm(resid(FS_fbsor.mod.red))
-qqline(resid(FS_fbsor.mod.red))
-plot(simulateResiduals(FS_fbsor.mod.red))
-densityPlot(rstudent(FS_fbsor.mod.red)) # check density estimate of the distribution of residuals
-outlierTest(FS_fbsor.mod.red)
-
-influenceIndexPlot(FS_fbsor.mod.red, vars = c("Cook"), id = list(n = 3))
+summary(FS_fbsor.mod.null)
+qqnorm(resid(FS_fbsor.mod.null))
+qqline(resid(FS_fbsor.mod.null))
+plot(simulateResiduals(FS_fbsor.mod.null))
+densityPlot(rstudent(FS_fbsor.mod.null)) # check density estimate of the distribution of residuals
+outlierTest(FS_fbsor.mod.null)
+#there is an outlier
+influenceIndexPlot(FS_fbsor.mod.null, vars = c("Cook"), id = list(n = 3))
+#It isn't much of an influence, and also this is a null model, so I won't remove 13
 
 # model comparison techniques
-anova(FS_fbsor.mod.full,FS_fbsor.mod.red, FS_fbsor.mod.null)
-AICtab(FS_fbsor.mod.full, FS_fbsor.mod.red, FS_fbsor.mod.null)
-
-Anova(FS_fbsor.mod.red)
-
-png("Figure trmt fbsor.png", width = 1500, height = 1000, pointsize = 20)
-effect_plot(FS_fbsor.mod.red, pred = trmt, interval = TRUE, partial.residuals = TRUE, x.label = 'Treatment Comparison', y.label = 'Standardized Effect Sizes (SES)')
-dev.off()
+anova(FS_fbsor.mod.full, FS_fbsor.mod.null)
+AICtab(FS_fbsor.mod.full, FS_fbsor.mod.null)
 
 
-KT_fbsor.mod.full <- glm(SES_fbsor ~ trmt + pland  + enn, family = gaussian, data = KT_comps)
+KT_fbsor.mod.full <- glm(SES_fbsor ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
 summary(KT_fbsor.mod.full)
 step(KT_fbsor.mod.full)
 
@@ -2940,7 +2537,7 @@ anova(KT_fbsor.mod.full, KT_fbsor.mod.null)
 AICtab(KT_fbsor.mod.full, KT_fbsor.mod.null)
 
 
-VL_fbsor.mod.full <- glm(SES_fbsor ~ trmt + pland  + enn, family = gaussian, data = VL_comps)
+VL_fbsor.mod.full <- glm(SES_fbsor ~ trmt + pland + lpi + enn, family = gaussian, data = VL_comps)
 summary(VL_fbsor.mod.full)
 step(VL_fbsor.mod.full)
 
@@ -3009,7 +2606,7 @@ anova(FS_fbsim.mod.full, FS_fbsim.mod.red, FS_fbsim.mod.null)
 AICtab(FS_fbsim.mod.full, FS_fbsim.mod.red, FS_fbsim.mod.null)
 
 
-KT_fbsim.mod.full <- glm(SES_fbsim ~ trmt + pland  + enn, family = gaussian, data = KT_comps)
+KT_fbsim.mod.full <- glm(SES_fbsim ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
 summary(KT_fbsim.mod.full)
 step(KT_fbsim.mod.full)
 
@@ -3027,7 +2624,7 @@ anova(KT_fbsim.mod.full, KT_fbsim.mod.null)
 AICtab(KT_fbsim.mod.full, KT_fbsim.mod.null)
 
 
-VL_fbsim.mod.full <- glm(SES_fbsim ~ trmt + pland  + enn, family = gaussian, data = VL_comps)
+VL_fbsim.mod.full <- glm(SES_fbsim ~ trmt + pland + lpi + enn, family = gaussian, data = VL_comps)
 summary(VL_fbsim.mod.full)
 step(VL_fbsim.mod.full)
 
@@ -3083,7 +2680,7 @@ with(VL_comps, ad.test(SES_fbsne))
 
 #Skipping FS because of failed normality test
 
-KT_fbsne.mod.full <- glm(SES_fbsne ~ trmt + pland  + enn, family = gaussian, data = KT_comps)
+KT_fbsne.mod.full <- glm(SES_fbsne ~ trmt + pland + lpi + enn, family = gaussian, data = KT_comps)
 summary(KT_fbsne.mod.full)
 step(KT_fbsne.mod.full)
 
@@ -3121,7 +2718,7 @@ AICtab(VL_fbsne.mod.full, VL_fbsne.mod.null)
 
 
 
-#Graph making----
+#Graph making
 library(ggplot2)
 #install.packages("ggthemes")
 library(ggthemes)
