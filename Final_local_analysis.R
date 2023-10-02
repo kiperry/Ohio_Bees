@@ -46,8 +46,8 @@ write.csv(t, file = "traits_urbanpool.csv")
 
 
 # removes any columns (i.e. species) that are not found in Cleveland
-a <- a[, colSums(a!= 0) > 0]
 
+a <- a[, colSums(a != 0) > 0]
 colSums(a)
 
 
