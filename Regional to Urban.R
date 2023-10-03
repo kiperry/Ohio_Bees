@@ -11,13 +11,13 @@
 #CA Shepard: 20 February 2023 (Updated)
 ###################################################################################
 
-t <- read.csv("./btraits_23.csv", row.names=1)
-a <- read.csv("./bcomm_23.localanalysis.csv", row.names=1)
+t <- read.csv("btraits_23.csv", row.names=1)
+a <- read.csv("bcomm_23.localanalysis.csv", row.names=1)
 
 
 str(a)
 a1 <- a #save the original dataset
-a <- a[2:361]
+a <- a[2:362]
 str(a)
 
 rowSums(a) #all sites have at least 10 species
