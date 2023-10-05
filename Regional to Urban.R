@@ -9,6 +9,7 @@
 # KI Perry; 20 July 2021
 # CA Shepard: 26 September 2022 
 #CA Shepard: 20 February 2023 (Updated)
+#CA Shepard: 3 October 2023 (update )
 ###################################################################################
 
 t <- read.csv("btraits_23.csv", row.names=1)
@@ -20,7 +21,16 @@ a1 <- a #save the original dataset
 a <- a[2:362]
 str(a)
 
-rowSums(a) #all sites have at least 10 species
+rowSums(a) #all sites have at least 10 species?
+a<-a[-49,]
+a<-a[-51,]
+a<-a[-56,]
+a<-a[-56,]
+a<-a[-56,]
+a<-a[-64,]
+a<-a[-58,]
+rowSums(a)#all sites have 4+ species
+
 
 str(t)
 names(t)
@@ -125,11 +135,12 @@ str(b.fun)
 #Because only fixing species richness, susceptible to type 1 errors
 
 #for (i in 1:nrow(a)){
-#  randomizedB <- randomizeMatrix(samp = a, null.model = "richness", iterations = 1)
+ #randomizedB <- randomizeMatrix(samp = a, null.model = "richness", iterations = 1)
 #}
 
 #rowSums(a) == rowSums(randomizedB) #should be TRUE
 #colSums(a) == colSums(randomizedB) #should be FALSE
+#I think a few were true when there were 0 species
 #colSums(a)
 #colSums(randomizedB) #it worked!
 
@@ -215,55 +226,55 @@ for(i in 1:numberReps){
 }
 
 # save the output matrices
-write.csv(nbl, file = "nbl.csv")
-write.csv(nlec_0, file = "nlec_0.csv")
-write.csv(nlec_1, file = "nlec_1.csv")
-write.csv(nlec_2, file = "nlec_2.csv")
-write.csv(nnest_1, file = "nnest_1.csv")
-write.csv(nnest_2, file = "nnest_2.csv")
-write.csv(nnest_3, file = "nnest_3.csv")
-write.csv(nnest_4, file = "nnest_4.csv")
-write.csv(nnest_5, file = "nnest_5.csv")
-write.csv(nsoc_1, file = "nsoc_1.csv")
-write.csv(nsoc_2, file = "nsoc_2.csv")
-write.csv(nsoc_3, file = "nsoc_3.csv")
-write.csv(nsoc_4, file = "nsoc_4.csv")
-write.csv(nori_0, file = "nori_0.csv")
-write.csv(nori_1, file = "nori_1.csv")
+write.csv(nbl, file = "Regional to Urban_Nulls_FINAL/nbl.csv")
+write.csv(nlec_0, file = "Regional to Urban_Nulls_FINAL/nlec_0.csv")
+write.csv(nlec_1, file = "Regional to Urban_Nulls_FINAL/nlec_1.csv")
+write.csv(nlec_2, file = "Regional to Urban_Nulls_FINAL/nlec_2.csv")
+write.csv(nnest_1, file = "Regional to Urban_Nulls_FINAL/nnest_1.csv")
+write.csv(nnest_2, file = "Regional to Urban_Nulls_FINAL/nnest_2.csv")
+write.csv(nnest_3, file = "Regional to Urban_Nulls_FINAL/nnest_3.csv")
+write.csv(nnest_4, file = "Regional to Urban_Nulls_FINAL/nnest_4.csv")
+write.csv(nnest_5, file = "Regional to Urban_Nulls_FINAL/nnest_5.csv")
+write.csv(nsoc_1, file = "Regional to Urban_Nulls_FINAL/nsoc_1.csv")
+write.csv(nsoc_2, file = "Regional to Urban_Nulls_FINAL/nsoc_2.csv")
+write.csv(nsoc_3, file = "Regional to Urban_Nulls_FINAL/nsoc_3.csv")
+write.csv(nsoc_4, file = "Regional to Urban_Nulls_FINAL/nsoc_4.csv")
+write.csv(nori_0, file = "Regional to Urban_Nulls_FINAL/nori_0.csv")
+write.csv(nori_1, file = "Regional to Urban_Nulls_FINAL/nori_1.csv")
 
-write.csv(nbsim, file = "tbeta_sim.csv")
-write.csv(nbsne, file = "tbeta_sne.csv")
-write.csv(nbsor, file = "tbeta_sor.csv")
+write.csv(nbsim, file = "Regional to Urban_Nulls_FINAL/tbeta_sim.csv")
+write.csv(nbsne, file = "Regional to Urban_Nulls_FINAL/tbeta_sne.csv")
+write.csv(nbsor, file = "Regional to Urban_Nulls_FINAL/tbeta_sor.csv")
 
-write.csv(nfsim, file = "fbeta_sim.csv")
-write.csv(nfsne, file = "fbeta_sne.csv")
-write.csv(nfsor, file = "fbeta_sor.csv")
+write.csv(nfsim, file = "Regional to Urban_Nulls_FINAL/fbeta_sim.csv")
+write.csv(nfsne, file = "Regional to Urban_Nulls_FINAL/fbeta_sne.csv")
+write.csv(nfsor, file = "Regional to Urban_Nulls_FINAL/fbeta_sor.csv")
 
 # load the output matrices
 
-nbl <- read.csv("Regional to Urban_Null Models_HillSmith_3 Axes/nbl.csv", row.names=1)
-nlec_0 <- read.csv("Regional to Urban_Null Models_HillSmith_3 Axes/nlec_0.csv", row.names=1)
-nlec_1 <- read.csv("Regional to Urban_Null Models_HillSmith_3 Axes/nlec_1.csv", row.names=1)
-nlec_2 <- read.csv("Regional to Urban_Null Models_HillSmith_3 Axes/nlec_2.csv", row.names=1)
-nnest_1 <- read.csv("Regional to Urban_Null Models_HillSmith_3 Axes/nnest_1.csv", row.names=1)
-nnest_2 <- read.csv("Regional to Urban_Null Models_HillSmith_3 Axes/nnest_2.csv", row.names=1)
-nnest_3 <- read.csv("Regional to Urban_Null Models_HillSmith_3 Axes/nnest_3.csv", row.names=1)
-nnest_4 <- read.csv("Regional to Urban_Null Models_HillSmith_3 Axes/nnest_4.csv", row.names=1)
-nnest_5 <- read.csv("Regional to Urban_Null Models_HillSmith_3 Axes/nnest_5.csv", row.names=1)
-nsoc_1 <- read.csv("Regional to Urban_Null Models_HillSmith_3 Axes/nsoc_1.csv", row.names=1)
-nsoc_2 <- read.csv("Regional to Urban_Null Models_HillSmith_3 Axes/nsoc_2.csv", row.names=1)
-nsoc_3 <- read.csv("Regional to Urban_Null Models_HillSmith_3 Axes/nsoc_3.csv", row.names=1)
-nsoc_4 <- read.csv("Regional to Urban_Null Models_HillSmith_3 Axes/nsoc_4.csv", row.names=1)
-nori_0 <- read.csv("Regional to Urban_Null Models_HillSmith_3 Axes/nori_0.csv", row.names=1)
-nori_1 <- read.csv("Regional to Urban_Null Models_HillSmith_3 Axes/nori_1.csv", row.names=1)
+nbl <- read.csv("Regional to Urban_Nulls_FINAL/nbl.csv", row.names=1)
+nlec_0 <- read.csv("Regional to Urban_Nulls_FINAL/nlec_0.csv", row.names=1)
+nlec_1 <- read.csv("Regional to Urban_Nulls_FINAL/nlec_1.csv", row.names=1)
+nlec_2 <- read.csv("Regional to Urban_Nulls_FINAL/nlec_2.csv", row.names=1)
+nnest_1 <- read.csv("Regional to Urban_Nulls_FINAL/nnest_1.csv", row.names=1)
+nnest_2 <- read.csv("Regional to Urban_Nulls_FINAL/nnest_2.csv", row.names=1)
+nnest_3 <- read.csv("Regional to Urban_Nulls_FINAL/nnest_3.csv", row.names=1)
+nnest_4 <- read.csv("Regional to Urban_Nulls_FINAL/nnest_4.csv", row.names=1)
+nnest_5 <- read.csv("Regional to Urban_Nulls_FINAL/nnest_5.csv", row.names=1)
+nsoc_1 <- read.csv("Regional to Urban_Nulls_FINAL/nsoc_1.csv", row.names=1)
+nsoc_2 <- read.csv("Regional to Urban_Nulls_FINAL/nsoc_2.csv", row.names=1)
+nsoc_3 <- read.csv("Regional to Urban_Nulls_FINAL/nsoc_3.csv", row.names=1)
+nsoc_4 <- read.csv("Regional to Urban_Nulls_FINAL/nsoc_4.csv", row.names=1)
+nori_0 <- read.csv("Regional to Urban_Nulls_FINAL/nori_0.csv", row.names=1)
+nori_1 <- read.csv("Regional to Urban_Nulls_FINAL/nori_1.csv", row.names=1)
 
-nbsim <- read.csv("Regional to Urban_Null Models_HillSmith_3 Axes/tbeta_sim.csv", row.names=1)
-nbsne <- read.csv("Regional to Urban_Null Models_HillSmith_3 Axes/tbeta_sne.csv", row.names=1)
-nbsor <- read.csv("Regional to Urban_Null Models_HillSmith_3 Axes/tbeta_sim.csv", row.names=1)
+nbsim <- read.csv("Regional to Urban_Nulls_FINAL/tbeta_sim.csv", row.names=1)
+nbsne <- read.csv("Regional to Urban_Nulls_FINAL/tbeta_sne.csv", row.names=1)
+nbsor <- read.csv("Regional to Urban_Nulls_FINAL/tbeta_sim.csv", row.names=1)
 
-nfsim <- read.csv("Regional to Urban_Null Models_HillSmith_3 Axes/fbeta_sim.csv", row.names=1)
-nfsne <- read.csv("Regional to Urban_Null Models_HillSmith_3 Axes/fbeta_sne.csv", row.names=1)
-nfsor <- read.csv("Regional to Urban_Null Models_HillSmith_3 Axes/fbeta_sor.csv", row.names=1)
+nfsim <- read.csv("Regional to Urban_Nulls_FINAL/fbeta_sim.csv", row.names=1)
+nfsne <- read.csv("Regional to Urban_Nulls_FINAL/fbeta_sne.csv", row.names=1)
+nfsor <- read.csv("Regional to Urban_Nulls_FINAL/fbeta_sor.csv", row.names=1)
 
 ## SES Calculations
 #calculate standardized effect sizes (SES) for each trait and index
@@ -436,7 +447,7 @@ w.nest_2 <- wilcox.test(SES_nest_2, y = NULL, mu = 0, alternative = c("two.sided
 w.nest_2
 
 
-## nest_3 - Hive----
+## nest_3 - Colony----
 SES_nest_3 <- (cwm.obs$nest_3 - apply(nnest_3, MARGIN = 1, mean)) / apply(nnest_3, MARGIN = 1, sd, na.rm=T)
 SES_nest_3
 
@@ -930,8 +941,8 @@ library(ggplot2)
 #install.packages("ggthemes")
 library(ggthemes)
 
-SES_TBeta$metric <- rep(c("Taxonomic"),each = 49)
-SES_FBeta$metric <- rep(c("Functional"),each = 49)
+SES_TBeta$metric <- rep(c("Taxonomic"),each = 64)
+SES_FBeta$metric <- rep(c("Functional"),each = 64)
 
 names(SES_TBeta) <- names(SES_FBeta) 
 #The above code was added to get rid of the "names do not match" error
@@ -967,27 +978,27 @@ ggplot(SES_div.m, aes(x=ses, y=var, fill = var)) +
 dev.off()
 
 
-png("SES_Diversity_Indices.png", width = 2500, height = 1000, pointsize = 20)
+png("Figures/Fig2.reg_Diversity_Indices.png", width = 3000, height = 1000, pointsize = 20)
 
 par(mfrow=c(1,2)) # indicates one row, two columns
 par(mar=c(5,15,4,2))
 
 boxplot(ses ~ fbeta, data = SES_TBeta, col = viridis(3, alpha = 0.6),
         xlab = "Standardized Effect Sizes (SES)", ylab = "",
-        horizontal = TRUE, las = 1, range = 0, cex.lab = 2, cex.axis = 1.7)
+        horizontal = TRUE, las = 1, range = 0, cex.lab = 2, cex.axis = 1.5, cex.main= 1.8, main = "Taxonomic Beta Diversity")
 stripchart(ses ~ fbeta, data = SES_TBeta, col = viridis(3),
            pch = 19, cex = 1, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
-text(52, 3.4, "A", pos = 4, font = 2, cex = 2.6)
+text(50, 3.4, "A", pos = 4, font = 2, cex = 2.6)
 
 
 boxplot(ses ~ fbeta, data = SES_FBeta, col = viridis(3, alpha = 0.6),
         xlab = "Standardized Effect Sizes (SES)", ylab = "",
-        horizontal = TRUE, las = 1, range = 0, cex.lab = 2, cex.axis = 1.7)
+        horizontal = TRUE, las = 1, range = 0, cex.lab = 2, cex.axis = 1.5, cex.main= 1.8, main = "Functional Beta Diversity")
 stripchart(ses ~ fbeta, data = SES_FBeta, col = viridis(3),
            pch = 19, cex = 1, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
-text(5.5, 3.4, "B", pos = 4, font = 2, cex = 2.6)
+text(6.5, 3.4, "B", pos = 4, font = 2, cex = 2.6)
 
 dev.off()
 
@@ -1094,7 +1105,7 @@ abline(v = 0.0, col = "black", lwd = 3, lty=2)
 
 
 #Same graphs but Put in figure order for making paper figures----
-png("Figure 2 all regional sp traits.png", width = 1500, height = 1000, pointsize = 20)
+png("Figures/Figure 3 all regional sp traits.png", width = 1500, height = 1000, pointsize = 20)
 
 par(mfrow=c(2,2)) # indicates two rows, two columns
 par(mar = c(5,9,4,2)) # sets the margins around the figure
@@ -1113,6 +1124,8 @@ boxplot(ses ~ trait, data = SES_lengthandorigin, col = viridis(5, alpha = 0.6),
 stripchart(ses ~ trait, data = SES_lengthandorigin, col = viridis(5),
            pch = 19, cex = 1, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
+text(6.5, 3.3, "A", pos = 4, font = 2, cex = 2)
+
 
 ## Nesting Traits
 
@@ -1127,6 +1140,7 @@ boxplot(ses ~ nest, data = SES_Nest, col = viridis(5, alpha = 0.6),
 stripchart(ses ~ nest, data = SES_Nest, col = viridis(5),
            pch = 19, cex = 1, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
+text(6.5, 5.2, "B", pos = 4, font = 2, cex = 2)
 
 #lecty
 SES_lect <- as.data.frame(cbind( SES_lec_2, SES_lec_1, SES_lec_0))
@@ -1142,6 +1156,9 @@ stripchart(ses ~ trait, data = SES_lect, col = viridis(6),
            pch = 19, cex = 1, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
 
+text(6.5, 3.3, "C", pos = 4, font = 2, cex = 2)
+
+
 ## Sociality Traits
 SES_Soc <- as.data.frame(cbind(SES_soc_4, SES_soc_3, SES_soc_1, SES_soc_2))
 colnames(SES_Soc) <- c("Parasitic","Eusocial", "Subsocial", "Solitary")
@@ -1155,5 +1172,7 @@ boxplot(ses ~ soc, data = SES_Soc, col = viridis(4, alpha = 0.6),
 stripchart(ses ~ soc, data = SES_Soc, col = viridis(4),
            pch = 19, cex = 1, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
+text(6.5, 4.2, "D", pos = 4, font = 2, cex = 2)
 
 dev.off()
+

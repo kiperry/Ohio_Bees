@@ -59,19 +59,33 @@ Control <- a[which(a$trmt == "Control"),]
 str(Control)
 T1 <- a[which(a$trmt == "T1"),]
 str(T1)
-T8 <- a[which(a$trmt == "T8"),]
-str(T8)
-T6 <- a[which(a$trmt == "T6"),]
-str(T6)
+Prairie <- a[which(a$trmt == "Prairie"),]
+str(Prairie)
+VL2019<- a[which(a$trmt== "VL"),]
+UP2019<- a[which(a$trmt== "UP"),]
 
-#Add VL and UP for Michelle's
+
 
 # create new dataset with only farm, Control, t1, and t8 treatments
 #SEPT EDIT:Creating two new datasets. One with Farm and Control, one with T1 and T8
 a.FS <- rbind(farm, Control)
-a.KT<- rbind(T1, T8)
+a.KT<- rbind(T1, Prairie)
+a.MP<- rbind(VL2019, UP2019)
 str(a.FS)
 str(a.KT)
+str(a.MP)
+
+write.csv(a.FS, file = "urbanpool.FS.csv")
+write.csv(a.KT, file = "urbanpool.KT.csv")
+write.csv(a.MP, file = "urbanpool.MP.csv")
+
+
+#From here go to separate R code files for each of the 3 urban pool data sets
+
+
+
+
+
 
 a.FS <- a.FS[1:130]
 a.KT <- a.KT[1:130]
@@ -465,6 +479,7 @@ SES$site <- as.factor(SES$Row.names)
 str(SES)
 
 write.csv(SES, file = "SES.csv")
+
 ## pull out data for each treatment
 farm <- SES[which(SES$trmt == "Farm"),]
 str(farm)
@@ -682,7 +697,7 @@ AICctab(VL_bl.mod.full, VL_bl.mod.null)
 
 
 ## lecty---- 
-##lec_0- Kleptoparasitic
+###lec_0- Kleptoparasitic----
 hist(SES$SES_lec_0)
 plot(SES$SES_lec_0, ylim = c(-3.5, 0.5))
 abline(h = 0.0, col = "black", lwd = 3, lty=2)
@@ -1020,7 +1035,7 @@ AICctab(VL_lec_2.mod.full, VL_lec_2.mod.red, VL_lec_2.mod.null)
 
 
 ##Nesting----
-## nest_1 - Soil
+### nest_1 - Soil----
 hist(SES$SES_nest_1)
 plot(SES$SES_nest_1)
 abline(h = 0.0, col = "black", lwd = 3, lty=2)
@@ -1485,7 +1500,7 @@ AICctab(VL_nest_5.mod.full, VL_nest_5.mod.red, VL_nest_5.mod.null)
 
 
 ##Sociality----
-## soc_1 - Subsocial
+### soc_1 - Subsocial----
 hist(SES$SES_soc_1)
 plot(SES$SES_soc_1)
 abline(h = 0.0, col = "black", lwd = 3, lty=2)

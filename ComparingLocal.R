@@ -39,11 +39,11 @@ a.KT<- rbind(T1, T8)
 str(a.FS)
 str(a.KT)
 
-a.FS <- a.FS[2:361]
-a.KT <- a.KT[2:361]
+a.FS <- a.FS[2:362]
+a.KT <- a.KT[2:362]
 str(a.FS)
 str(a.KT)
-rowSums(a1[2:361])
+rowSums(a1[2:362])
 
 # create a vector with the column sums for each species
 # species not found in Cleveland will have a 0
