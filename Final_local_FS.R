@@ -1200,21 +1200,209 @@ colnames(SES_ALLdivfarm) <- c("diversity","ses")
 
 
 #Now I should be able to plot it in a nice graph
-png("Figures/Figure4.png", width = 1500, height = 1000, pointsize = 20)
+png("Figures/Figure4.png", width = 2500, height = 1200, pointsize = 20)
 par(mfrow=c(1,2)) # indicates one row, two columns
 par(mar = c(5,11,4,2)) # sets the margins around the figure
 
 boxplot(ses ~ diversity, data = SES_ALLdivcontrol, col = viridis(6, alpha = 0.6),
         xlab = "Standardized Effect Sizes (SES)", ylab = "",
-        horizontal = TRUE, las = 1, range = 0, main = "Vacant Lot Diversity", ylim=c(-20,20))
+        horizontal = TRUE, las = 1, range = 0, main = "Vacant Lot Diversity", ylim=c(-21,18.5))
 stripchart(ses ~ diversity, data = SES_ALLdivcontrol, col = viridis(6),
            pch = 19, cex = 1, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
+text(15, 7.4, "A", pos = 4, font = 2, cex = 2.6)
+
 
 boxplot(ses ~ diversity, data = SES_ALLdivfarm, col = viridis(6, alpha = 0.6),
         xlab = "Standardized Effect Sizes (SES)", ylab = "",
-        horizontal = TRUE, las = 1, range = 0, main = "Farm Diversity", ylim=c(-3,7))
+        horizontal = TRUE, las = 1, range = 0, main = "Farm Diversity", ylim=c(-21,18.5))
 stripchart(ses ~ diversity, data = SES_ALLdivfarm, col = viridis(6),
            pch = 19, cex = 1, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
+text(15, 7.4, "B", pos = 4, font = 2, cex = 2.6)
+
+dev.off()
+
+
+library(ggplot2)
+library(cowplot)
+
+
+#Figure 5----
+
+#Length and Origin
+SES_lengthandorigin.FC<- data.frame(
+  trmt=rep(SES$trmt,3),
+  variable=rep(c("Alien", "Native", "Body Length"), each = nrow(SES)),
+  value = c(SES$SES_ori_1, SES$SES_ori_0, SES$SES_bl)
+)
+SES_lengthandorigin.FC$variable<-factor(SES_lengthandorigin.FC$variable, c("Alien", "Native", "Body Length"))
+#The above code puts the funct. traits as "factors" which is necessary for us to keep the order we want in our box plots
+
+
+
+fig5a<- ggplot(SES_lengthandorigin.FC, aes(x = variable, y = value, fill = trmt)) +
+  geom_boxplot(position = position_dodge(width = 0.75), alpha = 0.6, coef = 0, width = 0.6) +
+  geom_point(position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.75), 
+             shape = 19, size = 3, show.legend = TRUE) +
+  scale_fill_viridis_d(option = "C", end = 0.3, direction = -1, alpha = 0.6) +
+  ylab("Standardized Effect Sizes (SES)") +
+  xlab("") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 0, hjust = 1, size=15)) +
+  theme(axis.text.y = element_text(size=25))+
+  ylim(c(-5, 5)) +
+  geom_hline(yintercept = 0, col = "black", lwd = 2, linetype = "dashed") +
+  coord_flip() +
+  theme(legend.text = element_text(size=18), legend.key.size = unit(2, 'cm'), legend.title = element_blank())
+
+
+
+
+#Nesting traits
+
+SES_nesting.FC<- data.frame(
+  trmt=rep(SES$trmt,5),
+  variable=rep(c("Wood","Pithy Stems", "Colony", "Cavity", "Soil"), each = nrow(SES)),
+  value = c(SES$SES_nest_5, SES$SES_nest_4, SES$SES_nest_3, SES$SES_nest_2, SES$SES_nest_1)
+)
+SES_nesting.FC$variable<-factor(SES_nesting.FC$variable, c("Wood", "Pithy Stems","Colony", "Cavity", "Soil"))
+#The above code puts the funct. traits as "factors" which is necessary for us to keep the order we want in our box plots
+
+
+fig5b<- ggplot(SES_nesting.FC, aes(x = variable, y = value, fill = trmt)) +
+  geom_boxplot(position = position_dodge(width = 0.75), alpha = 0.6, coef = 0, width = 0.6) +
+  geom_point(position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.75), 
+             shape = 19, size = 3, show.legend = TRUE) +
+  scale_fill_viridis_d(option = "C", end = 0.3, direction = -1, alpha = 0.6) +
+  ylab("Standardized Effect Sizes (SES)") +
+  xlab("") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 0, hjust = 1,size=15)) +
+  theme(axis.text.y = element_text(size=25))+
+  ylim(c(-5, 5)) +
+  geom_hline(yintercept = 0, col = "black", lwd = 2, linetype = "dashed") +
+  coord_flip()+
+  theme(legend.text = element_text(size=18), legend.key.size = unit(2, 'cm'), legend.title = element_blank())
+
+
+
+#Lecty
+SES_lecty.FC<- data.frame(
+  trmt=rep(SES$trmt,3),
+  variable=rep(c("Specialist","Generalist", "Kleptoparasitic"), each = nrow(SES)),
+  value = c(SES$SES_lec_2, SES$SES_lec_1, SES$SES_lec_0)
+)
+SES_lecty.FC$variable<-factor(SES_lecty.FC$variable, c("Specialist", "Generalist","Kleptoparasitic"))
+#The above code puts the funct. traits as "factors" which is necessary for us to keep the order we want in our box plots
+
+
+fig5c<- ggplot(SES_lecty.FC, aes(x = variable, y = value, fill = trmt)) +
+  geom_boxplot(position = position_dodge(width = 0.75), alpha = 0.6, coef = 0, width = 0.6) +
+  geom_point(position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.75), 
+             shape = 19, size = 3, show.legend = TRUE) +
+  scale_fill_viridis_d(option = "C", end = 0.3, direction = -1, alpha = 0.6) +
+  ylab("Standardized Effect Sizes (SES)") +
+  xlab("") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 0, hjust = 1, size=15)) +
+  theme(axis.text.y = element_text(size=25))+
+  ylim(c(-5, 5)) +
+  geom_hline(yintercept = 0, col = "black", lwd = 2, linetype = "dashed") +
+  coord_flip()+
+  theme(legend.text = element_text(size=18), legend.key.size = unit(2, 'cm'), legend.title = element_blank())
+
+
+
+#Sociality
+SES_sociality.FC<- data.frame(
+  trmt=rep(SES$trmt,4),
+  variable=rep(c("Parasitic", "Eusocial","Subsocial", "Solitary"), each = nrow(SES)),
+  value = c(SES$SES_soc_4, SES$SES_soc_3, SES$SES_soc_2, SES$SES_soc_1)
+) #Note that we have to put our funct traits in the reverse order of how we want them to appear on our graph
+SES_sociality.FC$variable<-factor(SES_sociality.FC$variable, c("Parasitic", "Eusocial","Subsocial", "Solitary"))
+#The above code puts the funct. traits as "factors" which is necessary for us to keep the order we want in our box plots
+
+fig5d<- ggplot(SES_sociality.FC, aes(x = variable, y = value, fill = trmt)) +
+  geom_boxplot(position = position_dodge(width = .75), alpha = 0.6, coef = 0, width = 0.6) +
+  geom_point(position = position_jitterdodge(jitter.width = 0.2, dodge.width = .75), 
+             shape = 19, size = 3) +
+  scale_fill_viridis_d(option = "C", end = 0.3, direction = -1, alpha = 0.6) +
+  ylab("Standardized Effect Sizes (SES)") + 
+  xlab("") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 0, hjust = 1, size=15)) +
+  theme(axis.text.y = element_text(size=25))+
+  ylim(c(-5, 5)) +
+  geom_hline(yintercept = 0, col = "black", lwd = 2, linetype = "dashed") +
+  coord_flip() +
+  theme(legend.text = element_text(size=18), legend.key.size = unit(2, 'cm'), legend.title = element_blank())
+
+
+
+fig5 <- plot_grid(fig5a,fig5b,fig5c,fig5d, labels= c('A','B','C','D'), label_size= 30)
+png("Figures/Figure 5 all FS local sp traits.png", width = 1500, height = 1000, pointsize = 20)
+
+fig5
+
+dev.off()
+
+
+png("Figures/Figure 6.png", width = 1500, height = 1000, pointsize = 20)
+
+par(mfrow=c(3,2)) # indicates three rows, two columns
+par(mar = c(5,7,4,2)) # sets the margins around the figure
+
+# Soil nesting
+boxplot(SES_nest_1 ~ trmt, data = SES, col = viridis(3, alpha = 0.6),
+        xlab = "Standardized Effect Sizes (SES)", ylab = "", 
+        ylim = c(-2,2.5), cex.lab = 1.2, cex.axis = 1.1, cex.main = 1.5,
+        horizontal = TRUE, las = 1, range = 0, main = "Soil Nesting")
+stripchart(SES_nest_1 ~ trmt, data = SES, col = viridis(3),
+           pch = 19, cex = 2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+abline(v = 0.0, col = "black", lwd = 3, lty=2)
+text(2.38, 2.41, "A", pos = 4, font = 2, cex = 2)
+
+
+# native
+boxplot(SES_ori_0 ~ trmt, data = SES, col = viridis(3, alpha = 0.6),
+        xlab = "Standardized Effect Sizes (SES)", ylab = "", 
+        ylim = c(-2,2.5), cex.lab = 1.2, cex.axis = 1.1, cex.main = 1.5,
+        horizontal = TRUE, las = 1, range = 0, main = "Native")
+stripchart(SES_ori_0 ~ trmt, data = SES, col = viridis(3),
+           pch = 19, cex = 2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+abline(v = 0.0, col = "black", lwd = 3, lty=2)
+text(2.38, 2.41, "B", pos = 4, font = 2, cex = 2)
+
+
+# Cavity nesting
+boxplot(SES_nest_2 ~ trmt, data = SES, col = viridis(3, alpha = 0.6),
+        xlab = "Standardized Effect Sizes (SES)", ylab = "", 
+        ylim = c(-2,2.5), cex.lab = 1.2, cex.axis = 1.1, cex.main = 1.5,
+        horizontal = TRUE, las = 1, range = 0, main = "Cavity Nesting")
+stripchart(SES_nest_2 ~ trmt, data = SES, col = viridis(3),
+           pch = 19, cex = 2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+abline(v = 0.0, col = "black", lwd = 3, lty=2)
+text(2.38, 2.41, "C", pos = 4, font = 2, cex = 2)
+
+# non-native
+boxplot(SES_ori_1 ~ trmt, data = SES, col = viridis(3, alpha = 0.6),
+        xlab = "Standardized Effect Sizes (SES)", ylab = "",
+        ylim = c(-2,2.5), cex.lab = 1.2, cex.axis = 1.1, cex.main = 1.5,
+        horizontal = TRUE, las = 1, range = 0, main = "Non-Native")
+stripchart(SES_ori_1 ~ trmt, data = SES, col = viridis(3),
+           pch = 19, cex = 2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+abline(v = 0.0, col = "black", lwd = 3, lty=2)
+text(2.38, 2.41, "D", pos = 4, font = 2, cex = 2)
+
+# specialists
+boxplot(SES_lec_2 ~ trmt, data = SES, col = viridis(3, alpha = 0.6),
+        xlab = "Standardized Effect Sizes (SES)", ylab = "", 
+        ylim = c(-2,2.5), cex.lab = 1.2, cex.axis = 1.1, cex.main = 1.5,
+        horizontal = TRUE, las = 1, range = 0, main = "Specialists")
+stripchart(SES_lec_2 ~ trmt, data = SES, col = viridis(3),
+           pch = 19, cex = 2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+abline(v = 0.0, col = "black", lwd = 3, lty=2)
+text(2.38, 2.41, "E", pos = 4, font = 2, cex = 2)
+
 dev.off()
