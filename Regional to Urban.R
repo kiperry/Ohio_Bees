@@ -1176,3 +1176,19 @@ text(6.5, 4.2, "D", pos = 4, font = 2, cex = 2)
 
 dev.off()
 
+
+
+#Intro stats----
+ordered(colSums(a))
+sort(colSums(a), decreasing=T)
+t$ori
+
+Nonnative <- t[which(t$ori == 1),]
+
+
+native<-t$ori
+aforintrostats<-a
+
+introstats<-rbind(aforintrostats, native)
+nonnative2<- introstats["65"==1, ]
+#Well, can't figure out how to get that to work
