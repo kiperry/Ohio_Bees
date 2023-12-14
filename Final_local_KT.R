@@ -387,11 +387,16 @@ SES.all <- as.data.frame(cbind(SES_bl, SES_lec_0, SES_lec_1, SES_lec_2, SES_ori_
 write.csv(SES.all, file = "Urban to Local_Nulls_KT/SES_Local_KT.csv")
 #import the SES data
 SES <- read.csv("Urban to Local_Nulls_KT/SES_Local_KT.csv", row.names = 1)
+SES
 
 #Including treatment
 
 SES$trmt <- aO$trmt
 str(SES)
+
+#Adding the random neighborhood variable
+SES$neighd <- c("BU", "CE", "DS", "FA", "GL","HO","SV","TR","BU", "CE", "DS", "FA", "GL","HO","SV","TR","BU", "CE", "DS", "FA", "GL","HO","SV","TR")
+
 
 ## pull out data for each treatment
 T1 <- SES[which(SES$trmt == "T1"),]
@@ -451,17 +456,31 @@ dotchart(SES$SES_bsor, group = SES$trmt, pch = 19)
 with(SES, bartlett.test(SES_bsor ~ trmt))
 with(SES, ad.test(SES_bsor))
 
-KT_bsor.mod <- glm(SES_bsor ~ trmt , family = gaussian, data = SES)
-summary(KT_bsor.mod)
-qqnorm(resid(KT_bsor.mod))
-qqline(resid(KT_bsor.mod))
-plot(simulateResiduals(KT_bsor.mod))
-densityPlot(rstudent(KT_bsor.mod)) # check density estimate of the distribution of residuals
-outlierTest(KT_bsor.mod)
-influenceIndexPlot(KT_bsor.mod, vars = c("Cook"), id = list(n = 3))
+KT_bsor.lm <- lmer(SES_bsor~trmt+(1|neighd), data = SES)
+summary(KT_bsor.lm)
+qqnorm(resid(KT_bsor.lm))
+qqline(resid(KT_bsor.lm))
+plot(simulateResiduals(KT_bsor.lm))
+densityPlot(rstudent(KT_bsor.lm)) # check density estimate of the distribution of residuals
+outlierTest(KT_bsor.lm)
+influenceIndexPlot(KT_bsor.lm, vars = c("Cook"), id = list(n = 3))
 
-summary(KT_bsor.mod)
-Anova(KT_bsor.mod)
+summary(KT_bsor.lm)
+Anova(KT_bsor.lm)
+#No sig difference between treatments
+
+#below is the code I used for glms before switching to lmer
+#KT_bsor.mod <- glm(SES_bsor ~ trmt , family = gaussian, data = SES)
+#summary(KT_bsor.mod)
+#qqnorm(resid(KT_bsor.mod))
+#qqline(resid(KT_bsor.mod))
+#plot(simulateResiduals(KT_bsor.mod))
+#densityPlot(rstudent(KT_bsor.mod)) # check density estimate of the distribution of residuals
+#outlierTest(KT_bsor.mod)
+#influenceIndexPlot(KT_bsor.mod, vars = c("Cook"), id = list(n = 3))
+
+#summary(KT_bsor.mod)
+#Anova(KT_bsor.mod)
 #No sig diff between treatments
 
 
@@ -489,6 +508,12 @@ kruskal.test(SES_bsim ~ trmt, data = SES)
 #not significant
 
 #i am going to run both the above and below code just in case, until I hear otherwise
+
+KT_bsim.lm <- lmer(SES_bsim~trmt+(1|neighd), data = SES)
+summary(KT_bsim.lm)
+#error message boundary(singlular) fit
+?isSingular
+
 
 kt_bsim.mod <- glm(SES_bsim ~ trmt , family = gaussian, data = SES)
 summary(kt_bsim.mod)
@@ -525,17 +550,31 @@ with(SES, ad.test(SES_bsne))
 kruskal.test(SES_bsne ~ trmt, data = SES)
 #not significant
 
-kt_bsne.mod <- glm(SES_bsne ~ trmt , family = gaussian, data = SES)
-summary(kt_bsne.mod)
-qqnorm(resid(kt_bsne.mod))
-qqline(resid(kt_bsne.mod))
-plot(simulateResiduals(kt_bsne.mod))
-densityPlot(rstudent(kt_bsne.mod)) # check density estimate of the distribution of residuals
-outlierTest(kt_bsne.mod)
-influenceIndexPlot(kt_bsne.mod, vars = c("Cook"), id = list(n = 3))
+KT_bsne.lm <- lmer(SES_bsne~trmt+(1|neighd), data = SES)
+summary(KT_bsne.lm)
+qqnorm(resid(KT_bsne.lm))
+qqline(resid(KT_bsne.lm))
+plot(simulateResiduals(KT_bsne.lm))
+densityPlot(rstudent(KT_bsne.lm)) # check density estimate of the distribution of residuals
+outlierTest(KT_bsne.lm)
+influenceIndexPlot(KT_bsne.lm, vars = c("Cook"), id = list(n = 3))
 
-summary(kt_bsne.mod)
-Anova(kt_bsne.mod)
+summary(KT_bsne.lm)
+Anova(KT_bsne.lm)
+#no sig difference
+
+
+#kt_bsne.mod <- glm(SES_bsne ~ trmt , family = gaussian, data = SES)
+#summary(kt_bsne.mod)
+#qqnorm(resid(kt_bsne.mod))
+#qqline(resid(kt_bsne.mod))
+#plot(simulateResiduals(kt_bsne.mod))
+#densityPlot(rstudent(kt_bsne.mod)) # check density estimate of the distribution of residuals
+#outlierTest(kt_bsne.mod)
+#influenceIndexPlot(kt_bsne.mod, vars = c("Cook"), id = list(n = 3))
+
+#summary(kt_bsne.mod)
+#Anova(kt_bsne.mod)
 #no sig difference
 
 
@@ -560,17 +599,32 @@ with(SES, ad.test(SES_falpha))
 #passed homogeneity test
 #kruskal.test(SES_falpha ~ trmt, data = SES) it was significant here anyway
 
-kt_falpha.mod <- glm(SES_falpha ~ trmt , family = gaussian, data = SES)
-summary(kt_falpha.mod)
-qqnorm(resid(kt_falpha.mod))
-qqline(resid(kt_falpha.mod))
-plot(simulateResiduals(kt_falpha.mod))
-densityPlot(rstudent(kt_falpha.mod)) # check density estimate of the distribution of residuals
-outlierTest(kt_falpha.mod)
-influenceIndexPlot(kt_falpha.mod, vars = c("Cook"), id = list(n = 3))
 
-summary(kt_falpha.mod)
-Anova(kt_falpha.mod)
+KT_falpha.lm <- lmer(SES_falpha~trmt+(1|neighd), data = SES)
+summary(KT_falpha.lm)
+qqnorm(resid(KT_falpha.lm))
+qqline(resid(KT_falpha.lm))
+plot(simulateResiduals(KT_falpha.lm))
+densityPlot(rstudent(KT_falpha.lm)) # check density estimate of the distribution of residuals
+outlierTest(KT_falpha.lm)
+influenceIndexPlot(KT_falpha.lm, vars = c("Cook"), id = list(n = 3))
+
+summary(KT_falpha.lm)
+Anova(KT_falpha.lm)
+#very significant difference
+
+
+#kt_falpha.mod <- glm(SES_falpha ~ trmt , family = gaussian, data = SES)
+#summary(kt_falpha.mod)
+#qqnorm(resid(kt_falpha.mod))
+#qqline(resid(kt_falpha.mod))
+#plot(simulateResiduals(kt_falpha.mod))
+#densityPlot(rstudent(kt_falpha.mod)) # check density estimate of the distribution of residuals
+#outlierTest(kt_falpha.mod)
+#influenceIndexPlot(kt_falpha.mod, vars = c("Cook"), id = list(n = 3))
+
+#summary(kt_falpha.mod)
+#Anova(kt_falpha.mod)
 
 ##Functional beta div----
 ## functional beta diversity - beta sor
@@ -594,17 +648,32 @@ with(SES, ad.test(SES_fbsor))
 #kruskal.test(SES_fbsor ~ trmt, data = SES) #it was not significant here anyway
 
 
-kt_fbsor.mod <- glm(SES_fbsor~ trmt , family = gaussian, data = SES)
-summary(kt_fbsor.mod)
-qqnorm(resid(kt_fbsor.mod))
-qqline(resid(kt_fbsor.mod))
-plot(simulateResiduals(kt_fbsor.mod))
-densityPlot(rstudent(kt_fbsor.mod)) # check density estimate of the distribution of residuals
-outlierTest(kt_fbsor.mod)
-influenceIndexPlot(kt_fbsor.mod, vars = c("Cook"), id = list(n = 3))
+KT_fbsor.lm <- lmer(SES_fbsor~trmt+(1|neighd), data = SES)
+#error message boundary(singular) fit again
+summary(KT_fbsor.lm)
+qqnorm(resid(KT_fbsor.lm))
+qqline(resid(KT_fbsor.lm))
+plot(simulateResiduals(KT_fbsor.lm))
+densityPlot(rstudent(KT_fbsor.lm)) # check density estimate of the distribution of residuals
+outlierTest(KT_fbsor.lm)
+influenceIndexPlot(KT_fbsor.lm, vars = c("Cook"), id = list(n = 3))
 
-summary(kt_fbsor.mod)
-Anova(kt_fbsor.mod)
+summary(KT_fbsor.lm)
+Anova(KT_fbsor.lm)
+#not significant difference
+
+
+#kt_fbsor.mod <- glm(SES_fbsor~ trmt , family = gaussian, data = SES)
+#summary(kt_fbsor.mod)
+#qqnorm(resid(kt_fbsor.mod))
+#qqline(resid(kt_fbsor.mod))
+#plot(simulateResiduals(kt_fbsor.mod))
+#densityPlot(rstudent(kt_fbsor.mod)) # check density estimate of the distribution of residuals
+#outlierTest(kt_fbsor.mod)
+#influenceIndexPlot(kt_fbsor.mod, vars = c("Cook"), id = list(n = 3))
+
+#summary(kt_fbsor.mod)
+#Anova(kt_fbsor.mod)
 #not significant by treatment
 
 ### functional beta diversity - beta sim----
@@ -628,19 +697,32 @@ with(SES, ad.test(SES_fbsim))
 #passed homogeneity test
 #kruskal.test(SES_fbsim ~ trmt, data = SES) #it was not significant here anyway
 
+KT_fbsim.lm <- lmer(SES_fbsim~trmt+(1|neighd), data = SES)
+
+summary(KT_fbsim.lm)
+qqnorm(resid(KT_fbsim.lm))
+qqline(resid(KT_fbsim.lm))
+plot(simulateResiduals(KT_fbsim.lm))
+densityPlot(rstudent(KT_fbsim.lm)) # check density estimate of the distribution of residuals
+outlierTest(KT_fbsim.lm)
+influenceIndexPlot(KT_fbsim.lm, vars = c("Cook"), id = list(n = 3))
+
+summary(KT_fbsim.lm)
+Anova(KT_fbsim.lm)
+#not significant difference
 
 
-FS_fbsim.mod <- glm(SES_fbsim ~ trmt , family = gaussian, data = SES)
-summary(FS_fbsim.mod)
-qqnorm(resid(FS_fbsim.mod))
-qqline(resid(FS_fbsim.mod))
-plot(simulateResiduals(FS_fbsim.mod))
-densityPlot(rstudent(FS_fbsim.mod)) # check density estimate of the distribution of residuals
-outlierTest(FS_fbsim.mod)
-influenceIndexPlot(FS_fbsim.mod, vars = c("Cook"), id = list(n = 3))
+#KT_fbsim.mod <- glm(SES_fbsim ~ trmt , family = gaussian, data = SES)
+#summary(KT_fbsim.mod)
+#qqnorm(resid(KT_fbsim.mod))
+#qqline(resid(KT_fbsim.mod))
+#plot(simulateResiduals(KT_fbsim.mod))
+#densityPlot(rstudent(KT_fbsim.mod)) # check density estimate of the distribution of residuals
+#outlierTest(KT_fbsim.mod)
+#influenceIndexPlot(KT_fbsim.mod, vars = c("Cook"), id = list(n = 3))
 
-summary(FS_fbsim.mod)
-Anova(FS_fbsim.mod)
+#summary(KT_fbsim.mod)
+#Anova(KT_fbsim.mod)
 
 
 ### functional beta diversity - beta sne----
@@ -665,18 +747,31 @@ with(SES, ad.test(SES_fbsne))
 #kruskal.test(SES_fbsne ~ trmt, data = SES) #it was not significant here anyway
 
 
+KT_fbsne.lm <- lmer(SES_fbsne~trmt+(1|neighd), data = SES)
+#boundary(singular)fit error message again
+summary(KT_fbsim.lm)
+qqnorm(resid(KT_fbsim.lm))
+qqline(resid(KT_fbsim.lm))
+plot(simulateResiduals(KT_fbsim.lm))
+densityPlot(rstudent(KT_fbsim.lm)) # check density estimate of the distribution of residuals
+outlierTest(KT_fbsim.lm)
+influenceIndexPlot(KT_fbsim.lm, vars = c("Cook"), id = list(n = 3))
 
-kt_fbsne.mod <- glm(SES_fbsne ~ trmt , family = gaussian, data = SES)
-summary(kt_fbsne.mod)
-qqnorm(resid(kt_fbsne.mod))
-qqline(resid(kt_fbsne.mod))
-plot(simulateResiduals(kt_fbsne.mod))
-densityPlot(rstudent(kt_fbsne.mod)) # check density estimate of the distribution of residuals
-outlierTest(kt_fbsne.mod)
-influenceIndexPlot(kt_fbsne.mod, vars = c("Cook"), id = list(n = 3))
+summary(KT_fbsim.lm)
+Anova(KT_fbsim.lm)
+#not significant
 
-summary(kt_fbsne.mod)
-Anova(kt_fbsne.mod)
+#kt_fbsne.mod <- glm(SES_fbsne ~ trmt , family = gaussian, data = SES)
+#summary(kt_fbsne.mod)
+#qqnorm(resid(kt_fbsne.mod))
+#qqline(resid(kt_fbsne.mod))
+#plot(simulateResiduals(kt_fbsne.mod))
+#densityPlot(rstudent(kt_fbsne.mod)) # check density estimate of the distribution of residuals
+#outlierTest(kt_fbsne.mod)
+#influenceIndexPlot(kt_fbsne.mod, vars = c("Cook"), id = list(n = 3))
+
+#summary(kt_fbsne.mod)
+#Anova(kt_fbsne.mod)
 #not significant
 
 
@@ -704,18 +799,33 @@ with(SES, ad.test(SES_bl))
 #kruskal.test(SES_bl ~ trmt, data = SES) #it was not significant here anyway
 
 
+KT_bl.lm <- lmer(SES_bl~trmt+(1|neighd), data = SES)
 
-kt_bl.mod <- glm(SES_bl ~ trmt , family = gaussian, data = SES)
-summary(kt_bl.mod)
-qqnorm(resid(kt_bl.mod))
-qqline(resid(kt_bl.mod))
-plot(simulateResiduals(kt_bl.mod))
-densityPlot(rstudent(kt_bl.mod)) # check density estimate of the distribution of residuals
-outlierTest(kt_bl.mod)
-influenceIndexPlot(kt_bl.mod, vars = c("Cook"), id = list(n = 3))
+#boundary(singular)fit error message again
+summary(KT_bl.lm)
+qqnorm(resid(KT_bl.lm))
+qqline(resid(KT_bl.lm))
+plot(simulateResiduals(KT_bl.lm))
+densityPlot(rstudent(KT_bl.lm)) # check density estimate of the distribution of residuals
+outlierTest(KT_bl.lm)
+influenceIndexPlot(KT_bl.lm, vars = c("Cook"), id = list(n = 3))
 
-summary(kt_bl.mod)
-Anova(kt_bl.mod)
+summary(KT_bl.lm)
+Anova(KT_bl.lm)
+#not significant
+
+
+#kt_bl.mod <- glm(SES_bl ~ trmt , family = gaussian, data = SES)
+#summary(kt_bl.mod)
+#qqnorm(resid(kt_bl.mod))
+#qqline(resid(kt_bl.mod))
+#plot(simulateResiduals(kt_bl.mod))
+#densityPlot(rstudent(kt_bl.mod)) # check density estimate of the distribution of residuals
+#outlierTest(kt_bl.mod)
+#influenceIndexPlot(kt_bl.mod, vars = c("Cook"), id = list(n = 3))
+
+#summary(kt_bl.mod)
+#Anova(kt_bl.mod)
 
 
 ## lecty---- 
@@ -739,20 +849,36 @@ with(SES, bartlett.test(SES_lec_0 ~ trmt))
 with(SES, ad.test(SES_lec_0))
 #passed homogeneity test
 #kruskal.test(SES_lec_0 ~ trmt, data = SES) #it was not significant here anyway
+#citation("stats")
+
+KT_lec_0.lm <- lmer(SES_lec_0~trmt+(1|neighd), data = SES)
+
+summary(KT_lec_0.lm)
+qqnorm(resid(KT_lec_0.lm))
+qqline(resid(KT_lec_0.lm))
+plot(simulateResiduals(KT_lec_0.lm))
+densityPlot(rstudent(KT_lec_0.lm)) # check density estimate of the distribution of residuals
+outlierTest(KT_lec_0.lm)
+influenceIndexPlot(KT_lec_0.lm, vars = c("Cook"), id = list(n = 3))
+
+summary(KT_lec_0.lm)
+Anova(KT_lec_0.lm)
+#not significant
 
 
-kt_lec_0.mod <- glm(SES_lec_0 ~ trmt , family = gaussian, data = SES)
-summary(kt_lec_0.mod)
-qqnorm(resid(kt_lec_0.mod))
-qqline(resid(kt_lec_0.mod))
-plot(simulateResiduals(kt_lec_0.mod))
-densityPlot(rstudent(kt_lec_0.mod)) # check density estimate of the distribution of residuals
-outlierTest(kt_lec_0.mod)
-influenceIndexPlot(kt_lec_0.mod, vars = c("Cook"), id = list(n = 3))
+#kt_lec_0.mod <- glm(SES_lec_0 ~ trmt , family = gaussian, data = SES)
+#summary(kt_lec_0.mod)
+#qqnorm(resid(kt_lec_0.mod))
+#qqline(resid(kt_lec_0.mod))
+#plot(simulateResiduals(kt_lec_0.mod))
+#densityPlot(rstudent(kt_lec_0.mod)) # check density estimate of the distribution of residuals
+#outlierTest(kt_lec_0.mod)
+#influenceIndexPlot(kt_lec_0.mod, vars = c("Cook"), id = list(n = 3))
 
-summary(kt_lec_0.mod)
-Anova(kt_lec_0.mod)
-
+#summary(kt_lec_0.mod)
+#Anova(kt_lec_0.mod)
+#?Anova
+#citation("car")
 
 
 ### lec_1 - Generalist----
@@ -777,17 +903,32 @@ with(SES, ad.test(SES_lec_1))
 #passed homogeneity test
 #kruskal.test(SES_lec_1 ~ trmt, data = SES) #it was not significant here anyway
 
-kt_lec_1.mod <- glm(SES_lec_1 ~ trmt , family = gaussian, data = SES)
-summary(kt_lec_1.mod)
-qqnorm(resid(kt_lec_1.mod))
-qqline(resid(kt_lec_1.mod))
-plot(simulateResiduals(kt_lec_1.mod))
-densityPlot(rstudent(kt_lec_1.mod)) # check density estimate of the distribution of residuals
-outlierTest(kt_lec_1.mod)
-influenceIndexPlot(kt_lec_1.mod, vars = c("Cook"), id = list(n = 3))
+KT_lec_1.lm <- lmer(SES_lec_1~trmt+(1|neighd), data = SES)
 
-summary(kt_lec_1.mod)
-Anova(kt_lec_1.mod)
+summary(KT_lec_1.lm)
+qqnorm(resid(KT_lec_1.lm))
+qqline(resid(KT_lec_1.lm))
+plot(simulateResiduals(KT_lec_1.lm))
+densityPlot(rstudent(KT_lec_1.lm)) # check density estimate of the distribution of residuals
+outlierTest(KT_lec_1.lm)
+influenceIndexPlot(KT_lec_1.lm, vars = c("Cook"), id = list(n = 3))
+
+summary(KT_lec_1.lm)
+Anova(KT_lec_1.lm)
+#not significant
+
+
+#kt_lec_1.mod <- glm(SES_lec_1 ~ trmt , family = gaussian, data = SES)
+#summary(kt_lec_1.mod)
+#qqnorm(resid(kt_lec_1.mod))
+#qqline(resid(kt_lec_1.mod))
+#plot(simulateResiduals(kt_lec_1.mod))
+#densityPlot(rstudent(kt_lec_1.mod)) # check density estimate of the distribution of residuals
+#outlierTest(kt_lec_1.mod)
+#influenceIndexPlot(kt_lec_1.mod, vars = c("Cook"), id = list(n = 3))
+
+#summary(kt_lec_1.mod)
+#Anova(kt_lec_1.mod)
 
 
 
@@ -814,18 +955,34 @@ with(SES, ad.test(SES_lec_2))
 #passed homogeneity test
 #kruskal.test(SES_lec_2 ~ trmt, data = SES) #it was not significant here anyway
 
-kt_lec_2.mod <- glm(SES_lec_2 ~ trmt , family = gaussian, data = SES)
-summary(kt_lec_2.mod)
-qqnorm(resid(kt_lec_2.mod))
-qqline(resid(kt_lec_2.mod))
-plot(simulateResiduals(kt_lec_2.mod))
-densityPlot(rstudent(kt_lec_2.mod)) # check density estimate of the distribution of residuals
-outlierTest(kt_lec_2.mod)
-influenceIndexPlot(kt_lec_2.mod, vars = c("Cook"), id = list(n = 3))
+
+KT_lec_2.lm <- lmer(SES_lec_2~trmt+(1|neighd), data = SES)
+
+summary(KT_lec_2.lm)
+qqnorm(resid(KT_lec_2.lm))
+qqline(resid(KT_lec_2.lm))
+plot(simulateResiduals(KT_lec_2.lm))
+densityPlot(rstudent(KT_lec_2.lm)) # check density estimate of the distribution of residuals
+outlierTest(KT_lec_2.lm)
+influenceIndexPlot(KT_lec_2.lm, vars = c("Cook"), id = list(n = 3))
+
+summary(KT_lec_2.lm)
+Anova(KT_lec_2.lm)
+#not significant
 
 
-summary(kt_lec_2.mod)
-Anova(kt_lec_2.mod)
+#kt_lec_2.mod <- glm(SES_lec_2 ~ trmt , family = gaussian, data = SES)
+#summary(kt_lec_2.mod)
+#qqnorm(resid(kt_lec_2.mod))
+#qqline(resid(kt_lec_2.mod))
+#plot(simulateResiduals(kt_lec_2.mod))
+#densityPlot(rstudent(kt_lec_2.mod)) # check density estimate of the distribution of residuals
+#outlierTest(kt_lec_2.mod)
+#influenceIndexPlot(kt_lec_2.mod, vars = c("Cook"), id = list(n = 3))
+
+
+#summary(kt_lec_2.mod)
+#Anova(kt_lec_2.mod)
 #not significant
 
 
@@ -851,19 +1008,36 @@ with(SES, ad.test(SES_nest_1))
 #passed homogeneity test
 #kruskal.test(SES_nest_1 ~ trmt, data = SES) #it was not significant here anyway
 
-kt_nest_1.mod <- glm(SES_nest_1 ~ trmt , family = gaussian, data = SES)
-summary(kt_nest_1.mod)
-qqnorm(resid(kt_nest_1.mod))
-qqline(resid(kt_nest_1.mod))
-plot(simulateResiduals(kt_nest_1.mod))
-densityPlot(rstudent(kt_nest_1.mod)) # check density estimate of the distribution of residuals
-outlierTest(kt_nest_1.mod)
-influenceIndexPlot(kt_nest_1.mod, vars = c("Cook"), id = list(n = 3))
+
+kt_nest_1.lm <- lmer(SES_nest_1~trmt+(1|neighd), data = SES)
+
+summary(kt_nest_1.lm)
+qqnorm(resid(kt_nest_1.lm))
+qqline(resid(kt_nest_1.lm))
+plot(simulateResiduals(kt_nest_1.lm))
+densityPlot(rstudent(kt_nest_1.lm)) # check density estimate of the distribution of residuals
+outlierTest(kt_nest_1.lm)
+influenceIndexPlot(kt_nest_1.lm, vars = c("Cook"), id = list(n = 3))
+
+summary(kt_nest_1.lm)
+Anova(kt_nest_1.lm)
+#WAIT THIS ONE IS SIGNIFICANT NOW
 
 
-summary(kt_nest_1.mod)
-Anova(kt_nest_1.mod)
-#no significant difference
+
+#kt_nest_1.mod <- glm(SES_nest_1 ~ trmt , family = gaussian, data = SES)
+#summary(kt_nest_1.mod)
+#qqnorm(resid(kt_nest_1.mod))
+#qqline(resid(kt_nest_1.mod))
+#plot(simulateResiduals(kt_nest_1.mod))
+#densityPlot(rstudent(kt_nest_1.mod)) # check density estimate of the distribution of residuals
+#outlierTest(kt_nest_1.mod)
+#influenceIndexPlot(kt_nest_1.mod, vars = c("Cook"), id = list(n = 3))
+
+
+#summary(kt_nest_1.mod)
+#Anova(kt_nest_1.mod)
+
 
 
 ### nest_2 - Cavity----
@@ -888,18 +1062,34 @@ with(SES, ad.test(SES_nest_2))
 #passed homogeneity test
 #kruskal.test(SES_nest_2 ~ trmt, data = SES) #it was not significant here anyway
 
-kt_nest_2.mod <- glm(SES_nest_2 ~ trmt , family = gaussian, data = SES)
-summary(kt_nest_2.mod)
-qqnorm(resid(kt_nest_2.mod))
-qqline(resid(kt_nest_2.mod))
-plot(simulateResiduals(kt_nest_2.mod))
-densityPlot(rstudent(kt_nest_2.mod)) # check density estimate of the distribution of residuals
-outlierTest(kt_nest_2.mod)
-influenceIndexPlot(kt_nest_2.mod, vars = c("Cook"), id = list(n = 3))
+
+kt_nest_2.lm <- lmer(SES_nest_2~trmt+(1|neighd), data = SES)
+
+summary(kt_nest_2.lm)
+qqnorm(resid(kt_nest_2.lm))
+qqline(resid(kt_nest_2.lm))
+plot(simulateResiduals(kt_nest_2.lm))
+densityPlot(rstudent(kt_nest_2.lm)) # check density estimate of the distribution of residuals
+outlierTest(kt_nest_2.lm)
+influenceIndexPlot(kt_nest_2.lm, vars = c("Cook"), id = list(n = 3))
+
+summary(kt_nest_2.lm)
+Anova(kt_nest_2.lm)
+#NOT SIGNIFICANT
 
 
-summary(kt_nest_2.mod)
-Anova(kt_nest_2.mod)
+#kt_nest_2.mod <- glm(SES_nest_2 ~ trmt , family = gaussian, data = SES)
+#summary(kt_nest_2.mod)
+#qqnorm(resid(kt_nest_2.mod))
+#qqline(resid(kt_nest_2.mod))
+#plot(simulateResiduals(kt_nest_2.mod))
+#densityPlot(rstudent(kt_nest_2.mod)) # check density estimate of the distribution of residuals
+#outlierTest(kt_nest_2.mod)
+#influenceIndexPlot(kt_nest_2.mod, vars = c("Cook"), id = list(n = 3))
+
+
+#summary(kt_nest_2.mod)
+#Anova(kt_nest_2.mod)
 #no significance
 
 
@@ -924,18 +1114,33 @@ with(SES, ad.test(SES_nest_3))
 #passed homogeneity test
 #kruskal.test(SES_nest_3 ~ trmt, data = SES) #it was not significant here anyway
 
-kt_nest_3.mod <- glm(SES_nest_3 ~ trmt , family = gaussian, data = SES)
-summary(kt_nest_3.mod)
-qqnorm(resid(kt_nest_3.mod))
-qqline(resid(kt_nest_3.mod))
-plot(simulateResiduals(kt_nest_3.mod))
-densityPlot(rstudent(kt_nest_3.mod)) # check density estimate of the distribution of residuals
-outlierTest(kt_nest_3.mod)
-influenceIndexPlot(kt_nest_3.mod, vars = c("Cook"), id = list(n = 3))
+kt_nest_3.lm <- lmer(SES_nest_3~trmt+(1|neighd), data = SES)
+
+summary(kt_nest_3.lm)
+qqnorm(resid(kt_nest_3.lm))
+qqline(resid(kt_nest_3.lm))
+plot(simulateResiduals(kt_nest_3.lm))
+densityPlot(rstudent(kt_nest_3.lm)) # check density estimate of the distribution of residuals
+outlierTest(kt_nest_3.lm)
+influenceIndexPlot(kt_nest_3.lm, vars = c("Cook"), id = list(n = 3))
+
+summary(kt_nest_3.lm)
+Anova(kt_nest_3.lm)
+#nOT SIGNIFICANT
 
 
-summary(kt_nest_3.mod)
-Anova(kt_nest_3.mod)
+#kt_nest_3.mod <- glm(SES_nest_3 ~ trmt , family = gaussian, data = SES)
+#summary(kt_nest_3.mod)
+#qqnorm(resid(kt_nest_3.mod))
+#qqline(resid(kt_nest_3.mod))
+#plot(simulateResiduals(kt_nest_3.mod))
+#densityPlot(rstudent(kt_nest_3.mod)) # check density estimate of the distribution of residuals
+#outlierTest(kt_nest_3.mod)
+#influenceIndexPlot(kt_nest_3.mod, vars = c("Cook"), id = list(n = 3))
+
+
+#summary(kt_nest_3.mod)
+#Anova(kt_nest_3.mod)
 
 
 
@@ -960,19 +1165,35 @@ with(SES, ad.test(SES_nest_4))
 #passed homogeneity test
 #kruskal.test(SES_nest_4 ~ trmt, data = SES) #it was not significant here anyway
 
-kt_nest_4.mod <- glm(SES_nest_4 ~ trmt , family = gaussian, data = SES)
-summary(kt_nest_4.mod)
-qqnorm(resid(kt_nest_4.mod))
-qqline(resid(kt_nest_4.mod))
-plot(simulateResiduals(kt_nest_4.mod))
-densityPlot(rstudent(kt_nest_4.mod)) # check density estimate of the distribution of residuals
-outlierTest(kt_nest_4.mod)
+
+kt_nest_4.lm <- lmer(SES_nest_4~trmt+(1|neighd), data = SES)
+
+summary(kt_nest_4.lm)
+qqnorm(resid(kt_nest_4.lm))
+qqline(resid(kt_nest_4.lm))
+plot(simulateResiduals(kt_nest_4.lm))
+densityPlot(rstudent(kt_nest_4.lm)) # check density estimate of the distribution of residuals
+outlierTest(kt_nest_4.lm)
+influenceIndexPlot(kt_nest_4.lm, vars = c("Cook"), id = list(n = 3))
+
+summary(kt_nest_4.lm)
+Anova(kt_nest_4.lm)
+#nOT SIGNIFICANT
+
+
+#kt_nest_4.mod <- glm(SES_nest_4 ~ trmt , family = gaussian, data = SES)
+#summary(kt_nest_4.mod)
+#qqnorm(resid(kt_nest_4.mod))
+#qqline(resid(kt_nest_4.mod))
+#plot(simulateResiduals(kt_nest_4.mod))
+#densityPlot(rstudent(kt_nest_4.mod)) # check density estimate of the distribution of residuals
+#outlierTest(kt_nest_4.mod)
 #There is an outlier- influence plot looks like maybe H01 and FA8 are both outliers? But influence isn't above 3
-influenceIndexPlot(kt_nest_4.mod, vars = c("Cook"), id = list(n = 3))
+#influenceIndexPlot(kt_nest_4.mod, vars = c("Cook"), id = list(n = 3))
 
 
-summary(kt_nest_4.mod)
-Anova(kt_nest_4.mod)
+#summary(kt_nest_4.mod)
+#Anova(kt_nest_4.mod)
 #no sig difference
 
 
@@ -997,18 +1218,33 @@ with(SES, ad.test(SES_nest_5))
 #passed homogeneity test
 #kruskal.test(SES_nest_5 ~ trmt, data = SES) #it was not significant here anyway
 
-kt_nest_5.mod <- glm(SES_nest_5 ~ trmt , family = gaussian, data = SES)
-summary(kt_nest_5.mod)
-qqnorm(resid(kt_nest_5.mod))
-qqline(resid(kt_nest_5.mod))
-plot(simulateResiduals(kt_nest_5.mod))
-densityPlot(rstudent(kt_nest_5.mod)) # check density estimate of the distribution of residuals
-outlierTest(kt_nest_5.mod)
-influenceIndexPlot(kt_nest_5.mod, vars = c("Cook"), id = list(n = 3))
+kt_nest_5.lm <- lmer(SES_nest_5~trmt+(1|neighd), data = SES)
+
+summary(kt_nest_5.lm)
+qqnorm(resid(kt_nest_5.lm))
+qqline(resid(kt_nest_5.lm))
+plot(simulateResiduals(kt_nest_5.lm))
+densityPlot(rstudent(kt_nest_5.lm)) # check density estimate of the distribution of residuals
+outlierTest(kt_nest_5.lm)
+influenceIndexPlot(kt_nest_5.lm, vars = c("Cook"), id = list(n = 3))
+
+summary(kt_nest_5.lm)
+Anova(kt_nest_5.lm)
+#nOT SIGNIFICANT
 
 
-summary(kt_nest_5.mod)
-Anova(kt_nest_5.mod)
+#kt_nest_5.mod <- glm(SES_nest_5 ~ trmt , family = gaussian, data = SES)
+#summary(kt_nest_5.mod)
+#qqnorm(resid(kt_nest_5.mod))
+#qqline(resid(kt_nest_5.mod))
+#plot(simulateResiduals(kt_nest_5.mod))
+#densityPlot(rstudent(kt_nest_5.mod)) # check density estimate of the distribution of residuals
+#outlierTest(kt_nest_5.mod)
+#influenceIndexPlot(kt_nest_5.mod, vars = c("Cook"), id = list(n = 3))
+
+
+#summary(kt_nest_5.mod)
+#Anova(kt_nest_5.mod)
 #no sig difference
 
 
@@ -1036,18 +1272,34 @@ with(SES, ad.test(SES_soc_1))
 #kruskal.test(SES_soc_1 ~ trmt, data = SES) #it was not significant here anyway
 
 
-kt_soc_1.mod <- glm(SES_soc_1 ~ trmt , family = gaussian, data = SES)
-summary(kt_soc_1.mod)
-qqnorm(resid(kt_soc_1.mod))
-qqline(resid(kt_soc_1.mod))
-plot(simulateResiduals(kt_soc_1.mod))
-densityPlot(rstudent(kt_soc_1.mod)) # check density estimate of the distribution of residuals
-outlierTest(kt_soc_1.mod)
-influenceIndexPlot(kt_soc_1.mod, vars = c("Cook"), id = list(n = 3))
+kt_soc_1.lm <- lmer(SES_soc_1~trmt+(1|neighd), data = SES)
+#boundary(singular)fit error again
+summary(kt_soc_1.lm)
+qqnorm(resid(kt_soc_1.lm))
+qqline(resid(kt_soc_1.lm))
+plot(simulateResiduals(kt_soc_1.lm))
+densityPlot(rstudent(kt_soc_1.lm)) # check density estimate of the distribution of residuals
+outlierTest(kt_soc_1.lm)
+influenceIndexPlot(kt_soc_1.lm, vars = c("Cook"), id = list(n = 3))
+
+summary(kt_soc_1.lm)
+Anova(kt_soc_1.lm)
+#nOT SIGNIFICANT
+
+
+
+#kt_soc_1.mod <- glm(SES_soc_1 ~ trmt , family = gaussian, data = SES)
+#summary(kt_soc_1.mod)
+#qqnorm(resid(kt_soc_1.mod))
+#qqline(resid(kt_soc_1.mod))
+#plot(simulateResiduals(kt_soc_1.mod))
+#densityPlot(rstudent(kt_soc_1.mod)) # check density estimate of the distribution of residuals
+#outlierTest(kt_soc_1.mod)
+#influenceIndexPlot(kt_soc_1.mod, vars = c("Cook"), id = list(n = 3))
 #DS1 appears to be an outlier, but influence still below 3
 
-summary(kt_soc_1.mod)
-Anova(kt_soc_1.mod)
+#summary(kt_soc_1.mod)
+#Anova(kt_soc_1.mod)
 #no sig difference
 
 
@@ -1072,18 +1324,35 @@ with(SES, ad.test(SES_soc_2))
 #passed homogeneity test
 #kruskal.test(SES_soc_2 ~ trmt, data = SES) #it was not significant here anyway
 
-kt_soc_2.mod <- glm(SES_soc_2 ~ trmt , family = gaussian, data = SES)
-summary(kt_soc_2.mod)
-qqnorm(resid(kt_soc_2.mod))
-qqline(resid(kt_soc_2.mod))
-plot(simulateResiduals(kt_soc_2.mod))
-densityPlot(rstudent(kt_soc_2.mod)) # check density estimate of the distribution of residuals
-outlierTest(kt_soc_2.mod)
-influenceIndexPlot(kt_soc_2.mod, vars = c("Cook"), id = list(n = 3))
+
+kt_soc_2.lm <- lmer(SES_soc_2~trmt+(1|neighd), data = SES)
+
+summary(kt_soc_2.lm)
+qqnorm(resid(kt_soc_2.lm))
+qqline(resid(kt_soc_2.lm))
+plot(simulateResiduals(kt_soc_2.lm))
+densityPlot(rstudent(kt_soc_2.lm)) # check density estimate of the distribution of residuals
+outlierTest(kt_soc_2.lm)
+influenceIndexPlot(kt_soc_2.lm, vars = c("Cook"), id = list(n = 3))
+
+summary(kt_soc_2.lm)
+Anova(kt_soc_2.lm)
+#nOT SIGNIFICANT
 
 
-summary(kt_soc_2.mod)
-Anova(kt_soc_2.mod)
+
+#kt_soc_2.mod <- glm(SES_soc_2 ~ trmt , family = gaussian, data = SES)
+#summary(kt_soc_2.mod)
+#qqnorm(resid(kt_soc_2.mod))
+#qqline(resid(kt_soc_2.mod))
+#plot(simulateResiduals(kt_soc_2.mod))
+#densityPlot(rstudent(kt_soc_2.mod)) # check density estimate of the distribution of residuals
+#outlierTest(kt_soc_2.mod)
+#influenceIndexPlot(kt_soc_2.mod, vars = c("Cook"), id = list(n = 3))
+
+
+#summary(kt_soc_2.mod)
+#Anova(kt_soc_2.mod)
 #no sig difference
 
 
@@ -1109,18 +1378,33 @@ with(SES, ad.test(SES_soc_3))
 #passed homogeneity test
 #kruskal.test(SES_soc_3 ~ trmt, data = SES) #it was not significant here anyway
 
-kt_soc_3.mod <- glm(SES_soc_3 ~ trmt , family = gaussian, data = SES)
-summary(kt_soc_3.mod)
-qqnorm(resid(kt_soc_3.mod))
-qqline(resid(kt_soc_3.mod))
-plot(simulateResiduals(kt_soc_3.mod))
-densityPlot(rstudent(kt_soc_3.mod)) # check density estimate of the distribution of residuals
-outlierTest(kt_soc_3.mod)
-influenceIndexPlot(kt_soc_3.mod, vars = c("Cook"), id = list(n = 3))
+kt_soc_3.lm <- lmer(SES_soc_3~trmt+(1|neighd), data = SES)
+
+summary(kt_soc_3.lm)
+qqnorm(resid(kt_soc_3.lm))
+qqline(resid(kt_soc_3.lm))
+plot(simulateResiduals(kt_soc_3.lm))
+densityPlot(rstudent(kt_soc_3.lm)) # check density estimate of the distribution of residuals
+outlierTest(kt_soc_3.lm)
+influenceIndexPlot(kt_soc_3.lm, vars = c("Cook"), id = list(n = 3))
+
+summary(kt_soc_3.lm)
+Anova(kt_soc_3.lm)
+#nOT SIGNIFICANT
 
 
-summary(kt_soc_3.mod)
-Anova(kt_soc_3.mod)
+#kt_soc_3.mod <- glm(SES_soc_3 ~ trmt , family = gaussian, data = SES)
+#summary(kt_soc_3.mod)
+#qqnorm(resid(kt_soc_3.mod))
+#qqline(resid(kt_soc_3.mod))
+#plot(simulateResiduals(kt_soc_3.mod))
+#densityPlot(rstudent(kt_soc_3.mod)) # check density estimate of the distribution of residuals
+#outlierTest(kt_soc_3.mod)
+#influenceIndexPlot(kt_soc_3.mod, vars = c("Cook"), id = list(n = 3))
+
+
+#summary(kt_soc_3.mod)
+#Anova(kt_soc_3.mod)
 #no sig difference
 
 
@@ -1145,19 +1429,33 @@ with(SES, ad.test(SES_soc_4))
 #passed homogeneity test
 #kruskal.test(SES_soc_4 ~ trmt, data = SES) #it was not significant here anyway
 
+kt_soc_4.lm <- lmer(SES_soc_4~trmt+(1|neighd), data = SES)
+#
+summary(kt_soc_4.lm)
+qqnorm(resid(kt_soc_4.lm))
+qqline(resid(kt_soc_4.lm))
+plot(simulateResiduals(kt_soc_4.lm))
+densityPlot(rstudent(kt_soc_4.lm)) # check density estimate of the distribution of residuals
+outlierTest(kt_soc_4.lm)
+influenceIndexPlot(kt_soc_4.lm, vars = c("Cook"), id = list(n = 3))
 
-kt_soc_4.mod <- glm(SES_soc_4 ~ trmt , family = gaussian, data = SES)
-summary(kt_soc_4.mod)
-qqnorm(resid(kt_soc_4.mod))
-qqline(resid(kt_soc_4.mod))
-plot(simulateResiduals(kt_soc_4.mod))
-densityPlot(rstudent(kt_soc_4.mod)) # check density estimate of the distribution of residuals
-outlierTest(kt_soc_4.mod)
-influenceIndexPlot(kt_soc_4.mod, vars = c("Cook"), id = list(n = 3))
+summary(kt_soc_4.lm)
+Anova(kt_soc_4.lm)
+#nOT SIGNIFICANT
 
 
-summary(kt_soc_4.mod)
-Anova(kt_soc_4.mod)
+#kt_soc_4.mod <- glm(SES_soc_4 ~ trmt , family = gaussian, data = SES)
+#summary(kt_soc_4.mod)
+#qqnorm(resid(kt_soc_4.mod))
+#qqline(resid(kt_soc_4.mod))
+#plot(simulateResiduals(kt_soc_4.mod))
+#densityPlot(rstudent(kt_soc_4.mod)) # check density estimate of the distribution of residuals
+#outlierTest(kt_soc_4.mod)
+#influenceIndexPlot(kt_soc_4.mod, vars = c("Cook"), id = list(n = 3))
+
+
+#summary(kt_soc_4.mod)
+#Anova(kt_soc_4.mod)
 #no sig difference
 
 
@@ -1183,19 +1481,33 @@ with(SES, ad.test(SES_ori_0))
 #passed homogeneity test
 #kruskal.test(SES_ori_0 ~ trmt, data = SES) #it was not significant here anyway
 
+kt_ori_0.lm <- lmer(SES_ori_0~trmt+(1|neighd), data = SES)
+#
+summary(kt_ori_0.lm)
+qqnorm(resid(kt_ori_0.lm))
+qqline(resid(kt_ori_0.lm))
+plot(simulateResiduals(kt_ori_0.lm))
+densityPlot(rstudent(kt_ori_0.lm)) # check density estimate of the distribution of residuals
+outlierTest(kt_ori_0.lm)
+influenceIndexPlot(kt_ori_0.lm, vars = c("Cook"), id = list(n = 3))
 
-kt_ori_0.mod <- glm(SES_ori_0 ~ trmt , family = gaussian, data = SES)
-summary(kt_ori_0.mod)
-qqnorm(resid(kt_ori_0.mod))
-qqline(resid(kt_ori_0.mod))
-plot(simulateResiduals(kt_ori_0.mod))
-densityPlot(rstudent(kt_ori_0.mod)) # check density estimate of the distribution of residuals
-outlierTest(kt_ori_0.mod)
-influenceIndexPlot(kt_ori_0.mod, vars = c("Cook"), id = list(n = 3))
+summary(kt_ori_0.lm)
+Anova(kt_ori_0.lm)
+#nOT SIGNIFICANT
 
 
-summary(kt_ori_0.mod)
-Anova(kt_ori_0.mod)
+#kt_ori_0.mod <- glm(SES_ori_0 ~ trmt , family = gaussian, data = SES)
+#summary(kt_ori_0.mod)
+#qqnorm(resid(kt_ori_0.mod))
+#qqline(resid(kt_ori_0.mod))
+#plot(simulateResiduals(kt_ori_0.mod))
+#densityPlot(rstudent(kt_ori_0.mod)) # check density estimate of the distribution of residuals
+#outlierTest(kt_ori_0.mod)
+#influenceIndexPlot(kt_ori_0.mod, vars = c("Cook"), id = list(n = 3))
+
+
+#summary(kt_ori_0.mod)
+#Anova(kt_ori_0.mod)
 #no sig difference
 
 
@@ -1222,18 +1534,33 @@ with(SES, ad.test(SES_ori_1))
 #passed homogeneity test
 kruskal.test(SES_ori_1 ~ trmt, data = SES) #it was not significant here anyway
 
-kt_ori_1.mod <- glm(SES_ori_1 ~ trmt , family = gaussian, data = SES)
-summary(kt_ori_1.mod)
-qqnorm(resid(kt_ori_1.mod))
-qqline(resid(kt_ori_1.mod))
-plot(simulateResiduals(kt_ori_1.mod))
-densityPlot(rstudent(kt_ori_1.mod)) # check density estimate of the distribution of residuals
-outlierTest(kt_ori_1.mod)
-influenceIndexPlot(kt_ori_1.mod, vars = c("Cook"), id = list(n = 3))
+kt_ori_1.lm <- lmer(SES_ori_1~trmt+(1|neighd), data = SES)
+#
+summary(kt_ori_1.lm)
+qqnorm(resid(kt_ori_1.lm))
+qqline(resid(kt_ori_1.lm))
+plot(simulateResiduals(kt_ori_1.lm))
+densityPlot(rstudent(kt_ori_1.lm)) # check density estimate of the distribution of residuals
+outlierTest(kt_ori_1.lm)
+influenceIndexPlot(kt_ori_1.lm, vars = c("Cook"), id = list(n = 3))
+
+summary(kt_ori_1.lm)
+Anova(kt_ori_1.lm)
+#nOT SIGNIFICANT
 
 
-summary(kt_ori_1.mod)
-Anova(kt_ori_1.mod)
+#kt_ori_1.mod <- glm(SES_ori_1 ~ trmt , family = gaussian, data = SES)
+#summary(kt_ori_1.mod)
+#qqnorm(resid(kt_ori_1.mod))
+#qqline(resid(kt_ori_1.mod))
+#plot(simulateResiduals(kt_ori_1.mod))
+#densityPlot(rstudent(kt_ori_1.mod)) # check density estimate of the distribution of residuals
+#outlierTest(kt_ori_1.mod)
+#influenceIndexPlot(kt_ori_1.mod, vars = c("Cook"), id = list(n = 3))#
+
+
+#summary(kt_ori_1.mod)
+#Anova(kt_ori_1.mod)
 #no sig dif
 
 
@@ -1422,18 +1749,30 @@ dev.off()
 
 
 
-png("Figures/Figure 9.png", width = 1500, height = 1000, pointsize = 20)
+png("Figures/Figure KTtrtpred.png", width = 1500, height = 1000, pointsize = 20)
 
+par(mfrow=c(1,2)) # indicates one row, two columns
 
 par(mar = c(5,7,4,2)) # sets the margins around the figure
 
 # Functional Alpha
 boxplot(SES_falpha ~ trmt, data = SES, col = viridis(3, alpha = 0.6),
         xlab = "Standardized Effect Sizes (SES)", ylab = "", 
-        ylim = c(-2,2.5), cex.lab = 1.2, cex.axis = 1.1, cex.main = 1.5,
+        ylim = c(-3.6,2.5), cex.lab = 1.2, cex.axis = 1.1, cex.main = 1.5,
         horizontal = TRUE, las = 1, range = 0, main = "Functional Alpha")
 stripchart(SES_falpha ~ trmt, data = SES, col = viridis(3),
            pch = 19, cex = 2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
+text(1.87, 2.42, "A", pos = 4, font = 2, cex = 2)
+
+# Soil Nesting
+boxplot(SES_nest_1 ~ trmt, data = SES, col = viridis(3, alpha = 0.6),
+        xlab = "Standardized Effect Sizes (SES)", ylab = "", 
+        ylim = c(-3.6,2.5), cex.lab = 1.2, cex.axis = 1.1, cex.main = 1.5,
+        horizontal = TRUE, las = 1, range = 0, main = "Soil Nesting")
+stripchart(SES_nest_1 ~ trmt, data = SES, col = viridis(3),
+           pch = 19, cex = 2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+abline(v = 0.0, col = "black", lwd = 3, lty=2)
+text(1.87, 2.42, "B", pos = 4, font = 2, cex = 2)
 
 dev.off()
