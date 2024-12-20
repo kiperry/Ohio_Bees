@@ -2812,4 +2812,3 @@ anova(VL_fbsne.mod.full, VL_fbsne.mod.null)
 AICtab(VL_fbsne.mod.full, VL_fbsne.mod.null)
 
 ```
-
