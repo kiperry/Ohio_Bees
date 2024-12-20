@@ -82,6 +82,14 @@ write.csv(a.MP, file = "urbanpool.MP.csv")
 
 #From here go to separate R code files for each of the 3 urban pool data sets
 
+#IGNORE THE BELOW CODE#
+#I REPEAT- IGNORE THE BELOW CODE, it is left over from before the local analyses were divided into the three studies being ran individually#
+
+
+
+
+
+
 
 
 
