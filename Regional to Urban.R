@@ -10,6 +10,7 @@
 # CA Shepard: 26 September 2022 
 #CA Shepard: 20 February 2023 (Updated)
 #CA Shepard: 3 October 2023 (update )
+#CA Shepard: December 20th Update, based on code changes that occurred in a different version of the same document earlier in the year
 ###################################################################################
 
 t <- read.csv("btraits_23.csv", row.names=1)
@@ -21,7 +22,9 @@ a1 <- a #save the original dataset
 a <- a[2:362]
 str(a)
 
-rowSums(a) #all sites have at least 10 species?
+rowSums(a1[2:362])
+rowSums(a) #all sites have at least 10 species? #Note from Michelle that D and DS are the same place. Thus remove those 0s. the FAT7-C only had like, 1 observation
+
 a<-a[-49,]
 a<-a[-51,]
 a<-a[-56,]
@@ -29,6 +32,7 @@ a<-a[-56,]
 a<-a[-56,]
 a<-a[-64,]
 a<-a[-58,]
+
 rowSums(a)#all sites have 4+ species
 
 
@@ -978,27 +982,27 @@ ggplot(SES_div.m, aes(x=ses, y=var, fill = var)) +
 dev.off()
 
 
-png("Figures/Fig2.reg_Diversity_Indices.png", width = 3000, height = 1000, pointsize = 20)
+png("Figures/Fig4.Regionaldivpanel.png", width = 3000, height = 1000, pointsize = 20)
 
 par(mfrow=c(1,2)) # indicates one row, two columns
 par(mar=c(5,15,4,2))
 
 boxplot(ses ~ fbeta, data = SES_TBeta, col = viridis(3, alpha = 0.6),
         xlab = "Standardized Effect Sizes (SES)", ylab = "",
-        horizontal = TRUE, las = 1, range = 0, cex.lab = 2, cex.axis = 1.5, cex.main= 1.8, main = "Taxonomic Beta Diversity")
+        horizontal = TRUE, las = 1, range = 0, ylim= c(-80,70), cex.lab = 2, cex.axis = 1.45) #cex.main= 1.8(That is what I would use tomake the graph title size, but no titles))
 stripchart(ses ~ fbeta, data = SES_TBeta, col = viridis(3),
-           pch = 19, cex = 1, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+           pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
-text(50, 3.4, "A", pos = 4, font = 2, cex = 2.6)
+#I am going to put in the text labels in adobe indesign since I can't get them placed consistently across all of the graphs
 
 
 boxplot(ses ~ fbeta, data = SES_FBeta, col = viridis(3, alpha = 0.6),
         xlab = "Standardized Effect Sizes (SES)", ylab = "",
-        horizontal = TRUE, las = 1, range = 0, cex.lab = 2, cex.axis = 1.5, cex.main= 1.8, main = "Functional Beta Diversity")
+        horizontal = TRUE, las = 1, range = 0, ylim= c(-2.5,8), cex.lab = 2, cex.axis = 1.45)
 stripchart(ses ~ fbeta, data = SES_FBeta, col = viridis(3),
-           pch = 19, cex = 1, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+           pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
-text(6.5, 3.4, "B", pos = 4, font = 2, cex = 2.6)
+#text(6.5, 3.4, "B", pos = 4, font = 2, cex = 2.6)
 
 dev.off()
 
@@ -1105,14 +1109,14 @@ abline(v = 0.0, col = "black", lwd = 3, lty=2)
 
 
 #Same graphs but Put in figure order for making paper figures----
-png("Figures/Figure 3 all regional sp traits.png", width = 1500, height = 1000, pointsize = 20)
+png("Figures/Figure 5 Regionalsp traits panel.png", width = 1500, height = 1000, pointsize = 20)
 
 par(mfrow=c(2,2)) # indicates two rows, two columns
 par(mar = c(5,9,4,2)) # sets the margins around the figure
 
 #length and origin
 SES_lengthandorigin <- as.data.frame(cbind( SES_ori_1, SES_ori_0, SES_bl ))
-colnames(SES_lengthandorigin) <- c( "Non-Native", "Native", "Body Length")
+colnames(SES_lengthandorigin) <- c( "Alien", "Native", "Body Length")
 SES_lengthandorigin <- melt(SES_lengthandorigin)
 colnames(SES_lengthandorigin) <- c("trait","ses")
 
@@ -1120,11 +1124,11 @@ colnames(SES_lengthandorigin) <- c("trait","ses")
 
 boxplot(ses ~ trait, data = SES_lengthandorigin, col = viridis(5, alpha = 0.6),
         xlab = "Standardized Effect Sizes (SES)", ylab = "",
-        horizontal = TRUE, las = 1, range = 0, ylim= c(-8,8))
+        horizontal = TRUE, las = 1, range = 0, ylim= c(-9.5,9.5), cex.lab = 2, cex.axis = 1.45)
 stripchart(ses ~ trait, data = SES_lengthandorigin, col = viridis(5),
-           pch = 19, cex = 1, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+           pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
-text(6.5, 3.3, "A", pos = 4, font = 2, cex = 2)
+#text(6.5, 3.3, "A", pos = 4, font = 2, cex = 2)
 
 
 ## Nesting Traits
@@ -1136,11 +1140,11 @@ colnames(SES_Nest) <- c("nest","ses")
 
 boxplot(ses ~ nest, data = SES_Nest, col = viridis(5, alpha = 0.6),
         xlab = "Standardized Effect Sizes (SES)", ylab = "",
-        horizontal = TRUE, las = 1, range = 0, ylim= c(-8,8))
+        horizontal = TRUE, las = 1, range = 0, ylim= c(-9.5,9.5), cex.lab = 2, cex.axis = 1.45)
 stripchart(ses ~ nest, data = SES_Nest, col = viridis(5),
-           pch = 19, cex = 1, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+           pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
-text(6.5, 5.2, "B", pos = 4, font = 2, cex = 2)
+#text(6.5, 5.2, "B", pos = 4, font = 2, cex = 2)
 
 #lecty
 SES_lect <- as.data.frame(cbind( SES_lec_2, SES_lec_1, SES_lec_0))
@@ -1151,12 +1155,12 @@ colnames(SES_lect) <- c("trait","ses")
 
 boxplot(ses ~ trait, data = SES_lect, col = viridis(6, alpha = 0.6),
         xlab = "Standardized Effect Sizes (SES)", ylab = "",
-        horizontal = TRUE, las = 1, range = 0, ylim= c(-8,8))
+        horizontal = TRUE, las = 1, range = 0, ylim= c(-9.5,9.5), cex.lab = 2, cex.axis = 1.45)
 stripchart(ses ~ trait, data = SES_lect, col = viridis(6),
-           pch = 19, cex = 1, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+           pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
 
-text(6.5, 3.3, "C", pos = 4, font = 2, cex = 2)
+#text(6.5, 3.3, "C", pos = 4, font = 2, cex = 2)
 
 
 ## Sociality Traits
@@ -1168,11 +1172,11 @@ colnames(SES_Soc) <- c("soc","ses")
 
 boxplot(ses ~ soc, data = SES_Soc, col = viridis(4, alpha = 0.6),
         xlab = "Standardized Effect Sizes (SES)", ylab = "",
-        horizontal = TRUE, las = 1, range = 0, ylim= c(-8,8))
+        horizontal = TRUE, las = 1, range = 0, ylim= c(-9.5,9.5), cex.lab = 2, cex.axis = 1.45)
 stripchart(ses ~ soc, data = SES_Soc, col = viridis(4),
-           pch = 19, cex = 1, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+           pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
-text(6.5, 4.2, "D", pos = 4, font = 2, cex = 2)
+#text(6.5, 4.2, "D", pos = 4, font = 2, cex = 2)
 
 dev.off()
 
@@ -1181,10 +1185,13 @@ dev.off()
 #Intro stats----
 ordered(colSums(a))
 sort(colSums(a), decreasing=T)
+present<-a[which(colSums(a)>=1),]
+present
+
 t$ori
 
 Nonnative <- t[which(t$ori == 1),]
-
+Nonnative
 
 native<-t$ori
 aforintrostats<-a
@@ -1192,3 +1199,48 @@ aforintrostats<-a
 introstats<-rbind(aforintrostats, native)
 nonnative2<- introstats["65"==1, ]
 #Well, can't figure out how to get that to work
+
+#Discussion stats
+SES.all <- as.data.frame(cbind(SES_bl, SES_lec_0, SES_lec_1, SES_lec_2, SES_ori_0, SES_ori_1, 
+                               SES_nest_1, SES_nest_2, SES_nest_3, SES_nest_4, SES_nest_5,
+                               SES_soc_1, SES_soc_2, SES_soc_3, SES_soc_4, SES_bsor, SES_bsim,
+                               SES_bsne, SES_fbsor, SES_fbsim, SES_fbsne))
+write.csv(SES.all, file = "Regional to Urban_Nulls_FINAL/AllSESvals.csv")
+nestsites <- read.csv("Highestfunctnestsites.csv", row.names=1)
+
+
+
+str(nestsites)
+nestsites1 <- nestsites #save the original dataset
+nestsites <- nestsites[2:362]
+str(nestsites)
+
+colSums(nestsites1[2:362])
+nestsites <- nestsites[,which(colSums(nestsites)!=0)] 
+colSums(nestsites) 
+#Removed all species columsn where no member of the species was collected. 
+nestednessspp<-colnames(nestsites)
+nestednessspp
+
+nestednesstraits<-t2
+nestednesstraits = nestednesstraits[rownames(nestednesstraits) %in% nestednessspp, ]
+#Got rid of all the species that were not part of the nestsites
+setdiff(colnames(nestsites), rownames(nestednesstraits))
+setdiff(rownames (nestednesstraits), colnames(nestsites))
+
+rownames(nestednesstraits) == colnames(nestsites) # we are good to go!
+
+## pull out data for each treatment
+functnest <- nestsites[5:7,]
+functnest <- functnest[,which(colSums(functnest)!=0)] 
+colSums(functnest)
+functnestspp<-colnames(functnest)
+functnestednesstraits = nestednesstraits[rownames(nestednesstraits) %in% functnestspp, ]
+
+taxnest <- nestsites[2:4,]
+taxnest <- taxnest[,which(colSums(taxnest)!=0)] 
+colSums(taxnest)
+taxnestspp<-colnames(taxnest)
+taxnestednesstraits = nestednesstraits[rownames(nestednesstraits) %in% taxnestspp, ]
+summary(taxnestednesstraits)
+summary(functnestednesstraits)
