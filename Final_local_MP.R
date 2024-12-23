@@ -1797,41 +1797,45 @@ dev.off()
 
 
 ###Figure 12----
+treatmentcleanup <- c(VL="Vacant lots", UP="Pocket prairies")
+SES$treatmentspelledout <- as.character(treatmentcleanup[SES$trmt])
+
+
 png("Figures/Figure 12.png", width = 1500, height = 1000, pointsize = 20)
 
-par(mfrow=c(2,2)) # indicates two rows, two columns
+par(mfrow=c(1,2)) # indicates one row, two columns
 par(mar = c(5,7,4,2)) # sets the margins around the figure
 
 
 
 # Parasitic
-boxplot(SES_soc_4 ~ trmt, data = SES, col = viridis(3, alpha = 0.6),
+boxplot(SES_soc_4 ~ treatmentspelledout, data = SES, col = viridis(3, alpha = 0.6),
         xlab = "Standardized Effect Sizes (SES)", ylab = "", 
-        ylim = c(-2,2), cex.lab = 1.2, cex.axis = 1.1, cex.main = 1.5,
+        ylim = c(-1.84,1.94), cex.lab = 1.2, cex.axis = 1.1, cex.main = 1.5,
         horizontal = TRUE, las = 1, range = 0, main = "Parasitic")
 stripchart(SES_soc_4 ~ trmt, data = SES, col = viridis(3),
            pch = 19, cex = 2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
-text(1.87, 2.42, "A", pos = 4, font = 2, cex = 2)
+#text(1.7, 2.42, "A", pos = 4, font = 2, cex = 2)
 
 # Soil Nesting
-boxplot(SES_nest_1 ~ trmt, data = SES, col = viridis(3, alpha = 0.6),
+boxplot(SES_nest_1 ~ treatmentspelledout, data = SES, col = viridis(3, alpha = 0.6),
         xlab = "Standardized Effect Sizes (SES)", ylab = "", 
-        ylim = c(-2,2), cex.lab = 1.2, cex.axis = 1.1, cex.main = 1.5,
+        ylim = c(-1.84,1.94), cex.lab = 1.2, cex.axis = 1.1, cex.main = 1.5,
         horizontal = TRUE, las = 1, range = 0, main = "Soil Nesting")
 stripchart(SES_nest_1 ~ trmt, data = SES, col = viridis(3),
            pch = 19, cex = 2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
-text(1.87, 2.42, "B", pos = 4, font = 2, cex = 2)
+#text(1.7, 2.42, "B", pos = 4, font = 2, cex = 2)
 
 # Kleptoparasitic
-boxplot(SES_lec_0 ~ trmt, data = SES, col = viridis(3, alpha = 0.6),
-        xlab = "Standardized Effect Sizes (SES)", ylab = "", 
-        ylim = c(-2,2), cex.lab = 1.2, cex.axis = 1.1, cex.main = 1.5,
-        horizontal = TRUE, las = 1, range = 0, main = "Kleptoparasitic")
-stripchart(SES_lec_0 ~ trmt, data = SES, col = viridis(3),
-           pch = 19, cex = 2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
-abline(v = 0.0, col = "black", lwd = 3, lty=2)
-text(1.87, 2.42, "C", pos = 4, font = 2, cex = 2)
+#boxplot(SES_lec_0 ~ treatmentspelledout, data = SES, col = viridis(3, alpha = 0.6),
+        #xlab = "Standardized Effect Sizes (SES)", ylab = "", 
+       # ylim = c(-2,2), cex.lab = 1.2, cex.axis = 1.1, cex.main = 1.5,
+       # horizontal = TRUE, las = 1, range = 0, main = "Kleptoparasitic")
+#stripchart(SES_lec_0 ~ trmt, data = SES, col = viridis(3),
+        #   pch = 19, cex = 2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+#abline(v = 0.0, col = "black", lwd = 3, lty=2)
+#text(1.87, 2.42, "C", pos = 4, font = 2, cex = 2)
 
 dev.off()

@@ -1747,7 +1747,8 @@ fig8
 dev.off()
 
 
-
+treatmentcleanup <- c(T1="Vacant lots", Prairie="Pocket prairies")
+SES$treatmentspelledout <- as.character(treatmentcleanup[SES$trmt])
 
 png("Figures/Figure KTtrtpred.png", width = 1500, height = 1000, pointsize = 20)
 
@@ -1756,7 +1757,7 @@ par(mfrow=c(1,2)) # indicates one row, two columns
 par(mar = c(5,7,4,2)) # sets the margins around the figure
 
 # Functional Alpha
-boxplot(SES_falpha ~ trmt, data = SES, col = viridis(3, alpha = 0.6),
+boxplot(SES_falpha ~ treatmentspelledout, data = SES, col = viridis(3, alpha = 0.6),
         xlab = "Standardized Effect Sizes (SES)", ylab = "", 
         ylim = c(-3.6,2.5), cex.lab = 1.2, cex.axis = 1.1, cex.main = 1.5,
         horizontal = TRUE, las = 1, range = 0, main = "Functional Alpha")
@@ -1766,7 +1767,7 @@ abline(v = 0.0, col = "black", lwd = 3, lty=2)
 text(1.87, 2.42, "A", pos = 4, font = 2, cex = 2)
 
 # Soil Nesting
-boxplot(SES_nest_1 ~ trmt, data = SES, col = viridis(3, alpha = 0.6),
+boxplot(SES_nest_1 ~ treatmentspelledout, data = SES, col = viridis(3, alpha = 0.6),
         xlab = "Standardized Effect Sizes (SES)", ylab = "", 
         ylim = c(-3.6,2.5), cex.lab = 1.2, cex.axis = 1.1, cex.main = 1.5,
         horizontal = TRUE, las = 1, range = 0, main = "Soil Nesting")

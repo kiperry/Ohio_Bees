@@ -387,11 +387,16 @@ SES.all <- as.data.frame(cbind(SES_bl, SES_lec_0, SES_lec_1, SES_lec_2, SES_ori_
 write.csv(SES.all, file = "Urban to Local_Nulls_FS/SES_Local_FS.csv")
 #import the SES data
 SES <- read.csv("Urban to Local_Nulls_FS/SES_Local_FS.csv", row.names = 1)
+SES
 
 #Including treatment
 
 SES$trmt <- aO$trmt
 str(SES)
+
+#Adding the random site variable
+SES$site <- c("47thStGarden", "BluePike", "Buckeye", "Esperanza", "Fairfax","LonnieBurten","Midtown","Slavicvillage","C10","C11","C13","C5","C6","C69","C7","C9")
+
 
 ## pull out data for each treatment
 farm <- SES[which(SES$trmt == "Farm"),]
@@ -450,6 +455,9 @@ bsor.control
 dotchart(SES$SES_bsor, group = SES$trmt, pch = 19)
 with(SES, bartlett.test(SES_bsor ~ trmt))
 with(SES, ad.test(SES_bsor))
+
+####FS_bsor.lm <-lmer(SES_bsor ~ trmt+(trmt|site),data = SES)
+
 
 FS_bsor.mod <- glm(SES_bsor ~ trmt , family = gaussian, data = SES)
 summary(FS_bsor.mod)
@@ -1133,7 +1141,7 @@ Anova(FS_ori_0.mod)
 emmeans(FS_ori_0.mod, pairwise ~ trmt)
 
 
-### ori_2 - Exotic----
+### ori_1 - Exotic----
 hist(SES$SES_ori_1)
 plot(SES$SES_ori_1)
 abline(h = 0.0, col = "black", lwd = 3, lty=2)
@@ -1355,13 +1363,16 @@ fig5
 dev.off()
 
 
+treatmentcleanup.fs <- c(Farm="Urban Farms", Control="Vacant Lots")
+SES$treatmentspelledout <- as.character(treatmentcleanup.fs[SES$trmt])
+
 png("Figures/Figure 6.png", width = 1500, height = 1000, pointsize = 20)
 
 par(mfrow=c(2,2)) # indicates three rows, two columns
 par(mar = c(5,7,4,2)) # sets the margins around the figure
 
 # Soil nesting
-boxplot(SES_nest_1 ~ trmt, data = SES, col = viridis(3, alpha = 0.6),
+boxplot(SES_nest_1 ~ treatmentspelledout, data = SES, col = viridis(3, alpha = 0.6),
         xlab = "Standardized Effect Sizes (SES)", ylab = "", 
         ylim = c(-2,2.5), cex.lab = 1.2, cex.axis = 1.1, cex.main = 1.5,
         horizontal = TRUE, las = 1, range = 0, main = "Soil Nesting")
@@ -1374,7 +1385,7 @@ text(2.38, 2.41, "A", pos = 4, font = 2, cex = 2)
 
 
 # Cavity nesting
-boxplot(SES_nest_2 ~ trmt, data = SES, col = viridis(3, alpha = 0.6),
+boxplot(SES_nest_2 ~ treatmentspelledout, data = SES, col = viridis(3, alpha = 0.6),
         xlab = "Standardized Effect Sizes (SES)", ylab = "", 
         ylim = c(-2,2.5), cex.lab = 1.2, cex.axis = 1.1, cex.main = 1.5,
         horizontal = TRUE, las = 1, range = 0, main = "Cavity Nesting")
@@ -1384,7 +1395,7 @@ abline(v = 0.0, col = "black", lwd = 3, lty=2)
 text(2.38, 2.41, "B", pos = 4, font = 2, cex = 2)
 
 # native
-boxplot(SES_ori_0 ~ trmt, data = SES, col = viridis(3, alpha = 0.6),
+boxplot(SES_ori_0 ~ treatmentspelledout, data = SES, col = viridis(3, alpha = 0.6),
         xlab = "Standardized Effect Sizes (SES)", ylab = "", 
         ylim = c(-2,2.5), cex.lab = 1.2, cex.axis = 1.1, cex.main = 1.5,
         horizontal = TRUE, las = 1, range = 0, main = "Native")
@@ -1395,7 +1406,7 @@ text(2.38, 2.41, "C", pos = 4, font = 2, cex = 2)
 
 
 # non-native
-boxplot(SES_ori_1 ~ trmt, data = SES, col = viridis(3, alpha = 0.6),
+boxplot(SES_ori_1 ~ treatmentspelledout, data = SES, col = viridis(3, alpha = 0.6),
         xlab = "Standardized Effect Sizes (SES)", ylab = "",
         ylim = c(-2,2.5), cex.lab = 1.2, cex.axis = 1.1, cex.main = 1.5,
         horizontal = TRUE, las = 1, range = 0, main = "Non-Native")
