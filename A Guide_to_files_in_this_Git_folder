@@ -6,7 +6,7 @@ This paper was the result of compiling data from three papers, and several years
 
 I am going in alphabetical order of explaining the files here, rather than date of most recent modification. (This should technically be the first file you see, but 1 starts directly under it)
 
-1) Analysiswithoutseasonalbeestest - a folder created to run the final regional to urban species pool analysis, with 12 species removed that may not have been possible to collect based on historical seasonality and sampling timeframes for the three projects. This folder is used for the creation of supplemental materials, and the full versions of all local analyses are in file #22.
+1) Analysiswithoutseasonalbeestest - a folder created to run the final regional to urban species pool analysis, with 12 species removed that may not have been possible to collect based on historical seasonality and sampling timeframes for the three projects. This folder is used for the creation of supplemental materials, and the full versions of all local analyses are in file #23.
 
 2) bcomm_23.localanalysis.csv (and xlsx) - the files that contain the presence absence data for each species in the regional species pool at each sites sampled during the 3 studies used to create the urban species pool
 
@@ -28,7 +28,7 @@ I am going in alphabetical order of explaining the files here, rather than date 
 
 11)FinalRegional_workspace.RData- The R workspace used to save previous analyses during regional analysis so each line of code did not have to be run each time.
 
-12) landscape.localanalysis.csv - a file containing habitat treatment and landscape data for each site sampled as part of the three projects. Mostly anecdotal data as landscape data was dropped as part of the analysis, and the file still contains data for C8 which was dropped from analysis (see file #21)
+12) landscape.localanalysis.csv - a file containing habitat treatment and landscape data for each site sampled as part of the three projects. Mostly anecdotal data as landscape data was dropped as part of the analysis, and the file still contains data for C8 which was dropped from analysis (see file #22)
 
 13) LocalFS.workspace.RData - The R workspace used to save previous analyses during the local analysis of Sivakoff et al 2018 so each line of code did not have to be run each time.
 
@@ -42,30 +42,32 @@ I am going in alphabetical order of explaining the files here, rather than date 
 
 18) Rao.function.R - The R code for the Rao function, run before doing any null model analyses.
 
-19) README.md - a file created when the Git folder was created.
+19) RAW datasets from authors - a folder with the original datasets from the three papers. The file bcomm_23.localanalysis (item #2) was created using these. 
 
-20) Regional to Urban_Null models_Hillsmith_3 Axes- an earlier version of the regional analysis null from file #22 that were run when only two papers (Sivakoff et al 2018 and Turo et al 2021) were being included in the urban species pool. 
+20)README.md - a file created when the Git folder was created.
 
-21) Regional to Urban_Null models_Hillsmith_3 AxeswC8 - an earlier version of the regional analysis nulls that were run in file #20 when the site C8 was included in the analysis. C8 was removed because it was not vacuumed.
+21) Regional to Urban_Null models_Hillsmith_3 Axes- an earlier version of the regional analysis null from file #23 that were run when only two papers (Sivakoff et al 2018 and Turo et al 2021) were being included in the urban species pool. 
 
-22) Regional to Urbban_Nulls_FINAL - the null models created by the regional species pool anlaysis with all three paper data sets included. 
+22) Regional to Urban_Null models_Hillsmith_3 AxeswC8 - an earlier version of the regional analysis nulls that were run in file #21 when the site C8 was included in the analysis. C8 was removed because it was not vacuumed.
 
-23) Regional to Urban.R - The code used to run the analyses creating null models of the regional species pool to compare to the urban species pool created from the three paper's data.
+23) Regional to Urbban_Nulls_FINAL - the null models created by the regional species pool anlaysis with all three paper data sets included. 
 
-24)SES.csv - a file created of all SES values created as part of the regional to urban null model analyses (in file #23).
+24) Regional to Urban.R - The code used to run the analyses creating null models of the regional species pool to compare to the urban species pool created from the three paper's data.
 
-25) traits_urbanpool.csv - the file of the functional traits for species found in Clevleand, used as part of the local analysis (in file #7).
+25)SES.csv - a file created of all SES values created as part of the regional to urban null model analyses (in file #24).
 
-26) Undifferentiated_local_analyses - a file of code used in earlier data analyses for the urban to local analysis stage, when local analyses were not divided by paper. It was determined that all habitats could not be compared against eachother due to different sampling methods, so these codes were modified in their newer forms (Files #7-10). Also contains folders with the resulting null models from the varius earlier stages of analysis. 
+26) traits_urbanpool.csv - the file of the functional traits for species found in Clevleand, used as part of the local analysis (in file #7).
 
-27) Urban to Local_Nulls_FS - Null model analyses created based on the urban species pool compared to the bees collected in each site that was part of Sivakoff et al 2018. 
+27) Undifferentiated_local_analyses - a file of code used in earlier data analyses for the urban to local analysis stage, when local analyses were not divided by paper. It was determined that all habitats could not be compared against eachother due to different sampling methods, so these codes were modified in their newer forms (Files #7-10). Also contains folders with the resulting null models from the varius earlier stages of analysis. 
 
-28) Urban to Local_Nulls_KT - Null model analyses created based on the urban species pool compared to the bees collected in each site that was part of Turo et al 2021.
+28) Urban to Local_Nulls_FS - Null model analyses created based on the urban species pool compared to the bees collected in each site that was part of Sivakoff et al 2018. 
 
-29) Urban to Local_Nulls_MP - Null model analyses created based on the urban species pool compared to the bees collected in each site that was part of Pham et al in review.
+29) Urban to Local_Nulls_KT - Null model analyses created based on the urban species pool compared to the bees collected in each site that was part of Turo et al 2021.
 
-30) urbanpool.FS.csv - The sites from Sivakoff et al 2018 and the members of the urban species pool that were present and absent at each. 
+30) Urban to Local_Nulls_MP - Null model analyses created based on the urban species pool compared to the bees collected in each site that was part of Pham et al in review.
 
-31) urbanpool.KT.csv - The sites from Turo et al 2021 and the members of the urban species pool that were present and absent at each. 
+31) urbanpool.FS.csv - The sites from Sivakoff et al 2018 and the members of the urban species pool that were present and absent at each. 
 
-32) urbanpool.MP.csv - The sites from Pham et al in review and the members of the urban species pool that were present and absent at each. 
+32) urbanpool.KT.csv - The sites from Turo et al 2021 and the members of the urban species pool that were present and absent at each. 
+
+33) urbanpool.MP.csv - The sites from Pham et al in review and the members of the urban species pool that were present and absent at each. 

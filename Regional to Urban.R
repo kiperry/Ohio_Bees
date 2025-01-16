@@ -24,7 +24,9 @@ str(a)
 
 rowSums(a1[2:362])
 rowSums(a) #all sites have at least 10 species? #Note from Michelle that D and DS are the same place. Thus remove those 0s. the FAT7-C only had like, 1 observation
-
+#sites that have less than 10: t1-BE, T1C, T1ds, t1H, t1SV, fat7-c, t6c, t6g, t7c,t7-sv, t8-c, t8-ds
+#Sites that have 4 or fewer species: T1-BE, T1-DS, Fat7-C, T6-C, T6-G, T7-C, T8-DS
+#The above 7 sites are removed below
 a<-a[-49,]
 a<-a[-51,]
 a<-a[-56,]
@@ -230,55 +232,55 @@ for(i in 1:numberReps){
 }
 
 # save the output matrices
-write.csv(nbl, file = "Regional to Urban_Nulls_FINAL/nbl.csv")
-write.csv(nlec_0, file = "Regional to Urban_Nulls_FINAL/nlec_0.csv")
-write.csv(nlec_1, file = "Regional to Urban_Nulls_FINAL/nlec_1.csv")
-write.csv(nlec_2, file = "Regional to Urban_Nulls_FINAL/nlec_2.csv")
-write.csv(nnest_1, file = "Regional to Urban_Nulls_FINAL/nnest_1.csv")
-write.csv(nnest_2, file = "Regional to Urban_Nulls_FINAL/nnest_2.csv")
-write.csv(nnest_3, file = "Regional to Urban_Nulls_FINAL/nnest_3.csv")
-write.csv(nnest_4, file = "Regional to Urban_Nulls_FINAL/nnest_4.csv")
-write.csv(nnest_5, file = "Regional to Urban_Nulls_FINAL/nnest_5.csv")
-write.csv(nsoc_1, file = "Regional to Urban_Nulls_FINAL/nsoc_1.csv")
-write.csv(nsoc_2, file = "Regional to Urban_Nulls_FINAL/nsoc_2.csv")
-write.csv(nsoc_3, file = "Regional to Urban_Nulls_FINAL/nsoc_3.csv")
-write.csv(nsoc_4, file = "Regional to Urban_Nulls_FINAL/nsoc_4.csv")
-write.csv(nori_0, file = "Regional to Urban_Nulls_FINAL/nori_0.csv")
-write.csv(nori_1, file = "Regional to Urban_Nulls_FINAL/nori_1.csv")
+write.csv(nbl, file = "Final.25.Regional to Urban_Nulls/nbl.csv")
+write.csv(nlec_0, file = "Final.25.Regional to Urban_Nulls/nlec_0.csv")
+write.csv(nlec_1, file = "Final.25.Regional to Urban_Nulls/nlec_1.csv")
+write.csv(nlec_2, file = "Final.25.Regional to Urban_Nulls/nlec_2.csv")
+write.csv(nnest_1, file = "Final.25.Regional to Urban_Nulls/nnest_1.csv")
+write.csv(nnest_2, file = "Final.25.Regional to Urban_Nulls/nnest_2.csv")
+write.csv(nnest_3, file = "Final.25.Regional to Urban_Nulls/nnest_3.csv")
+write.csv(nnest_4, file = "Final.25.Regional to Urban_Nulls/nnest_4.csv")
+write.csv(nnest_5, file = "Final.25.Regional to Urban_Nulls/nnest_5.csv")
+write.csv(nsoc_1, file = "Final.25.Regional to Urban_Nulls/nsoc_1.csv")
+write.csv(nsoc_2, file = "Final.25.Regional to Urban_Nulls/nsoc_2.csv")
+write.csv(nsoc_3, file = "Final.25.Regional to Urban_Nulls/nsoc_3.csv")
+write.csv(nsoc_4, file = "Final.25.Regional to Urban_Nulls/nsoc_4.csv")
+write.csv(nori_0, file = "Final.25.Regional to Urban_Nulls/nori_0.csv")
+write.csv(nori_1, file = "Final.25.Regional to Urban_Nulls/nori_1.csv")
 
-write.csv(nbsim, file = "Regional to Urban_Nulls_FINAL/tbeta_sim.csv")
-write.csv(nbsne, file = "Regional to Urban_Nulls_FINAL/tbeta_sne.csv")
-write.csv(nbsor, file = "Regional to Urban_Nulls_FINAL/tbeta_sor.csv")
+write.csv(nbsim, file = "Final.25.Regional to Urban_Nulls/tbeta_sim.csv")
+write.csv(nbsne, file = "Final.25.Regional to Urban_Nulls/tbeta_sne.csv")
+write.csv(nbsor, file = "Final.25.Regional to Urban_Nulls/tbeta_sor.csv")
 
-write.csv(nfsim, file = "Regional to Urban_Nulls_FINAL/fbeta_sim.csv")
-write.csv(nfsne, file = "Regional to Urban_Nulls_FINAL/fbeta_sne.csv")
-write.csv(nfsor, file = "Regional to Urban_Nulls_FINAL/fbeta_sor.csv")
+write.csv(nfsim, file = "Final.25.Regional to Urban_Nulls/fbeta_sim.csv")
+write.csv(nfsne, file = "Final.25.Regional to Urban_Nulls/fbeta_sne.csv")
+write.csv(nfsor, file = "Final.25.Regional to Urban_Nulls/fbeta_sor.csv")
 
 # load the output matrices
 
-nbl <- read.csv("Regional to Urban_Nulls_FINAL/nbl.csv", row.names=1)
-nlec_0 <- read.csv("Regional to Urban_Nulls_FINAL/nlec_0.csv", row.names=1)
-nlec_1 <- read.csv("Regional to Urban_Nulls_FINAL/nlec_1.csv", row.names=1)
-nlec_2 <- read.csv("Regional to Urban_Nulls_FINAL/nlec_2.csv", row.names=1)
-nnest_1 <- read.csv("Regional to Urban_Nulls_FINAL/nnest_1.csv", row.names=1)
-nnest_2 <- read.csv("Regional to Urban_Nulls_FINAL/nnest_2.csv", row.names=1)
-nnest_3 <- read.csv("Regional to Urban_Nulls_FINAL/nnest_3.csv", row.names=1)
-nnest_4 <- read.csv("Regional to Urban_Nulls_FINAL/nnest_4.csv", row.names=1)
-nnest_5 <- read.csv("Regional to Urban_Nulls_FINAL/nnest_5.csv", row.names=1)
-nsoc_1 <- read.csv("Regional to Urban_Nulls_FINAL/nsoc_1.csv", row.names=1)
-nsoc_2 <- read.csv("Regional to Urban_Nulls_FINAL/nsoc_2.csv", row.names=1)
-nsoc_3 <- read.csv("Regional to Urban_Nulls_FINAL/nsoc_3.csv", row.names=1)
-nsoc_4 <- read.csv("Regional to Urban_Nulls_FINAL/nsoc_4.csv", row.names=1)
-nori_0 <- read.csv("Regional to Urban_Nulls_FINAL/nori_0.csv", row.names=1)
-nori_1 <- read.csv("Regional to Urban_Nulls_FINAL/nori_1.csv", row.names=1)
+nbl <- read.csv("Final.25.Regional to Urban_Nulls/nbl.csv", row.names=1)
+nlec_0 <- read.csv("Final.25.Regional to Urban_Nulls/nlec_0.csv", row.names=1)
+nlec_1 <- read.csv("Final.25.Regional to Urban_Nulls/nlec_1.csv", row.names=1)
+nlec_2 <- read.csv("Final.25.Regional to Urban_Nulls/nlec_2.csv", row.names=1)
+nnest_1 <- read.csv("Final.25.Regional to Urban_Nulls/nnest_1.csv", row.names=1)
+nnest_2 <- read.csv("Final.25.Regional to Urban_Nulls/nnest_2.csv", row.names=1)
+nnest_3 <- read.csv("Final.25.Regional to Urban_Nulls/nnest_3.csv", row.names=1)
+nnest_4 <- read.csv("Final.25.Regional to Urban_Nulls/nnest_4.csv", row.names=1)
+nnest_5 <- read.csv("Final.25.Regional to Urban_Nulls/nnest_5.csv", row.names=1)
+nsoc_1 <- read.csv("Final.25.Regional to Urban_Nulls/nsoc_1.csv", row.names=1)
+nsoc_2 <- read.csv("Final.25.Regional to Urban_Nulls/nsoc_2.csv", row.names=1)
+nsoc_3 <- read.csv("Final.25.Regional to Urban_Nulls/nsoc_3.csv", row.names=1)
+nsoc_4 <- read.csv("Final.25.Regional to Urban_Nulls/nsoc_4.csv", row.names=1)
+nori_0 <- read.csv("Final.25.Regional to Urban_Nulls/nori_0.csv", row.names=1)
+nori_1 <- read.csv("Final.25.Regional to Urban_Nulls/nori_1.csv", row.names=1)
 
-nbsim <- read.csv("Regional to Urban_Nulls_FINAL/tbeta_sim.csv", row.names=1)
-nbsne <- read.csv("Regional to Urban_Nulls_FINAL/tbeta_sne.csv", row.names=1)
-nbsor <- read.csv("Regional to Urban_Nulls_FINAL/tbeta_sim.csv", row.names=1)
+nbsim <- read.csv("Final.25.Regional to Urban_Nulls/tbeta_sim.csv", row.names=1)
+nbsne <- read.csv("Final.25.Regional to Urban_Nulls/tbeta_sne.csv", row.names=1)
+nbsor <- read.csv("Final.25.Regional to Urban_Nulls/tbeta_sim.csv", row.names=1)
 
-nfsim <- read.csv("Regional to Urban_Nulls_FINAL/fbeta_sim.csv", row.names=1)
-nfsne <- read.csv("Regional to Urban_Nulls_FINAL/fbeta_sne.csv", row.names=1)
-nfsor <- read.csv("Regional to Urban_Nulls_FINAL/fbeta_sor.csv", row.names=1)
+nfsim <- read.csv("Final.25.Regional to Urban_Nulls/fbeta_sim.csv", row.names=1)
+nfsne <- read.csv("Final.25.Regional to Urban_Nulls/fbeta_sne.csv", row.names=1)
+nfsor <- read.csv("Final.25.Regional to Urban_Nulls/fbeta_sor.csv", row.names=1)
 
 ## SES Calculations
 #calculate standardized effect sizes (SES) for each trait and index
@@ -1185,62 +1187,62 @@ dev.off()
 #Intro stats----
 ordered(colSums(a))
 sort(colSums(a), decreasing=T)
-present<-a[which(colSums(a)>=1),]
-present
+absent<-which(colSums(a)==0)
+present<-a[,-absent]
+#okay got that to work- 136 present species
+sort(colSums(present), decreasing = T)
+
 
 t$ori
 
 Nonnative <- t[which(t$ori == 1),]
 Nonnative
 
-native<-t$ori
-aforintrostats<-a
 
-introstats<-rbind(aforintrostats, native)
-nonnative2<- introstats["65"==1, ]
-#Well, can't figure out how to get that to work
 
 #Discussion stats
 SES.all <- as.data.frame(cbind(SES_bl, SES_lec_0, SES_lec_1, SES_lec_2, SES_ori_0, SES_ori_1, 
                                SES_nest_1, SES_nest_2, SES_nest_3, SES_nest_4, SES_nest_5,
                                SES_soc_1, SES_soc_2, SES_soc_3, SES_soc_4, SES_bsor, SES_bsim,
                                SES_bsne, SES_fbsor, SES_fbsim, SES_fbsne))
-write.csv(SES.all, file = "Regional to Urban_Nulls_FINAL/AllSESvals.csv")
-nestsites <- read.csv("Highestfunctnestsites.csv", row.names=1)
+write.csv(SES.all, file = "Final.25.Regional to Urban_Nulls/AllSESvals.csv")
+
+#The below code seems left over from something
+#nestsites <- read.csv("Highestfunctnestsites.csv", row.names=1)
 
 
 
-str(nestsites)
-nestsites1 <- nestsites #save the original dataset
-nestsites <- nestsites[2:362]
-str(nestsites)
-
-colSums(nestsites1[2:362])
-nestsites <- nestsites[,which(colSums(nestsites)!=0)] 
-colSums(nestsites) 
+#str(nestsites)
+#nestsites1 <- nestsites #save the original dataset
+#nestsites <- nestsites[2:362]
+s#tr(nestsites)
+#
+#colSums(nestsites1[2:362])
+#nestsites <- nestsites[,which(colSums(nestsites)!=0)] 
+#colSums(nestsites) 
 #Removed all species columsn where no member of the species was collected. 
-nestednessspp<-colnames(nestsites)
-nestednessspp
+#nestednessspp<-colnames(nestsites)
+#nestednessspp
 
-nestednesstraits<-t2
-nestednesstraits = nestednesstraits[rownames(nestednesstraits) %in% nestednessspp, ]
+#nestednesstraits<-t2
+#nestednesstraits = nestednesstraits[rownames(nestednesstraits) %in% nestednessspp, ]
 #Got rid of all the species that were not part of the nestsites
-setdiff(colnames(nestsites), rownames(nestednesstraits))
-setdiff(rownames (nestednesstraits), colnames(nestsites))
+#setdiff(colnames(nestsites), rownames(nestednesstraits))
+#setdiff(rownames (nestednesstraits), colnames(nestsites))
 
-rownames(nestednesstraits) == colnames(nestsites) # we are good to go!
+#rownames(nestednesstraits) == colnames(nestsites) # we are good to go!
 
 ## pull out data for each treatment
-functnest <- nestsites[5:7,]
-functnest <- functnest[,which(colSums(functnest)!=0)] 
-colSums(functnest)
-functnestspp<-colnames(functnest)
-functnestednesstraits = nestednesstraits[rownames(nestednesstraits) %in% functnestspp, ]
+#functnest <- nestsites[5:7,]
+#functnest <- functnest[,which(colSums(functnest)!=0)] 
+#colSums(functnest)
+#functnestspp<-colnames(functnest)
+#functnestednesstraits = nestednesstraits[rownames(nestednesstraits) %in% functnestspp, ]
 
-taxnest <- nestsites[2:4,]
-taxnest <- taxnest[,which(colSums(taxnest)!=0)] 
-colSums(taxnest)
-taxnestspp<-colnames(taxnest)
-taxnestednesstraits = nestednesstraits[rownames(nestednesstraits) %in% taxnestspp, ]
-summary(taxnestednesstraits)
-summary(functnestednesstraits)
+#taxnest <- nestsites[2:4,]
+#taxnest <- taxnest[,which(colSums(taxnest)!=0)] 
+#colSums(taxnest)
+#taxnestspp<-colnames(taxnest)
+#taxnestednesstraits = nestednesstraits[rownames(nestednesstraits) %in% taxnestspp, ]
+#summary(taxnestednesstraits)
+#summary(functnestednesstraits)

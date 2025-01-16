@@ -1,0 +1,15 @@
+
+There are Several files within this folder from the three coauthor papers
+
+From Sivakoff et al 2018:
+- bee bowl species list[...] : the bees collected through bee bowl trapping
+- Master_VisitationFreq : The bees collected through bee vacuuming
+
+From Turo et al 2021:
+- Collected Bees (raw data, pan traps) trt : The bees collected through pan traps
+- 2015NetworkFreq_Turo : The bees vacuumed in 2015
+- 2016NetworkFreq : The bees vacuumed in 2016
+- Turo_network : a list of the plant species IDed in each treatment 
+
+From Pham et al (in review)
+-SpecimenDataset : The bee specimen collected as part of Pham et al 2019 (the confirmed ID tab is what we used)
