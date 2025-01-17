@@ -18,7 +18,7 @@ t <- read.csv("traits_urbanpool.csv", row.names=1)
 a <- read.csv("urbanpool.FS.csv", row.names=1)
 
 aO<-a
-a<-a[1:134]
+a<-a[1:136]
 
 str(t)
 names(t)
@@ -97,7 +97,7 @@ attr(tdis, "correls")
 attr(tdis, "weights")
 
 # save trait weights for the null model
-wt <- c(0.39, 0.18, 0.11, 0.12, 0.20)
+wt <- c(0.38, 0.18, 0.11, 0.13, 0.21)
 
 #now run a principal coordinates analysis (PCoA) so we can collapse these traits into 
 #a few continuous axes for the functional diversity calculations
@@ -556,10 +556,13 @@ qqline(resid(FS_falpha.mod))
 plot(simulateResiduals(FS_falpha.mod))
 densityPlot(rstudent(FS_falpha.mod)) # check density estimate of the distribution of residuals
 outlierTest(FS_falpha.mod)
+#there was an outlier apparently
 influenceIndexPlot(FS_falpha.mod, vars = c("Cook"), id = list(n = 3))
+#But it didn't have a strong influence
 
 summary(FS_falpha.mod)
 Anova(FS_falpha.mod)
+#Not significant
 
 ##Functional beta div----
 ## functional beta diversity - beta sor
@@ -634,6 +637,29 @@ fbsne.control <- wilcox.test(control$SES_fbsne, y = NULL, mu = 0, alternative = 
 fbsne.control
 
 
+## compare among treatments
+dotchart(SES$SES_fbsne, group = SES$trmt, pch = 19)
+
+with(SES, bartlett.test(SES_fbsne ~ trmt))
+with(SES, ad.test(SES_fbsne))
+#normality test failed
+kruskal.test(SES_fbsne ~ trmt, data = SES) #It was not significant
+
+
+FS_fbsne.mod <- glm(SES_fbsne ~ trmt , family = gaussian, data = SES)
+summary(FS_fbsne.mod)
+qqnorm(resid(FS_fbsne.mod))
+qqline(resid(FS_fbsne.mod))
+plot(simulateResiduals(FS_fbsne.mod))
+densityPlot(rstudent(FS_fbsne.mod)) # check density estimate of the distribution of residuals
+outlierTest(FS_fbsne.mod)
+influenceIndexPlot(FS_fbsne.mod, vars = c("Cook"), id = list(n = 3))
+
+summary(FS_fbsne.mod)
+Anova(FS_fbsne.mod)
+
+#Not significant
+
 
 ## body length----
 hist(SES$SES_bl)
@@ -665,6 +691,7 @@ influenceIndexPlot(FS_bl.mod, vars = c("Cook"), id = list(n = 3))
 
 summary(FS_bl.mod)
 Anova(FS_bl.mod)
+#Not significant
 #If significant run the below code and use the boxplot on figure code to make a graph. if not don't
 emmeans(FS_bl.mod, pairwise ~ trmt)
 
@@ -700,7 +727,7 @@ influenceIndexPlot(FS_lec_0.mod, vars = c("Cook"), id = list(n = 3))
 
 summary(FS_lec_0.mod)
 Anova(FS_lec_0.mod)
-
+#Not significant
 
 
 ### lec_1 - Generalist----
@@ -722,6 +749,8 @@ dotchart(SES$SES_lec_1, group = SES$trmt, pch = 19)
 
 with(SES, bartlett.test(SES_lec_1 ~ trmt))
 with(SES, ad.test(SES_lec_1))
+#Failed normality test
+kruskal.test(SES_lec_1 ~ trmt, data = SES) #It was not significant
 
 FS_lec_1.mod <- glm(SES_lec_1 ~ trmt , family = gaussian, data = SES)
 summary(FS_lec_1.mod)
@@ -734,6 +763,7 @@ influenceIndexPlot(FS_lec_1.mod, vars = c("Cook"), id = list(n = 3))
 
 summary(FS_lec_1.mod)
 Anova(FS_lec_1.mod)
+#Also not significant
 
 ### lec_2 - Specialist----
 hist(SES$SES_lec_2)
@@ -777,7 +807,7 @@ Anova(FS_lec_2.mod)
 summary(FS_lec_2.mod.red)
 Anova(FS_lec_2.mod.red)
 
-#Not significant here 
+#Not significant with outlier removed 
 
 
 ##Nesting----
@@ -809,6 +839,21 @@ densityPlot(rstudent(FS_nest_1.mod)) # check density estimate of the distributio
 outlierTest(FS_nest_1.mod)
 influenceIndexPlot(FS_nest_1.mod, vars = c("Cook"), id = list(n = 3))
 #There is an outlier detected- 47th st garden
+FS_nest_1.mod.red <- update(FS_nest_1.mod, subset = -c(1))
+summary(FS_nest_1.mod.red)
+compareCoefs(FS_nest_1.mod.red, FS_nest_1.mod)
+outlierTest(FS_nest_1.mod.red)
+influenceIndexPlot(FS_nest_1.mod.red, vars = c("Cook"), id = list(n = 3))
+
+qqnorm(resid(FS_nest_1.mod.red))
+qqline(resid(FS_nest_1.mod.red))
+plot(simulateResiduals(FS_nest_1.mod.red))
+densityPlot(rstudent(FS_nest_1.mod.red))
+
+
+summary(FS_nest_1.mod.red)
+Anova(FS_nest_1.mod.red)
+#chi squared p value of 0.053 with outlier removed
 
 summary(FS_nest_1.mod)
 Anova(FS_nest_1.mod)
@@ -886,7 +931,7 @@ influenceIndexPlot(FS_nest_3.mod, vars = c("Cook"), id = list(n = 3))
 
 summary(FS_nest_3.mod)
 Anova(FS_nest_3.mod)
-
+#Not significant
 
 ### nest_4 - Pithy Stems----
 hist(SES$SES_nest_4)
@@ -906,8 +951,8 @@ dotchart(SES$SES_nest_4, group = SES$trmt, pch = 19)
 
 with(SES, bartlett.test(SES_nest_4 ~ trmt))
 with(SES, ad.test(SES_nest_4))
-#fails normality
-
+#failed normality test
+kruskal.test(SES_nest_4 ~ trmt, data = SES) #It was not significant
 
 FS_nest_4.mod <- glm(SES_nest_4 ~ trmt , family = gaussian, data = SES)
 summary(FS_nest_4.mod)
