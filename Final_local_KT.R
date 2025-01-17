@@ -18,7 +18,7 @@ t <- read.csv("traits_urbanpool.csv", row.names=1)
 a <- read.csv("urbanpool.KT.csv", row.names=1)
 
 aO<-a
-a<-a[1:134]
+a<-a[1:136]
 
 str(t)
 names(t)
@@ -97,7 +97,7 @@ attr(tdis, "correls")
 attr(tdis, "weights")
 
 # save trait weights for the null model
-wt <- c(0.39, 0.18, 0.11, 0.12, 0.20)
+wt <- c(0.38, 0.18, 0.11, 0.12, 0.21)
 
 #now run a principal coordinates analysis (PCoA) so we can collapse these traits into 
 #a few continuous axes for the functional diversity calculations
@@ -457,17 +457,21 @@ with(SES, bartlett.test(SES_bsor ~ trmt))
 with(SES, ad.test(SES_bsor))
 
 KT_bsor.lm <- lmer(SES_bsor~trmt+(1|neighd), data = SES)
+#boundary(singular ) fit error
 summary(KT_bsor.lm)
 qqnorm(resid(KT_bsor.lm))
 qqline(resid(KT_bsor.lm))
 plot(simulateResiduals(KT_bsor.lm))
+#Oh does not pass levene test for homoeneity of variance 
+#So because of this ANOVA is probably not the best test. I'll do a kruskal too
 densityPlot(rstudent(KT_bsor.lm)) # check density estimate of the distribution of residuals
 outlierTest(KT_bsor.lm)
 influenceIndexPlot(KT_bsor.lm, vars = c("Cook"), id = list(n = 3))
 
 summary(KT_bsor.lm)
 Anova(KT_bsor.lm)
-#No sig difference between treatments
+kruskal.test(SES_bsor ~ trmt, data = SES) #It was not significant
+#No sig difference between treatments either way
 
 #below is the code I used for glms before switching to lmer
 #KT_bsor.mod <- glm(SES_bsor ~ trmt , family = gaussian, data = SES)
@@ -504,7 +508,7 @@ with(SES, ad.test(SES_bsim))
 #Failed bartlett test
 
 kruskal.test(SES_bsim ~ trmt, data = SES)
-#if the data violate the normality or homogeneity assumptions. Kruskal-wallis is a non-parametric test
+#if the data violates the normality or homogeneity assumptions. Kruskal-wallis is a non-parametric test
 #not significant
 
 #i am going to run both the above and below code just in case, until I hear otherwise
@@ -526,7 +530,10 @@ influenceIndexPlot(kt_bsim.mod, vars = c("Cook"), id = list(n = 3))
 
 summary(kt_bsim.mod)
 Anova(kt_bsim.mod)
-#no sig difference
+#Okay look. this technically says significant- BUT IT FAILED the bartlett test and kruskall wallace said not significant
+#I might just try the welches anova too, since the data is normal
+oneway.test(SES_bsim ~ trmt, data = SES, var.equal = FALSE)
+#NOT SIGNIFICANT NOW I AM SATISFIED
 
 
 ### taxonomic diveristy - beta sne----
@@ -546,21 +553,22 @@ bsne.Prairie
 dotchart(SES$SES_bsne, group = SES$trmt, pch = 19)
 with(SES, bartlett.test(SES_bsne ~ trmt))
 with(SES, ad.test(SES_bsne))
-#Failed homogeneity test
+#Failed homogeneity test, passed normality test
 kruskal.test(SES_bsne ~ trmt, data = SES)
+oneway.test(SES_bsne ~ trmt, data = SES, var.equal = FALSE)
 #not significant
 
-KT_bsne.lm <- lmer(SES_bsne~trmt+(1|neighd), data = SES)
-summary(KT_bsne.lm)
-qqnorm(resid(KT_bsne.lm))
-qqline(resid(KT_bsne.lm))
-plot(simulateResiduals(KT_bsne.lm))
-densityPlot(rstudent(KT_bsne.lm)) # check density estimate of the distribution of residuals
-outlierTest(KT_bsne.lm)
-influenceIndexPlot(KT_bsne.lm, vars = c("Cook"), id = list(n = 3))
+#KT_bsne.lm <- lmer(SES_bsne~trmt+(1|neighd), data = SES)
+#summary(KT_bsne.lm)
+#qqnorm(resid(KT_bsne.lm))
+#qqline(resid(KT_bsne.lm))
+#plot(simulateResiduals(KT_bsne.lm))
+#densityPlot(rstudent(KT_bsne.lm)) # check density estimate of the distribution of residuals
+#outlierTest(KT_bsne.lm)
+#influenceIndexPlot(KT_bsne.lm, vars = c("Cook"), id = list(n = 3))
 
-summary(KT_bsne.lm)
-Anova(KT_bsne.lm)
+#summary(KT_bsne.lm)
+#Anova(KT_bsne.lm)
 #no sig difference
 
 
@@ -596,7 +604,7 @@ falpha.Prairie
 dotchart(SES$SES_falpha, group = SES$trmt, pch = 19)
 with(SES, bartlett.test(SES_falpha ~ trmt))
 with(SES, ad.test(SES_falpha))
-#passed homogeneity test
+#passed homogeneity and normality test
 #kruskal.test(SES_falpha ~ trmt, data = SES) it was significant here anyway
 
 
@@ -644,7 +652,7 @@ fbsor.prairie
 dotchart(SES$SES_fbsor, group = SES$trmt, pch = 19)
 with(SES, bartlett.test(SES_fbsor ~ trmt))
 with(SES, ad.test(SES_fbsor))
-#passed homogeneity test
+#passed homogeneity and normality test
 #kruskal.test(SES_fbsor ~ trmt, data = SES) #it was not significant here anyway
 
 
@@ -694,7 +702,7 @@ dotchart(SES$SES_fbsim, group = SES$trmt, pch = 19)
 
 with(SES, bartlett.test(SES_fbsim ~ trmt))
 with(SES, ad.test(SES_fbsim))
-#passed homogeneity test
+#passed homogeneity and normality test
 #kruskal.test(SES_fbsim ~ trmt, data = SES) #it was not significant here anyway
 
 KT_fbsim.lm <- lmer(SES_fbsim~trmt+(1|neighd), data = SES)
@@ -1005,9 +1013,9 @@ dotchart(SES$SES_nest_1, group = SES$trmt, pch = 19)
 
 with(SES, bartlett.test(SES_nest_1 ~ trmt))
 with(SES, ad.test(SES_nest_1))
-#passed homogeneity test
-#kruskal.test(SES_nest_1 ~ trmt, data = SES) #it was not significant here anyway
-
+#barely passed homogeneity test maybe? 0.05029
+kruskal.test(SES_nest_1 ~ trmt, data = SES) #it was not significant here anyway
+oneway.test(SES_nest_1 ~ trmt, data = SES, var.equal = FALSE)#Not significant
 
 kt_nest_1.lm <- lmer(SES_nest_1~trmt+(1|neighd), data = SES)
 
@@ -1021,7 +1029,7 @@ influenceIndexPlot(kt_nest_1.lm, vars = c("Cook"), id = list(n = 3))
 
 summary(kt_nest_1.lm)
 Anova(kt_nest_1.lm)
-#WAIT THIS ONE IS SIGNIFICANT NOW
+#THIS ONE IS SIGNIFICANT here, Because technically both tests were passed I think I am keeping this 
 
 
 
@@ -1115,7 +1123,7 @@ with(SES, ad.test(SES_nest_3))
 #kruskal.test(SES_nest_3 ~ trmt, data = SES) #it was not significant here anyway
 
 kt_nest_3.lm <- lmer(SES_nest_3~trmt+(1|neighd), data = SES)
-
+#boundary(singular) fit error
 summary(kt_nest_3.lm)
 qqnorm(resid(kt_nest_3.lm))
 qqline(resid(kt_nest_3.lm))
@@ -1437,7 +1445,9 @@ qqline(resid(kt_soc_4.lm))
 plot(simulateResiduals(kt_soc_4.lm))
 densityPlot(rstudent(kt_soc_4.lm)) # check density estimate of the distribution of residuals
 outlierTest(kt_soc_4.lm)
+#I think we did have an outlier?
 influenceIndexPlot(kt_soc_4.lm, vars = c("Cook"), id = list(n = 3))
+#okay there was no one point that had the most influence
 
 summary(kt_soc_4.lm)
 Anova(kt_soc_4.lm)
