@@ -18,7 +18,7 @@ t <- read.csv("traits_urbanpool.csv", row.names=1)
 a <- read.csv("urbanpool.MP.csv", row.names=1)
 
 aO<-a
-a<-a[1:134]
+a<-a[1:136]
 
 str(t)
 names(t)
@@ -74,6 +74,7 @@ if (!suppressWarnings(require(betapart))) install.packages("betapart")
 citation("betapart")
 
 rowSums(a)
+#removing sites with fewer than 4 species: t1be,t1ds, fat7-c, t6-c, t6-g,t7-c,t8ds
 a<-a[-1,]
 a<-a[-3,]
 a<-a[-8,]
@@ -105,7 +106,7 @@ attr(tdis, "correls")
 attr(tdis, "weights")
 
 # save trait weights for the null model
-wt <- c(0.39, 0.18, 0.11, 0.12, 0.20)
+wt <- c(0.37, 0.18, 0.11, 0.13, 0.21)
 
 #now run a principal coordinates analysis (PCoA) so we can collapse these traits into 
 #a few continuous axes for the functional diversity calculations
@@ -474,6 +475,8 @@ with(SES, ad.test(SES_bsor))
 #passed homogeneity test
 #kruskal.test(SES_bsor ~ trmt, data = SES) #it was not significant here anyway
 
+#Doing this to try and resolve an error I had with running the code below: install.packages("lme4", type = "source")
+#library(lme4) 
 
 mp_bsor.lm <- lmer(SES_bsor~trmt+(1|neighd), data = SES)
 summary(mp_bsor.lm)
@@ -573,15 +576,19 @@ with(SES, ad.test(SES_bsne))
 #not significant
 
 mp_bsne.lm <- lmer(SES_bsne~trmt+(1|neighd), data = SES)
-summary(mp_bsne.lm)
-qqnorm(resid(mp_bsne.lm))
-qqline(resid(mp_bsne.lm))
-plot(simulateResiduals(mp_bsne.lm))
-densityPlot(rstudent(mp_bsne.lm)) # check density estimate of the distribution of residuals
-outlierTest(mp_bsne.lm)
-influenceIndexPlot(mp_bsne.lm, vars = c("Cook"), id = list(n = 3))
+?isSingular
+#okay based on that, I would say, not significant because an error came up indicating super low effects
+#therefore: below is not needed, hastaging it
 
-summary(mp_bsne.lm)
+#summary(mp_bsne.lm)
+#qqnorm(resid(mp_bsne.lm))
+#qqline(resid(mp_bsne.lm))
+#plot(simulateResiduals(mp_bsne.lm))
+#densityPlot(rstudent(mp_bsne.lm)) # check density estimate of the distribution of residuals
+#outlierTest(mp_bsne.lm)
+#influenceIndexPlot(mp_bsne.lm, vars = c("Cook"), id = list(n = 3))
+
+#summary(mp_bsne.lm)
 Anova(mp_bsne.lm)
 #not sig
 
@@ -623,7 +630,7 @@ with(SES, ad.test(SES_falpha))
 #kruskal.test(SES_falpha ~ trmt, data = SES) #it was not significant here anyway
 
 mp_falpha.lm <- lmer(SES_falpha~trmt+(1|neighd), data = SES)
-#boundary(singular)fit error
+
 summary(mp_falpha.lm)
 qqnorm(resid(mp_falpha.lm))
 qqline(resid(mp_falpha.lm))
@@ -672,7 +679,7 @@ with(SES, ad.test(SES_fbsor))
 #kruskal.test(SES_fbsor ~ trmt, data = SES) #it was not significant here anyway
 
 mp_fbsor.lm <- lmer(SES_fbsor~trmt+(1|neighd), data = SES)
-#boundary(singular)fit error
+
 summary(mp_falpha.lm)
 qqnorm(resid(mp_falpha.lm))
 qqline(resid(mp_falpha.lm))
@@ -718,21 +725,23 @@ dotchart(SES$SES_fbsim, group = SES$trmt, pch = 19)
 
 with(SES, bartlett.test(SES_fbsim ~ trmt))
 with(SES, ad.test(SES_fbsim))
-# failed normality test
-kruskal.test(SES_fbsim ~ trmt, data = SES) 
+
+#kruskal.test(SES_fbsim ~ trmt, data = SES) 
 #it was not significant 
 
 mp_fbsim.lm <- lmer(SES_fbsim~trmt+(1|neighd), data = SES)
 #boundary(singular)fit error
-summary(mp_fbsim.lm)
-qqnorm(resid(mp_fbsim.lm))
-qqline(resid(mp_fbsim.lm))
-plot(simulateResiduals(mp_fbsim.lm))
-densityPlot(rstudent(mp_fbsim.lm)) # check density estimate of the distribution of residuals
-outlierTest(mp_fbsim.lm)
-influenceIndexPlot(mp_fbsim.lm, vars = c("Cook"), id = list(n = 3))
+#assumed not significant because of above error
 
-summary(mp_fbsim.lm)
+#summary(mp_fbsim.lm)
+#qqnorm(resid(mp_fbsim.lm))
+#qqline(resid(mp_fbsim.lm))
+#plot(simulateResiduals(mp_fbsim.lm))
+#densityPlot(rstudent(mp_fbsim.lm)) # check density estimate of the distribution of residuals
+#outlierTest(mp_fbsim.lm)
+#influenceIndexPlot(mp_fbsim.lm, vars = c("Cook"), id = list(n = 3))
+
+#summary(mp_fbsim.lm)
 Anova(mp_fbsim.lm)
 #not sig
 
@@ -782,8 +791,8 @@ dotchart(SES$SES_fbsne, group = SES$trmt, pch = 19)
 
 with(SES, bartlett.test(SES_fbsne ~ trmt))
 with(SES, ad.test(SES_fbsne))
-#failed normality test
-kruskal.test(SES_fbsne ~ trmt, data = SES) #it was not significant here anyway
+
+#kruskal.test(SES_fbsne ~ trmt, data = SES) #it was not significant here anyway
 
 mp_fbsne.lm <- lmer(SES_fbsne~trmt+(1|neighd), data = SES)
 #
@@ -794,10 +803,15 @@ plot(simulateResiduals(mp_fbsne.lm))
 densityPlot(rstudent(mp_fbsne.lm)) # check density estimate of the distribution of residuals
 outlierTest(mp_fbsne.lm)
 influenceIndexPlot(mp_fbsne.lm, vars = c("Cook"), id = list(n = 3))
+#okay. outlier test had nothing BUT T8-C is OVER 2!!! on the cook plot
+mp_fbsne.lm.red <- update(mp_fbsne.lm, subset = -c(13))
+summary(mp_fbsne.lm.red)
+compareCoefs(mp_fbsne.lm.red, mp_fbsne.lm)
 
-summary(mp_fbsne.lm)
+summary(mp_fbsne.lm.red)
+Anova(mp_fbsne.lm.red)
 Anova(mp_fbsne.lm)
-#not sig
+#not sig either way
 
 #mp_fbsne.mod <- glm(SES_fbsne ~ trmt , family = gaussian, data = SES)
 #summary(mp_fbsne.mod)
@@ -844,10 +858,19 @@ plot(simulateResiduals(mp_bl.lm))
 densityPlot(rstudent(mp_bl.lm)) # check density estimate of the distribution of residuals
 outlierTest(mp_bl.lm)
 influenceIndexPlot(mp_bl.lm, vars = c("Cook"), id = list(n = 3))
+#WOW T8-BE has a cooks distance of over 3??? but it ISNT an outlier
+mp_bl.lm.red <- update(mp_bl.lm, subset = -c(12))
+influenceIndexPlot(mp_bl.lm.red, vars = c("Cook"), id = list(n = 3))
+
+summary(mp_bl.lm.red)
+compareCoefs(mp_bl.lm.red, mp_bl.lm)
+
+
 
 summary(mp_bl.lm)
+Anova(mp_bl.lm.red)
 Anova(mp_bl.lm)
-#not sig
+#not sig either way
 
 
 #mp_bl.mod <- glm(SES_bl ~ trmt , family = gaussian, data = SES)
@@ -884,10 +907,10 @@ dotchart(SES$SES_lec_0, group = SES$trmt, pch = 19)
 with(SES, bartlett.test(SES_lec_0 ~ trmt))
 with(SES, ad.test(SES_lec_0))
 #passed homogeneity test
-kruskal.test(SES_lec_0 ~ trmt, data = SES) #it was significant here 
+#kruskal.test(SES_lec_0 ~ trmt, data = SES) 
 
 mp_lec_0.lm <- lmer(SES_lec_0~trmt+(1|neighd), data = SES)
-#boundary(singular)fit error
+
 summary(mp_lec_0.lm)
 qqnorm(resid(mp_lec_0.lm))
 qqline(resid(mp_lec_0.lm))
@@ -927,7 +950,7 @@ Anova(mp_lec_0.lm)
 #outlierTest(mp_lec_0.mod.red)
 #influenceIndexPlot(mp_lec_0.mod.red, vars = c("Cook"), id = list(n = 3))
 
-#Not entirely sure what to conclude here. 
+ 
 
 
 ### lec_1 - Generalist----
@@ -1008,16 +1031,16 @@ with(SES, ad.test(SES_lec_2))
 
 mp_lec_2.lm <- lmer(SES_lec_2~trmt+(1|neighd), data = SES)
 #boundary(signular)fit
-summary(mp_lec_2.lm)
-qqnorm(resid(mp_lec_2.lm))
-qqline(resid(mp_lec_2.lm))
-plot(simulateResiduals(mp_lec_2.lm))
-densityPlot(rstudent(mp_lec_2.lm)) # check density estimate of the distribution of residuals
-outlierTest(mp_lec_2.lm)
-influenceIndexPlot(mp_lec_2.lm, vars = c("Cook"), id = list(n = 3))
+#summary(mp_lec_2.lm)
+#qqnorm(resid(mp_lec_2.lm))
+#qqline(resid(mp_lec_2.lm))
+#plot(simulateResiduals(mp_lec_2.lm))
+#densityPlot(rstudent(mp_lec_2.lm)) # check density estimate of the distribution of residuals
+#outlierTest(mp_lec_2.lm)
+#influenceIndexPlot(mp_lec_2.lm, vars = c("Cook"), id = list(n = 3))
 
-summary(mp_lec_2.lm)
-Anova(mp_lec_2.lm)
+#summary(mp_lec_2.lm)
+#Anova(mp_lec_2.lm)
 #not sig
 
 #mp_lec_2.mod <- glm(SES_lec_2 ~ trmt , family = gaussian, data = SES)
@@ -1058,7 +1081,7 @@ with(SES, ad.test(SES_nest_1))
 #kruskal.test(SES_nest_1 ~ trmt, data = SES) #it was not significant- 0.0502
 
 mp_nest_1.lm <- lmer(SES_nest_1~trmt+(1|neighd), data = SES)
-#boundary(signular)fit
+
 summary(mp_nest_1.lm)
 qqnorm(resid(mp_nest_1.lm))
 qqline(resid(mp_nest_1.lm))
@@ -1069,7 +1092,7 @@ influenceIndexPlot(mp_nest_1.lm, vars = c("Cook"), id = list(n = 3))
 
 summary(mp_nest_1.lm)
 Anova(mp_nest_1.lm)
-#Okay that is significant!
+#Okay that is NO LONGER significant! (an update with the 2025 run)
 
 
 #mp_nest_1.mod <- glm(SES_nest_1 ~ trmt , family = gaussian, data = SES)
@@ -1169,10 +1192,20 @@ plot(simulateResiduals(mp_nest_3.lm))
 densityPlot(rstudent(mp_nest_3.lm)) # check density estimate of the distribution of residuals
 outlierTest(mp_nest_3.lm)
 influenceIndexPlot(mp_nest_3.lm, vars = c("Cook"), id = list(n = 3))
+#OKAY T8-BE has an influence of 8
+mp_nest_3.lm.red <- update(mp_nest_3.lm, subset = -c(12))
+influenceIndexPlot(mp_nest_3.lm.red, vars = c("Cook"), id = list(n = 3))
+
+summary(mp_nest_3.lm.red)
+compareCoefs(mp_nest_3.lm.red, mp_nest_3.lm)
+
+
 
 summary(mp_nest_3.lm)
+Anova(mp_nest_3.lm.red)
 Anova(mp_nest_3.lm)
-#not sig
+
+#not sig either way
 
 
 #mp_nest_3.mod <- glm(SES_nest_3 ~ trmt , family = gaussian, data = SES)
@@ -1208,7 +1241,7 @@ dotchart(SES$SES_nest_4, group = SES$trmt, pch = 19)
 
 with(SES, bartlett.test(SES_nest_4 ~ trmt))
 with(SES, ad.test(SES_nest_4))
-#Massively failed both homogeneity and normality tests
+# failed normality test
 kruskal.test(SES_nest_4 ~ trmt, data = SES) #it was not significant here 
 
 mp_nest_4.lm <- lmer(SES_nest_4~trmt+(1|neighd), data = SES)
@@ -1268,7 +1301,7 @@ with(SES, ad.test(SES_nest_5))
 #kruskal.test(SES_nest_5 ~ trmt, data = SES) #it was not significant here anyway
 
 mp_nest_5.lm <- lmer(SES_nest_5~trmt+(1|neighd), data = SES)
-#boundary(signular)fit
+#
 summary(mp_nest_5.lm)
 qqnorm(resid(mp_nest_5.lm))
 qqline(resid(mp_nest_5.lm))
@@ -1317,8 +1350,8 @@ dotchart(SES$SES_soc_1, group = SES$trmt, pch = 19)
 
 with(SES, bartlett.test(SES_soc_1 ~ trmt))
 with(SES, ad.test(SES_soc_1))
-#passed homogeneity test
-#kruskal.test(SES_soc_1 ~ trmt, data = SES) #it was not significant here anyway
+# did not pass homogeneity test
+kruskal.test(SES_soc_1 ~ trmt, data = SES) #it was not significant here 
 
 mp_soc_1.lm <- lmer(SES_soc_1~trmt+(1|neighd), data = SES)
 #boundary(signular)fit
@@ -1367,8 +1400,8 @@ dotchart(SES$SES_soc_2, group = SES$trmt, pch = 19)
 
 with(SES, bartlett.test(SES_soc_2 ~ trmt))
 with(SES, ad.test(SES_soc_2))
-#failed homogeneity test
-kruskal.test(SES_soc_2 ~ trmt, data = SES) #it was not significant here anyway
+#passed homogeneity test
+#kruskal.test(SES_soc_2 ~ trmt, data = SES) #it was not significant here anyway
 
 mp_soc_2.lm <- lmer(SES_soc_2~trmt+(1|neighd), data = SES)
 #boundary(signular)fit
@@ -1419,8 +1452,8 @@ dotchart(SES$SES_soc_3, group = SES$trmt, pch = 19)
 
 with(SES, bartlett.test(SES_soc_3 ~ trmt))
 with(SES, ad.test(SES_soc_3))
-#failed homogeneity test
-kruskal.test(SES_soc_3 ~ trmt, data = SES) #it was not significant here anyway
+#passed homogeneity test
+#kruskal.test(SES_soc_3 ~ trmt, data = SES) #it was not significant here anyway
 
 mp_soc_3.lm <- lmer(SES_soc_3~trmt+(1|neighd), data = SES)
 #
@@ -1475,7 +1508,7 @@ with(SES, ad.test(SES_soc_4))
 #kruskal.test(SES_soc_4 ~ trmt, data = SES) #it was significant  anyway
 
 mp_soc_4.lm <- lmer(SES_soc_4~trmt+(1|neighd), data = SES)
-#boundary(signular)fit
+#
 summary(mp_soc_4.lm)
 qqnorm(resid(mp_soc_4.lm))
 qqline(resid(mp_soc_4.lm))
@@ -1486,7 +1519,7 @@ influenceIndexPlot(mp_soc_4.lm, vars = c("Cook"), id = list(n = 3))
 
 summary(mp_soc_4.lm)
 Anova(mp_soc_4.lm)
-#Significant difference!
+#NO LONGER a Significant difference! (UPDATE WITH 2025 RUN)
 
 
 #mp_soc_4.mod <- glm(SES_soc_4 ~ trmt , family = gaussian, data = SES)
