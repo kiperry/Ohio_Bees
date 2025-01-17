@@ -1,6 +1,7 @@
 #Making Panel figures 
 #Edited by Caralee Shepard 8.8.24
 #edited again by C.S. 1.15.25 (just to change figure colors)
+#editing again 1.17.25 following changes with updated species list
 
 #Step 1- importing data----
 ##1.1 Pham data----
@@ -757,7 +758,7 @@ dev.off()
 
 
 
-##Figure of Turo and Pham sig figs----
+##Figure of Turo sig figs----
 library(ggplot2)
 library(cowplot)
 treatmentcleanup.mp <- c(VL="VL", UP="PP")
@@ -767,7 +768,7 @@ SES.kt$treatmentspelledout <- as.character(treatmentcleanup.kt[SES.kt$trmt])
 
 
 
-png("Figures/FiguresforManuscript/fig7 panel turophamsigs.png", width = 1500, height = 1000, pointsize = 20)
+png("Figures/fig7 panel turophamsigs.png", width = 1500, height = 1000, pointsize = 20)
 
 par(mfrow=c(2,2)) # indicates one row, two columns
 par(mar = c(5,7,4,2)) # sets the margins around the figure
@@ -793,23 +794,23 @@ abline(v = 0.0, col = "black", lwd = 3, lty=2)
 #text(1.87, 2.42, "B", pos = 4, font = 2, cex = 2)
 
 # Parasitic
-boxplot(SES_soc_4 ~ treatmentspelledout, data = SES.mp, col = c("#C1BDFF", "#52A43B"),
-        xlab = "Standardized Effect Sizes (SES)", ylab = "", 
-        ylim = c(-3.6,3), cex.lab = 2, cex.axis = 1.45, 
-        horizontal = TRUE, las = 1, range = 0)
-stripchart(SES_soc_4 ~ trmt, data = SES.mp, col = c("#5e0a7c","#11290A"),
-           pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
-abline(v = 0.0, col = "black", lwd = 3, lty=2)
+#boxplot(SES_soc_4 ~ treatmentspelledout, data = SES.mp, col = c("#C1BDFF", "#52A43B"),
+#        xlab = "Standardized Effect Sizes (SES)", ylab = "", 
+#        ylim = c(-3.6,3), cex.lab = 2, cex.axis = 1.45, 
+#        horizontal = TRUE, las = 1, range = 0)
+#stripchart(SES_soc_4 ~ trmt, data = SES.mp, col = c("#5e0a7c","#11290A"),
+#           pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+#abline(v = 0.0, col = "black", lwd = 3, lty=2)
 #text(1.87, 2.42, "C", pos = 4, font = 2, cex = 2)
 
 # Soil Nesting mp
-boxplot(SES_nest_1 ~ treatmentspelledout, data = SES.mp, col = c("#C1BDFF", "#52A43B"),
-        xlab = "Standardized Effect Sizes (SES)", ylab = "", 
-        ylim = c(-3.6,3), cex.lab = 2, cex.axis = 1.45, 
-        horizontal = TRUE, las = 1, range = 0 )
-stripchart(SES_nest_1 ~ trmt, data = SES.mp, col = c("#5e0a7c","#11290A"),
-           pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
-abline(v = 0.0, col = "black", lwd = 3, lty=2)
+#boxplot(SES_nest_1 ~ treatmentspelledout, data = SES.mp, col = c("#C1BDFF", "#52A43B"),
+#        xlab = "Standardized Effect Sizes (SES)", ylab = "", 
+#        ylim = c(-3.6,3), cex.lab = 2, cex.axis = 1.45, 
+#        horizontal = TRUE, las = 1, range = 0 )
+#stripchart(SES_nest_1 ~ trmt, data = SES.mp, col = c("#5e0a7c","#11290A"),
+ #          pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+#abline(v = 0.0, col = "black", lwd = 3, lty=2)
 #text(1.87, 2.42, "D", pos = 4, font = 2, cex = 2)
 
 
@@ -826,7 +827,7 @@ treatmentcleanup.fs <- c(Farm="UF", Control="VL")
 SES.fs$treatmentspelledout <- as.character(treatmentcleanup.fs[SES.fs$trmt])
 
 
-png("Figures/FiguresforManuscript/fig 6 panel sivakoffsigs.png", width = 1500, height = 1000, pointsize = 20)
+png("Figures/fig 6 panel sivakoffsigs.png", width = 1500, height = 1000, pointsize = 20)
 
 par(mfrow=c(2,2)) # indicates one row, two columns
 par(mar = c(5,7,4,2)) # sets the margins around the figure
@@ -838,7 +839,7 @@ boxplot(SES_nest_1 ~ treatmentspelledout, data = SES.fs,  col = c("#6D3737","#52
         xlab = "Standardized Effect Sizes (SES)", ylab = "", 
         ylim = c(-3.6,3), cex.lab = 2, cex.axis = 1.45, 
         horizontal = TRUE, las = 1, range = 0)
-stripchart(SES_nest_1 ~ treatmentspelledout, data = SES.fs, col = c("#C9BBB0","#11290A"),
+stripchart(SES_nest_1 ~ treatmentspelledout, data = SES.fs, col = c("#F07EDF","#11290A"),
            pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
 #text(1.87, 2.42, "B", pos = 4, font = 2, cex = 2)
@@ -848,7 +849,7 @@ boxplot(SES_nest_2 ~ treatmentspelledout, data = SES.fs, col = c("#6D3737","#52A
         xlab = "Standardized Effect Sizes (SES)", ylab = "", 
         ylim = c(-3.6,3), cex.lab = 2, cex.axis = 1.45,
         horizontal = TRUE, las = 1, range = 0)
-stripchart(SES_nest_2 ~ treatmentspelledout, data = SES.fs, col = c("#C9BBB0","#11290A"),
+stripchart(SES_nest_2 ~ treatmentspelledout, data = SES.fs, col = c("#F07EDF","#11290A"),
            pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
 #text(2.38, 2.41, "B", pos = 4, font = 2, cex = 2)
@@ -858,7 +859,7 @@ boxplot(SES_ori_0 ~ treatmentspelledout, data = SES.fs, col = c("#6D3737","#52A4
         xlab = "Standardized Effect Sizes (SES)", ylab = "", 
         ylim = c(-3.6,3), cex.lab = 2, cex.axis = 1.45,
         horizontal = TRUE, las = 1, range = 0 )
-stripchart(SES_ori_0 ~ treatmentspelledout, data = SES.fs, col = c("#C9BBB0","#11290A"),
+stripchart(SES_ori_0 ~ treatmentspelledout, data = SES.fs, col = c("#F07EDF","#11290A"),
            pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
 #text(2.38, 2.41, "C", pos = 4, font = 2, cex = 2)
@@ -869,7 +870,7 @@ boxplot(SES_ori_1 ~ treatmentspelledout, data = SES.fs, col =c("#6D3737","#52A43
         xlab = "Standardized Effect Sizes (SES)", ylab = "",
         ylim = c(-3.6,3), cex.lab = 2, cex.axis = 1.45,
         horizontal = TRUE, las = 1, range = 0)
-stripchart(SES_ori_1 ~ treatmentspelledout, data = SES.fs, col = c("#C9BBB0","#11290A"),
+stripchart(SES_ori_1 ~ treatmentspelledout, data = SES.fs, col = c("#F07EDF","#11290A"),
            pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
 #text(2.38, 2.41, "D", pos = 4, font = 2, cex = 2)

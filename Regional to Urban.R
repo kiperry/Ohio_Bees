@@ -991,7 +991,7 @@ par(mar=c(5,15,4,2))
 
 boxplot(ses ~ fbeta, data = SES_TBeta, col = viridis(3, alpha = 0.6),
         xlab = "Standardized Effect Sizes (SES)", ylab = "",
-        horizontal = TRUE, las = 1, range = 0, ylim= c(-80,70), cex.lab = 2, cex.axis = 1.45) #cex.main= 1.8(That is what I would use tomake the graph title size, but no titles))
+        horizontal = TRUE, las = 1, range = 0, ylim= c(-90,80), cex.lab = 2, cex.axis = 1.45) #cex.main= 1.8(That is what I would use tomake the graph title size, but no titles))
 stripchart(ses ~ fbeta, data = SES_TBeta, col = viridis(3),
            pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
@@ -1000,7 +1000,7 @@ abline(v = 0.0, col = "black", lwd = 3, lty=2)
 
 boxplot(ses ~ fbeta, data = SES_FBeta, col = viridis(3, alpha = 0.6),
         xlab = "Standardized Effect Sizes (SES)", ylab = "",
-        horizontal = TRUE, las = 1, range = 0, ylim= c(-2.5,8), cex.lab = 2, cex.axis = 1.45)
+        horizontal = TRUE, las = 1, range = 0, ylim= c(-3,8), cex.lab = 2, cex.axis = 1.45)
 stripchart(ses ~ fbeta, data = SES_FBeta, col = viridis(3),
            pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
@@ -1013,7 +1013,7 @@ dev.off()
 
 ## figure panel - Traits
 
-png("SES_Traits.png", width = 600, height = 1600, pointsize = 20)
+png("Figures/SES_Traits.png", width = 600, height = 1600, pointsize = 20)
 
 par(mfrow=c(3,1)) # indicates two rows, two columns
 par(mar=c(5,10,4,2))
@@ -1126,7 +1126,7 @@ colnames(SES_lengthandorigin) <- c("trait","ses")
 
 boxplot(ses ~ trait, data = SES_lengthandorigin, col = viridis(5, alpha = 0.6),
         xlab = "Standardized Effect Sizes (SES)", ylab = "",
-        horizontal = TRUE, las = 1, range = 0, ylim= c(-9.5,9.5), cex.lab = 2, cex.axis = 1.45)
+        horizontal = TRUE, las = 1, range = 0, ylim= c(-9,9), cex.lab = 2, cex.axis = 1.45)
 stripchart(ses ~ trait, data = SES_lengthandorigin, col = viridis(5),
            pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
@@ -1142,7 +1142,7 @@ colnames(SES_Nest) <- c("nest","ses")
 
 boxplot(ses ~ nest, data = SES_Nest, col = viridis(5, alpha = 0.6),
         xlab = "Standardized Effect Sizes (SES)", ylab = "",
-        horizontal = TRUE, las = 1, range = 0, ylim= c(-9.5,9.5), cex.lab = 2, cex.axis = 1.45)
+        horizontal = TRUE, las = 1, range = 0, ylim= c(-9,9), cex.lab = 2, cex.axis = 1.45)
 stripchart(ses ~ nest, data = SES_Nest, col = viridis(5),
            pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
@@ -1157,7 +1157,7 @@ colnames(SES_lect) <- c("trait","ses")
 
 boxplot(ses ~ trait, data = SES_lect, col = viridis(6, alpha = 0.6),
         xlab = "Standardized Effect Sizes (SES)", ylab = "",
-        horizontal = TRUE, las = 1, range = 0, ylim= c(-9.5,9.5), cex.lab = 2, cex.axis = 1.45)
+        horizontal = TRUE, las = 1, range = 0, ylim= c(-9,9), cex.lab = 2, cex.axis = 1.45)
 stripchart(ses ~ trait, data = SES_lect, col = viridis(6),
            pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
@@ -1174,7 +1174,7 @@ colnames(SES_Soc) <- c("soc","ses")
 
 boxplot(ses ~ soc, data = SES_Soc, col = viridis(4, alpha = 0.6),
         xlab = "Standardized Effect Sizes (SES)", ylab = "",
-        horizontal = TRUE, las = 1, range = 0, ylim= c(-9.5,9.5), cex.lab = 2, cex.axis = 1.45)
+        horizontal = TRUE, las = 1, range = 0, ylim= c(-9,9), cex.lab = 2, cex.axis = 1.45)
 stripchart(ses ~ soc, data = SES_Soc, col = viridis(4),
            pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
