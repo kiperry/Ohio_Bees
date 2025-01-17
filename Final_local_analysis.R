@@ -67,7 +67,7 @@ UP2019<- a[which(a$trmt== "UP"),]
 
 
 # create new dataset with only farm, Control, t1, and t8 treatments
-#SEPT EDIT:Creating two new datasets. One with Farm and Control, one with T1 and T8
+#Oct 23 EDIT:Creating three new datasets. One with Farm and Control, one with T1 and T8, one with the 2019 t1 and t7/8
 a.FS <- rbind(farm, Control)
 a.KT<- rbind(T1, Prairie)
 a.MP<- rbind(VL2019, UP2019)
