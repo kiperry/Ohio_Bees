@@ -839,7 +839,7 @@ boxplot(SES_nest_1 ~ treatmentspelledout, data = SES.fs,  col = c("#6D3737","#52
         xlab = "Standardized Effect Sizes (SES)", ylab = "", 
         ylim = c(-3.6,3), cex.lab = 2, cex.axis = 1.45, 
         horizontal = TRUE, las = 1, range = 0)
-stripchart(SES_nest_1 ~ treatmentspelledout, data = SES.fs, col = c("#F07EDF","#11290A"),
+stripchart(SES_nest_1 ~ treatmentspelledout, data = SES.fs, col = c("burlywood2","#11290A"),
            pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
 #text(1.87, 2.42, "B", pos = 4, font = 2, cex = 2)
@@ -849,7 +849,7 @@ boxplot(SES_nest_2 ~ treatmentspelledout, data = SES.fs, col = c("#6D3737","#52A
         xlab = "Standardized Effect Sizes (SES)", ylab = "", 
         ylim = c(-3.6,3), cex.lab = 2, cex.axis = 1.45,
         horizontal = TRUE, las = 1, range = 0)
-stripchart(SES_nest_2 ~ treatmentspelledout, data = SES.fs, col = c("#F07EDF","#11290A"),
+stripchart(SES_nest_2 ~ treatmentspelledout, data = SES.fs, col = c("burlywood2","#11290A"),
            pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
 #text(2.38, 2.41, "B", pos = 4, font = 2, cex = 2)
