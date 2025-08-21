@@ -14,7 +14,7 @@
 ###################################################################################
 
 t <- read.csv("btraits_23.csv", row.names=1)
-a <- read.csv("bcomm_23.localanalysis.csv", row.names=1)
+a <- read.csv("bcomm_25.localanalysis.csv", row.names=1)
 
 
 str(a)
@@ -23,17 +23,14 @@ a <- a[2:362]
 str(a)
 
 rowSums(a1[2:362])
-rowSums(a) #all sites have at least 10 species? #Note from Michelle that D and DS are the same place. Thus remove those 0s. the FAT7-C only had like, 1 observation
-#sites that have less than 10: t1-BE, T1C, T1ds, t1H, t1SV, fat7-c, t6c, t6g, t7c,t7-sv, t8-c, t8-ds
-#Sites that have 4 or fewer species: T1-BE, T1-DS, Fat7-C, T6-C, T6-G, T7-C, T8-DS
-#The above 7 sites are removed below
+rowSums(a) #all sites have at least 10 species? 
+#sites that have less than 10: t1-BE, T1C, t1H, t1SV, t6c, t7-c, t7-sv, t8-c 
+#Sites that have 4 or fewer species: t1-BE,  t1H, t6c, t7-c
+#The above 4 sites are removed below
+a<-a[-60,]
+a<-a[-57,]
+a<-a[-54,]
 a<-a[-49,]
-a<-a[-51,]
-a<-a[-56,]
-a<-a[-56,]
-a<-a[-56,]
-a<-a[-64,]
-a<-a[-58,]
 
 rowSums(a)#all sites have 4+ species
 
@@ -112,7 +109,7 @@ attr(tdis, "correls")
 attr(tdis, "weights")
 
 # save trait weights for the null model
-wt <- c(0.37, 0.15, 0.11, 0.10, 0.26)
+wt <- c(0.38, 0.15, 0.11, 0.10, 0.26)
 
 #now run a principal coordinates analysis (PCoA) so we can collapse these traits into 
 #a few continuous axes for the functional diversity calculations
@@ -947,8 +944,8 @@ library(ggplot2)
 #install.packages("ggthemes")
 library(ggthemes)
 
-SES_TBeta$metric <- rep(c("Taxonomic"),each = 64)
-SES_FBeta$metric <- rep(c("Functional"),each = 64)
+SES_TBeta$metric <- rep(c("Taxonomic"),each = 189)
+SES_FBeta$metric <- rep(c("Functional"),each = 189)
 
 names(SES_TBeta) <- names(SES_FBeta) 
 #The above code was added to get rid of the "names do not match" error
@@ -958,6 +955,8 @@ colnames(SES_div.m) <- c("metric", "var", "ses")
 
 SES_div.m$metric <- factor(SES_div.m$metric, levels = c("Taxonomic", "Functional"))
 
+
+#Don't use this figure, use the next one down
 png("SES_Div.png", width = 2000, height = 1000, pointsize = 20)
 
 ggplot(SES_div.m, aes(x=ses, y=var, fill = var)) +
@@ -1246,3 +1245,70 @@ s#tr(nestsites)
 #taxnestednesstraits = nestednesstraits[rownames(nestednesstraits) %in% taxnestspp, ]
 #summary(taxnestednesstraits)
 #summary(functnestednesstraits)
+
+
+
+##Figure for presentation----
+par(mar = c(5,9,4,2)) # sets the margins around the figure
+windows()
+#length and origin
+SES_lengthandorigin.1 <- as.data.frame(cbind( SES_ori_1, SES_ori_0 ))
+colnames(SES_lengthandorigin.1) <- c( "Alien", "Native")
+SES_lengthandorigin.1 <- melt(SES_lengthandorigin.1)
+colnames(SES_lengthandorigin.1) <- c("trait","ses")
+
+
+
+boxplot(ses ~ trait, data = SES_lengthandorigin.1, col = viridis(2, alpha = 0.55, begin = 0.4),
+        xlab = "Standardized Effect Sizes (SES)", ylab = "",
+        horizontal = TRUE, las = 1, range = 0, ylim= c(-9,9), cex.lab = 2, cex.axis = 1.45)
+stripchart(ses ~ trait, data = SES_lengthandorigin.1, col = viridis(2, begin = 0.4),
+           pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+abline(v = 0.0, col = "black", lwd = 3, lty=2)
+#text(6.5, 3.3, "A", pos = 4, font = 2, cex = 2)
+
+
+## Nesting Traits
+
+SES_Nest.1 <- as.data.frame(cbind( SES_nest_2, SES_nest_1))
+colnames(SES_Nest.1) <- c( "Cavity", "Soil")
+SES_Nest.1 <- melt(SES_Nest.1)
+colnames(SES_Nest.1) <- c("nest","ses")
+
+boxplot(ses ~ nest, data = SES_Nest.1, col = viridis(3, alpha = 0.55, begin = 0),
+        xlab = "Standardized Effect Sizes (SES)", ylab = "",
+        horizontal = TRUE, las = 1, range = 0, ylim= c(-9,9), cex.lab = 2, cex.axis = 1.45)
+stripchart(ses ~ nest, data = SES_Nest.1, col = viridis(3, begin = 0),
+           pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+abline(v = 0.0, col = "black", lwd = 3, lty=2)
+#text(6.5, 5.2, "B", pos = 4, font = 2, cex = 2)
+
+
+## Taxonomic Beta-Diversity
+#SES_TBeta <- as.data.frame(cbind(SES_bsne, SES_bsim, SES_bsor))
+#colnames(SES_TBeta) <- c("Nestedness", "Turnover", "Total Beta-Diversity")
+#SES_TBeta <- melt(SES_TBeta)
+#colnames(SES_TBeta) <- c("tbeta","ses")
+windows()
+par(mar = c(5,10,4,2))
+boxplot(SES_bsor, col = viridis(1, alpha = 0.55, begin = 0.75),
+        xlab = "Standardized Effect Sizes (SES)", ylab = "",
+        horizontal = TRUE, las = 1, range = 0, ylim= c(-60,60),main = "Taxonomic Beta-Diversity")
+stripchart(SES_bsor, data = SES_TBeta, col = viridis(1, begin = 0.75),
+           pch = 19, cex = 1, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+abline(v = 0.0, col = "black", lwd = 3, lty=2)
+
+
+## Functional Beta-Diversity
+#SES_FBeta <- as.data.frame(cbind(SES_fbsne, SES_fbsim, SES_fbsor))
+#colnames(SES_FBeta) <- c("Nestedness","Turnover", "Total Beta-Diversity")
+#SES_FBeta <- melt(SES_FBeta)
+#colnames(SES_FBeta) <- c("fbeta","ses")
+
+par(mar = c(5,10,4,2))
+boxplot(SES_fbsor, col = viridis(1, alpha = 0.55, begin = 0.8),
+        xlab = "Standardized Effect Sizes (SES)", ylab = "",
+        horizontal = TRUE, las = 1, range = 0, ylim= c(-6,7),main = "Functional Beta-Diversity")
+stripchart(SES_fbsor, col = viridis(1, begin = 0.8),
+           pch = 19, cex = 1, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+abline(v = 0.0, col = "black", lwd = 3, lty=2)
