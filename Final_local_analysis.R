@@ -16,7 +16,7 @@
 #Creating the datasets----
 
 t <- read.csv("./btraits_23.csv", row.names=1)
-a <- read.csv("./bcomm_23.localanalysis.csv", row.names=1)
+a <- read.csv("./bcomm_25.localanalysis.csv", row.names=1)
 
 
 str(a)
@@ -51,7 +51,7 @@ a <- a[, colSums(a != 0) > 0]
 colSums(a)
 
 
-a$trmt<-a1$trmt
+a$trmt<-a1$X.1
 # pull out treatments that we want to keep
 farm <- a[which(a$trmt == "Farm"),]
 str(farm)
@@ -75,9 +75,9 @@ str(a.FS)
 str(a.KT)
 str(a.MP)
 
-write.csv(a.FS, file = "urbanpool.FS.csv")
-write.csv(a.KT, file = "urbanpool.KT.csv")
-write.csv(a.MP, file = "urbanpool.MP.csv")
+write.csv(a.FS, file = "urbanpool.FS.25.csv")
+write.csv(a.KT, file = "urbanpool.KT.25.csv")
+write.csv(a.MP, file = "urbanpool.MP.25.csv")
 
 
 #From here go to separate R code files for each of the 3 urban pool data sets
