@@ -36,11 +36,11 @@
 #####################################################################################################################################
 
 #start here:
-
+??rao
 Rao<-function(sample, dfunc, dphyl, weight=F, Jost=F, structure=NULL)   {
   library(ade4)
 
-####function Qdecomp by by VillÃger & Mouillot (J Ecol, 2008) modify by Wilfried Thuiller #####
+####function Qdecomp by by Vill?ger & Mouillot (J Ecol, 2008) modify by Wilfried Thuiller #####
 
 Qdecomp = function(functdist,abundances, w=TRUE) {
 
