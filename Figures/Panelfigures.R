@@ -769,8 +769,8 @@ SES.kt$treatmentspelledout <- as.character(treatmentcleanup.kt[SES.kt$trmt])
 
 
 png("Figures/fig7 panel turophamsigs.png", width = 1500, height = 1000, pointsize = 20)
-
-par(mfrow=c(2,2)) # indicates one row, two columns
+windows()
+par(mfrow=c(1,2)) # indicates one row, two columns
 par(mar = c(5,7,4,2)) # sets the margins around the figure
 
 # Functional Alpha
@@ -879,3 +879,52 @@ abline(v = 0.0, col = "black", lwd = 3, lty=2)
 dev.off()
 
 #My favorite website for picking out colors: https://www.whocanuse.com/
+#Figure of pham traits----
+png("Figures/fig panel phamsigs.png", width = 1500, height = 1000, pointsize = 20)
+
+par(mfrow=c(2,2)) # indicates two rows, two columns
+par(mar = c(5,7,4,2)) # sets the margins around the figure
+
+# Functional Alpha
+boxplot(SES_falpha ~ treatmentspelledout, data = SES.mp, col = c("#C1BDFF", "#52A43B"),
+        xlab = "Standardized Effect Sizes (SES)", ylab = "", 
+        ylim = c(-3.6,3), cex.lab = 2, cex.axis = 1.45, 
+        horizontal = TRUE, las = 1, range = 0)
+stripchart(SES_falpha ~ trmt, data = SES.mp, col = c("#5e0a7c","#11290A"),
+           pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+abline(v = 0.0, col = "black", lwd = 3, lty=2)
+#text(1.87, 2.42, "A", pos = 4, font = 2, cex = 2)
+
+# Soil Nesting.mp
+boxplot(SES_nest_1 ~ treatmentspelledout, data = SES.mp,  col = c("#C1BDFF", "#52A43B"),
+        xlab = "Standardized Effect Sizes (SES)", ylab = "", 
+        ylim = c(-3.6,3), cex.lab = 2, cex.axis = 1.45, 
+        horizontal = TRUE, las = 1, range = 0)
+stripchart(SES_nest_1 ~ trmt, data = SES.mp, col = c("#5e0a7c","#11290A"),
+           pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+abline(v = 0.0, col = "black", lwd = 3, lty=2)
+#text(1.87, 2.42, "B", pos = 4, font = 2, cex = 2)
+
+# Parasitic
+#boxplot(SES_soc_4 ~ treatmentspelledout, data = SES.mp, col = c("#C1BDFF", "#52A43B"),
+#        xlab = "Standardized Effect Sizes (SES)", ylab = "", 
+#        ylim = c(-3.6,3), cex.lab = 2, cex.axis = 1.45, 
+#        horizontal = TRUE, las = 1, range = 0)
+#stripchart(SES_soc_4 ~ trmt, data = SES.mp, col = c("#5e0a7c","#11290A"),
+#           pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+#abline(v = 0.0, col = "black", lwd = 3, lty=2)
+#text(1.87, 2.42, "C", pos = 4, font = 2, cex = 2)
+
+# Soil Nesting mp
+#boxplot(SES_nest_1 ~ treatmentspelledout, data = SES.mp, col = c("#C1BDFF", "#52A43B"),
+#        xlab = "Standardized Effect Sizes (SES)", ylab = "", 
+#        ylim = c(-3.6,3), cex.lab = 2, cex.axis = 1.45, 
+#        horizontal = TRUE, las = 1, range = 0 )
+#stripchart(SES_nest_1 ~ trmt, data = SES.mp, col = c("#5e0a7c","#11290A"),
+#          pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+#abline(v = 0.0, col = "black", lwd = 3, lty=2)
+#text(1.87, 2.42, "D", pos = 4, font = 2, cex = 2)
+
+
+
+dev.off()
