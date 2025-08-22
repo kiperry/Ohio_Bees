@@ -556,9 +556,8 @@ qqline(resid(FS_falpha.mod))
 plot(simulateResiduals(FS_falpha.mod))
 densityPlot(rstudent(FS_falpha.mod)) # check density estimate of the distribution of residuals
 outlierTest(FS_falpha.mod)
-#there was an outlier apparently
 influenceIndexPlot(FS_falpha.mod, vars = c("Cook"), id = list(n = 3))
-#But it didn't have a strong influence
+#
 
 summary(FS_falpha.mod)
 Anova(FS_falpha.mod)
@@ -1223,7 +1222,7 @@ Anova(FS_ori_1.mod)
 emmeans(FS_ori_1.mod, pairwise ~ trmt)
 
 
-
+#The below figure text was not used for the manuscript- use the Panelfigures.R file
 #Figures----
 
 ##Loading programs needed
