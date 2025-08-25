@@ -15,7 +15,7 @@
 #Refer back to Final_local_analysis to get to the beginning of this document
 #Everything before Line 83
 t <- read.csv("traits_urbanpool.csv", row.names=1)
-a <- read.csv("urbanpool.KT.csv", row.names=1)
+a <- read.csv("urbanpool.KT.25.csv", row.names=1)
 
 aO<-a
 a<-a[1:136]
@@ -97,7 +97,7 @@ attr(tdis, "correls")
 attr(tdis, "weights")
 
 # save trait weights for the null model
-wt <- c(0.38, 0.18, 0.11, 0.12, 0.21)
+wt <- c(0.37, 0.18, 0.11, 0.13, 0.21)
 
 #now run a principal coordinates analysis (PCoA) so we can collapse these traits into 
 #a few continuous axes for the functional diversity calculations
@@ -462,8 +462,6 @@ summary(KT_bsor.lm)
 qqnorm(resid(KT_bsor.lm))
 qqline(resid(KT_bsor.lm))
 plot(simulateResiduals(KT_bsor.lm))
-#Oh does not pass levene test for homoeneity of variance 
-#So because of this ANOVA is probably not the best test. I'll do a kruskal too
 densityPlot(rstudent(KT_bsor.lm)) # check density estimate of the distribution of residuals
 outlierTest(KT_bsor.lm)
 influenceIndexPlot(KT_bsor.lm, vars = c("Cook"), id = list(n = 3))
@@ -717,7 +715,7 @@ influenceIndexPlot(KT_fbsim.lm, vars = c("Cook"), id = list(n = 3))
 
 summary(KT_fbsim.lm)
 Anova(KT_fbsim.lm)
-#not significant difference
+#That's a significant difference
 
 
 #KT_fbsim.mod <- glm(SES_fbsim ~ trmt , family = gaussian, data = SES)
@@ -747,6 +745,7 @@ fbsne.Prairie <- wilcox.test(Prairie$SES_fbsne, y = NULL, mu = 0, alternative = 
 fbsne.Prairie
 
 ## compare among treatments
+windows()
 dotchart(SES$SES_fbsne, group = SES$trmt, pch = 19)
 
 with(SES, bartlett.test(SES_fbsne ~ trmt))
@@ -767,7 +766,7 @@ influenceIndexPlot(KT_fbsim.lm, vars = c("Cook"), id = list(n = 3))
 
 summary(KT_fbsim.lm)
 Anova(KT_fbsim.lm)
-#not significant
+#That's significant now
 
 #kt_fbsne.mod <- glm(SES_fbsne ~ trmt , family = gaussian, data = SES)
 #summary(kt_fbsne.mod)
@@ -1013,7 +1012,7 @@ dotchart(SES$SES_nest_1, group = SES$trmt, pch = 19)
 
 with(SES, bartlett.test(SES_nest_1 ~ trmt))
 with(SES, ad.test(SES_nest_1))
-#barely passed homogeneity test maybe? 0.05029
+# passed homogeneity test ? 0.09949
 kruskal.test(SES_nest_1 ~ trmt, data = SES) #it was not significant here anyway
 oneway.test(SES_nest_1 ~ trmt, data = SES, var.equal = FALSE)#Not significant
 
@@ -1026,7 +1025,7 @@ plot(simulateResiduals(kt_nest_1.lm))
 densityPlot(rstudent(kt_nest_1.lm)) # check density estimate of the distribution of residuals
 outlierTest(kt_nest_1.lm)
 influenceIndexPlot(kt_nest_1.lm, vars = c("Cook"), id = list(n = 3))
-
+#Interesting. Outlier test said that there is no outlier but BU1 has a seriously strong influence- 1.4
 summary(kt_nest_1.lm)
 Anova(kt_nest_1.lm)
 #THIS ONE IS SIGNIFICANT here, Because technically both tests were passed I think I am keeping this 
@@ -1123,7 +1122,7 @@ with(SES, ad.test(SES_nest_3))
 #kruskal.test(SES_nest_3 ~ trmt, data = SES) #it was not significant here anyway
 
 kt_nest_3.lm <- lmer(SES_nest_3~trmt+(1|neighd), data = SES)
-#boundary(singular) fit error
+
 summary(kt_nest_3.lm)
 qqnorm(resid(kt_nest_3.lm))
 qqline(resid(kt_nest_3.lm))
@@ -1445,7 +1444,7 @@ qqline(resid(kt_soc_4.lm))
 plot(simulateResiduals(kt_soc_4.lm))
 densityPlot(rstudent(kt_soc_4.lm)) # check density estimate of the distribution of residuals
 outlierTest(kt_soc_4.lm)
-#I think we did have an outlier?
+
 influenceIndexPlot(kt_soc_4.lm, vars = c("Cook"), id = list(n = 3))
 #okay there was no one point that had the most influence
 
