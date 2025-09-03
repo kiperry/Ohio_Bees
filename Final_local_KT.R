@@ -756,17 +756,17 @@ with(SES, ad.test(SES_fbsne))
 
 KT_fbsne.lm <- lmer(SES_fbsne~trmt+(1|neighd), data = SES)
 #boundary(singular)fit error message again
-summary(KT_fbsim.lm)
-qqnorm(resid(KT_fbsim.lm))
-qqline(resid(KT_fbsim.lm))
-plot(simulateResiduals(KT_fbsim.lm))
-densityPlot(rstudent(KT_fbsim.lm)) # check density estimate of the distribution of residuals
-outlierTest(KT_fbsim.lm)
-influenceIndexPlot(KT_fbsim.lm, vars = c("Cook"), id = list(n = 3))
+summary(KT_fbsne.lm)
+qqnorm(resid(KT_fbsne.lm))
+qqline(resid(KT_fbsne.lm))
+plot(simulateResiduals(KT_fbsne.lm))
+densityPlot(rstudent(KT_fbsne.lm)) # check density estimate of the distribution of residuals
+outlierTest(KT_fbsne.lm)
+influenceIndexPlot(KT_fbsne.lm, vars = c("Cook"), id = list(n = 3))
 
-summary(KT_fbsim.lm)
-Anova(KT_fbsim.lm)
-#That's significant now
+summary(KT_fbsne.lm)
+Anova(KT_fbsne.lm)
+#That's not significant now
 
 #kt_fbsne.mod <- glm(SES_fbsne ~ trmt , family = gaussian, data = SES)
 #summary(kt_fbsne.mod)
