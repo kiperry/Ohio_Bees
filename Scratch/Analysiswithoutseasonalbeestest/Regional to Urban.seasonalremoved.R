@@ -15,21 +15,24 @@
 ###################################################################################
 
 t <- read.csv("Analysiswithoutseasonalbeestest/btraits_23.csv", row.names=1)
-a <- read.csv("Analysiswithoutseasonalbeestest/bcomm_25.localanalysis.csv", row.names=1)
+a <- read.csv("Analysiswithoutseasonalbeestest/bcomm_23.localanalysis.csv", row.names=1)
 
 
 str(a)
 a1 <- a #save the original dataset
-a <- a[2:349]
+a <- a[2:350]
 str(a)
 
-rowSums(a1[2:349])
-rowSums(a) #all sites have at least 5 species? 
-#t7-C T6-C, T1-H, t1-BE
-a<-a[-60,]
-a<-a[-57,]
-a<-a[-54,]
+rowSums(a1[2:350])
+rowSums(a) #all sites have at least 10 species? #Note from Michelle that D and DS are the same place. Thus remove those 0s. the FAT7-C only had like, 1 observation
+
 a<-a[-49,]
+a<-a[-51,]
+a<-a[-56,]
+a<-a[-56,]
+a<-a[-56,]
+a<-a[-64,]
+a<-a[-58,]
 
 rowSums(a)#all sites have 4+ species
 
@@ -108,7 +111,7 @@ attr(tdis, "correls")
 attr(tdis, "weights")
 
 # save trait weights for the null model
-wt <- c(0.38, 0.16, 0.11, 0.10, 0.26)
+wt <- c(0.37, 0.16, 0.11, 0.10, 0.26)
 
 #now run a principal coordinates analysis (PCoA) so we can collapse these traits into 
 #a few continuous axes for the functional diversity calculations
