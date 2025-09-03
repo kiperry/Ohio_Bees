@@ -5,18 +5,15 @@
 
 #Step 1- importing data----
 ##1.1 Pham data----
-a.mp <- read.csv("urbanpool.MP.csv", row.names=1)
+a.mp <- read.csv("urbanpool.MP.25.csv", row.names=1)
 
 aO.mp<-a.mp
-a.mp<-a.mp[1:134]
 
+a.mp<-a.mp[1:136]
+rowSums(a.mp)
+a.mp<-a.mp[-12,]
+a.mp<-a.mp[-9,]
 a.mp<-a.mp[-1,]
-a.mp<-a.mp[-3,]
-a.mp<-a.mp[-8,]
-a.mp<-a.mp[-8,]
-a.mp<-a.mp[-8,]
-a.mp<-a.mp[-10,]
-a.mp<-a.mp[-15,]
 rowSums(a.mp)
 
 #import the SES data
@@ -24,20 +21,16 @@ SES.mp <- read.csv("Urban to Local_Nulls_MP/SES_Local_MP.csv", row.names = 1)
 
 #Including treatment
 a1.mp<-aO.mp
+a1.mp<-a1.mp[-12,]
+a1.mp<-a1.mp[-9,]
 a1.mp<-a1.mp[-1,]
-a1.mp<-a1.mp[-3,]
-a1.mp<-a1.mp[-8,]
-a1.mp<-a1.mp[-8,]
-a1.mp<-a1.mp[-8,]
-a1.mp<-a1.mp[-10,]
-a1.mp<-a1.mp[-15,]
 
 SES.mp$trmt <- a1.mp$trmt
 str(SES.mp)
 SES.mp
 
 #Adding the random neighborhood variable
-SES.mp$neighd <- c("C", "D", "F", "G", "H","SV","TM","SV","TM", "H", "SV", "BE", "C","D","F","G")
+SES.mp$neighd <- c("C", "DS", "F", "G", "H","SV","TM","SV","TM", "H", "SV", "BE", "C","DS","F","G")
 
 
 ## pull out data for each treatment
@@ -48,10 +41,10 @@ UP2019<- SES.mp[which(SES.mp$trmt== "UP"),]
 str(UP2019)
 
 ##1.2 Turo data ----
-a.kt <- read.csv("urbanpool.KT.csv", row.names=1)
+a.kt <- read.csv("urbanpool.KT.25.csv", row.names=1)
 
 aO.kt<-a.kt
-a.kt<-a.kt[1:134]
+a.kt<-a.kt[1:136]
 
 #import the SES data
 SES.kt <- read.csv("Urban to Local_Nulls_KT/SES_Local_KT.csv", row.names = 1)
@@ -73,10 +66,10 @@ Prairie <- SES.kt[which(SES.kt$trmt == "Prairie"),]
 str(Prairie)
 
 ##1.3 Sivakoff data----
-a.fs <- read.csv("urbanpool.FS.csv", row.names=1)
+a.fs <- read.csv("urbanpool.FS.25.csv", row.names=1)
 
 aO.fs<-a.fs
-a.fs<-a.fs[1:134]
+a.fs<-a.fs[1:136]
 
 #import the SES data
 SES.fs <- read.csv("Urban to Local_Nulls_FS/SES_Local_FS.csv", row.names = 1)
@@ -926,5 +919,122 @@ abline(v = 0.0, col = "black", lwd = 3, lty=2)
 #text(1.87, 2.42, "D", pos = 4, font = 2, cex = 2)
 
 
+
+dev.off()
+
+
+
+#New.Graphs. Pham and TuroFunctional diversities----
+##Turo funct dataset----
+SES_ALLdiv.kt.func.forcomp <- as.data.frame(rbind( Prairie$SES_fbsim, T1$SES_fbsim, Prairie$SES_fbsne,T1$SES_fbsne, Prairie$SES_fbsor, T1$SES_fbsor, Prairie$SES_falpha, T1$SES_falpha))
+str(SES_ALLdiv.kt.func.forcomp)
+#Not sure where that last column comes from
+#It bound them in the wrong direction. The t function should switch row and columns. 
+SES_ALLdiv.kt.func.forcomp <- data.frame(t(SES_ALLdiv.kt.func.forcomp))
+str(SES_ALLdiv.kt.func.forcomp)
+colnames(SES_ALLdiv.kt.func.forcomp) <- c( "PP Turnover", "VL Turnover", "PP Nestedness", "VL Nestedness",  " PP Beta-Diversity", " VL Beta-Diversity",  "PP Alpha",  "VL Alpha" )
+
+
+SES_ALLdiv.kt.func.forcomp <- melt(SES_ALLdiv.kt.func.forcomp)
+colnames(SES_ALLdiv.kt.func.forcomp) <- c("Functional_diversity","ses")
+
+##Pham funct dataset----
+
+SES_ALLdiv.mp.func.forcomp <- as.data.frame(rbind(UP2019$SES_fbsim, VL2019$SES_fbsim, UP2019$SES_fbsne, VL2019$SES_fbsne, UP2019$SES_fbsor, VL2019$SES_fbsor, UP2019$SES_falpha,  VL2019$SES_falpha))
+str(SES_ALLdiv.mp.func.forcomp)
+#Not sure where that last column comes from
+#It bound them in the wrong direction. The t function should switch row and columns. 
+SES_ALLdiv.mp.func.forcomp  <- data.frame(t(SES_ALLdiv.mp.func.forcomp ))
+str(SES_ALLdiv.mp.func.forcomp )
+colnames(SES_ALLdiv.mp.func.forcomp ) <- c( "PP Turnover", "VL Turnover", "PP Nestedness", "VL Nestedness",  " PP Beta-Diversity", " VL Beta-Diversity",  "PP Alpha",  "VL Alpha"  )
+
+
+SES_ALLdiv.mp.func.forcomp  <- melt(SES_ALLdiv.mp.func.forcomp )
+colnames(SES_ALLdiv.mp.func.forcomp) <- c("Functional_diversity","ses")
+
+##colors----
+turo.functcolors.forcomp<-ifelse(levels(SES_ALLdiv.kt.func.forcomp$Functional_diversity)=="PP Turnover", "#C1BDFF" ,
+                               ifelse(levels(SES_ALLdiv.kt.func.forcomp$Functional_diversity)=="PP Nestedness","#C1BDFF",
+                                      ifelse(levels(SES_ALLdiv.kt.func.forcomp$Functional_diversity)==" PP Beta-Diversity", "#C1BDFF",
+                                             ifelse(levels(SES_ALLdiv.kt.func.forcomp$Functional_diversity)=="PP Alpha", "#C1BDFF",
+                                                    ifelse(levels(SES_ALLdiv.kt.func.forcomp$Functional_diversity)=="VL Turnover", "#52A43B",
+                                                           ifelse(levels(SES_ALLdiv.kt.func.forcomp$Functional_diversity)==" VL Beta-Diversity", "#52A43B",
+                                                                  ifelse(levels(SES_ALLdiv.kt.func.forcomp$Functional_diversity)=="VL Alpha","#52A43B",
+                                                                         ifelse(levels(SES_ALLdiv.kt.func.forcomp$Functional_diversity)=="VL Nestedness", "#52A43B",
+                                                                                "grey90")))))))) 
+turopoints.functcolors.forcomp <-ifelse(levels(SES_ALLdiv.kt.func.forcomp$Functional_diversity)=="PP Turnover", "#5e0a7c", 
+                         ifelse(levels(SES_ALLdiv.kt.func.forcomp$Functional_diversity)=="PP Nestedness", "#5e0a7c",
+                                ifelse(levels(SES_ALLdiv.kt.func.forcomp$Functional_diversity)==" PP Beta-Diversity", "#5e0a7c",
+                                       ifelse(levels(SES_ALLdiv.kt.func.forcomp$Functional_diversity)=="PP Alpha", "#5e0a7c",
+                                              ifelse(levels(SES_ALLdiv.kt.func.forcomp$Functional_diversity)=="VL Turnover", "#11290A",
+                                                     ifelse(levels(SES_ALLdiv.kt.func.forcomp$Functional_diversity)==" VL Beta-Diversity", "#11290A",
+                                                            ifelse(levels(SES_ALLdiv.kt.func.forcomp$Functional_diversity)=="VL Alpha", "#11290A",
+                                                                   ifelse(levels(SES_ALLdiv.kt.func.forcomp$Functional_diversity)=="VL Nestedness", "#11290A",
+                                                                          "grey90"))))))))
+
+pham.functcolors.forcomp<-ifelse(levels(SES_ALLdiv.mp.func.forcomp$Functional_diversity)=="PP Turnover", "#C1BDFF", 
+                               ifelse(levels(SES_ALLdiv.mp.func.forcomp$Functional_diversity)=="PP Nestedness", "#C1BDFF",
+                                      ifelse(levels(SES_ALLdiv.mp.func.forcomp$Functional_diversity)==" PP Beta-Diversity", "#C1BDFF",
+                                             ifelse(levels(SES_ALLdiv.mp.func.forcomp$Functional_diversity)=="PP Alpha", "#C1BDFF",
+                                                    ifelse(levels(SES_ALLdiv.mp.func.forcomp$Functional_diversity)=="VL Turnover", "#52A43B",
+                                                           ifelse(levels(SES_ALLdiv.mp.func.forcomp$Functional_diversity)==" VL Beta-Diversity", "#52A43B",
+                                                                  ifelse(levels(SES_ALLdiv.mp.func.forcomp$Functional_diversity)=="VL Alpha", "#52A43B",
+                                                                         ifelse(levels(SES_ALLdiv.mp.func.forcomp$Functional_diversity)=="VL Nestedness", "#52A43B",
+                                                                                "grey90"))))))))
+
+phampoints.functcolors.forcomp <-ifelse(levels(SES_ALLdiv.mp.func.forcomp$Functional_diversity)=="PP Turnover", "#5e0a7c", 
+                         ifelse(levels(SES_ALLdiv.mp.func.forcomp$Functional_diversity)=="PP Nestedness", "#5e0a7c",
+                                ifelse(levels(SES_ALLdiv.mp.func.forcomp$Functional_diversity)==" PP Beta-Diversity", "#5e0a7c",
+                                       ifelse(levels(SES_ALLdiv.mp.func.forcomp$Functional_diversity)=="PP Alpha", "#5e0a7c",
+                                              ifelse(levels(SES_ALLdiv.mp.func.forcomp$Functional_diversity)=="VL Turnover", "#11290A",
+                                                     ifelse(levels(SES_ALLdiv.mp.func.forcomp$Functional_diversity)==" VL Beta-Diversity", "#11290A",
+                                                            ifelse(levels(SES_ALLdiv.mp.func.forcomp$Functional_diversity)=="VL Alpha", "#11290A",
+                                                                   ifelse(levels(SES_ALLdiv.mp.func.forcomp$Functional_diversity)=="VL Nestedness", "#11290A",
+                                                                          "grey90"))))))))
+
+
+##graphs----
+png("Figures/ panel ktvsmp functdiv.png", width = 2500, height = 800, pointsize = 20)
+par(mfrow=c(1,2)) # indicates 1 rows, 2 columns
+par(mar = c(2,11,2,2)) # sets the margins around the figure (I made them small since I'm going to be editing all the things later)
+
+boxplot(ses ~ Functional_diversity, data = SES_ALLdiv.kt.func.forcomp, col = turo.functcolors.forcomp,
+        xlab = "Standardized Effect Sizes (SES)", ylab = "",
+        horizontal = TRUE, las = 1, range = 0,  ylim=c(-6,7), cex.lab = 2, cex.axis=1.45)
+stripchart(ses ~ Functional_diversity, data = SES_ALLdiv.kt.func.forcomp, col = turopoints.functcolors.forcomp,
+           pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+abline(v = 0.0, col = "black", lwd = 3, lty=2)
+#text(5.5, 8, "D", pos = 4, font = 2, cex = 2.6)
+
+boxplot(ses ~ Functional_diversity, data = SES_ALLdiv.mp.func.forcomp, col = pham.functcolors.forcomp,
+        xlab = "Standardized Effect Sizes (SES)", ylab = "",
+        horizontal = TRUE, las = 1, range = 0,  ylim=c(-6,7), cex.lab = 2, cex.axis=1.45)
+stripchart(ses ~ Functional_diversity, data = SES_ALLdiv.mp.func.forcomp, col = phampoints.functcolors.forcomp,
+           pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+abline(v = 0.0, col = "black", lwd = 3, lty=2)
+
+dev.off()
+
+
+png("Figures/fig7  turo and pham soil.png", width = 1500, height = 1000, pointsize = 20)
+par(mfrow=c(2,2)) # indicates one row, two columns
+par(mar = c(5,7,4,2)) # sets the margins around the figure
+# Soil Nesting.kt
+boxplot(SES_nest_1 ~ treatmentspelledout, data = SES.kt,  col = c("#C1BDFF", "#52A43B"),
+        xlab = "Standardized Effect Sizes (SES)", ylab = "", 
+        ylim = c(-3.6,3), cex.lab = 2, cex.axis = 1.45, 
+        horizontal = TRUE, las = 1, range = 0)
+stripchart(SES_nest_1 ~ trmt, data = SES.kt, col = c("#5e0a7c","#11290A"),
+           pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+abline(v = 0.0, col = "black", lwd = 3, lty=2)
+
+# Soil Nesting.mp
+boxplot(SES_nest_1 ~ treatmentspelledout, data = SES.mp,  col = c("#C1BDFF", "#52A43B"),
+        xlab = "Standardized Effect Sizes (SES)", ylab = "", 
+        ylim = c(-3.6,3), cex.lab = 2, cex.axis = 1.45, 
+        horizontal = TRUE, las = 1, range = 0)
+stripchart(SES_nest_1 ~ trmt, data = SES.mp, col = c("#5e0a7c","#11290A"),
+           pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+abline(v = 0.0, col = "black", lwd = 3, lty=2)
 
 dev.off()
