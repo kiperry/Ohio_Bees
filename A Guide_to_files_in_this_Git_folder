@@ -32,9 +32,9 @@ I am going in alphabetical order of explaining the files here, rather than date 
 
 13) LocalFS.workspace.RData - The R workspace used to save previous analyses during the local analysis of Sivakoff et al 2018 so each line of code did not have to be run each time.
 
-14) LocalFS.workspace.RData - The R workspace used to save previous analyses during the local analysis of Turo et al 2021 so each line of code did not have to be run each time.
+14) LocalKT.workspace.RData - The R workspace used to save previous analyses during the local analysis of Turo et al 2021 so each line of code did not have to be run each time.
 
-15) LocalFS.workspace.RData - The R workspace used to save previous analyses during the local analysis of Pham et al in review so each line of code did not have to be run each time.
+15) LocalMP.workspace.RData - The R workspace used to save previous analyses during the local analysis of Pham et al in review so each line of code did not have to be run each time.
 
 16) Ohio_Bee_Project.Rproj - the r project connected to the git folder.
 
