@@ -829,6 +829,16 @@ dotchart(SES$SES_nest_1, group = SES$trmt, pch = 19)
 with(SES, bartlett.test(SES_nest_1 ~ trmt))
 with(SES, ad.test(SES_nest_1))
 
+
+#failed normality test
+kruskal.test(SES_nest_1 ~ trmt, data = SES)
+#Okay but Kruskal wallace called it significant
+
+SESno47<- SES[-1,]
+with(SESno47, bartlett.test(SES_nest_1 ~ trmt))
+with(SESno47, ad.test(SES_nest_1))
+#yep it is 47th street garden causing it to be nonnormal
+
 FS_nest_1.mod <- glm(SES_nest_1 ~ trmt , family = gaussian, data = SES)
 summary(FS_nest_1.mod)
 qqnorm(resid(FS_nest_1.mod))
