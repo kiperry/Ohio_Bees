@@ -15,16 +15,16 @@
 ###################################################################################
 #Creating the datasets----
 
-t <- read.csv("./btraits_23.csv", row.names=1)
-a <- read.csv("./bcomm_25.localanalysis.csv", row.names=1)
+t <- read.csv("./reg.traits.26.csv", row.names=1)
+a <- read.csv("./reg.comm.26.csv", row.names=1)
 
 
 str(a)
 a1 <- a #save the original dataset
 
-a <- a[2:362]
+a <- a[1:360]
 str(a)
-rowSums(a1[2:362])
+rowSums(a1[1:360])
 
 # create a vector with the column sums for each species
 # species not found in Cleveland will have a 0
@@ -41,7 +41,7 @@ t
 t <- t[t$sp != 0, ]
 t <- t[,-6]
 
-write.csv(t, file = "traits_urbanpool.csv")
+write.csv(t, file = "traits_urbanpool.26.csv")
 #Create separate r file and folder for each null model- name outputs with code so we know what they are
 
 
@@ -51,7 +51,7 @@ a <- a[, colSums(a != 0) > 0]
 colSums(a)
 
 
-a$trmt<-a1$X.1
+a$trmt<-a1$trmt
 # pull out treatments that we want to keep
 farm <- a[which(a$trmt == "Farm"),]
 str(farm)
@@ -75,9 +75,9 @@ str(a.FS)
 str(a.KT)
 str(a.MP)
 
-write.csv(a.FS, file = "urbanpool.FS.25.csv")
-write.csv(a.KT, file = "urbanpool.KT.25.csv")
-write.csv(a.MP, file = "urbanpool.MP.25.csv")
+write.csv(a.FS, file = "urbanpool.FS.26.csv")
+write.csv(a.KT, file = "urbanpool.KT.26.csv")
+write.csv(a.MP, file = "urbanpool.MP.26.csv")
 
 
 #From here go to separate R code files for each of the 3 urban pool data sets

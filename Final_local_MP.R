@@ -14,8 +14,8 @@
 
 #Refer back to Final_local_analysis to get to the beginning of this document
 #Everything before Line 83
-t <- read.csv("traits_urbanpool.csv", row.names=1)
-a <- read.csv("urbanpool.MP.25.csv", row.names=1)
+t <- read.csv("traits_urbanpool.26.csv", row.names=1)
+a <- read.csv("urbanpool.MP.26.csv", row.names=1)
 
 aO<-a
 a<-a[1:136]
@@ -74,12 +74,8 @@ if (!suppressWarnings(require(betapart))) install.packages("betapart")
 citation("betapart")
 
 rowSums(a)
-#removing sites with fewer than 4 species: t1be,  t6-c, t7-c
-a<-a[-12,]
-a<-a[-9,]
-a<-a[-1,]
+#checking that all sites have more than 4 species
 
-rowSums(a) #Check that we removed all sites with fewer than 4 species
 
 #observed CWM
 cwm.obs <- functcomp(t2, as.matrix(a), CWM.type = "all")

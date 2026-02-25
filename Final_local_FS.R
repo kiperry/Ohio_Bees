@@ -14,8 +14,8 @@
 
 #Refer back to Final_local_analysis to get to the beginning of this document
 #Everything before Line 83
-t <- read.csv("traits_urbanpool.csv", row.names=1)
-a <- read.csv("urbanpool.FS.25.csv", row.names=1)
+t <- read.csv("traits_urbanpool.26.csv", row.names=1)
+a <- read.csv("urbanpool.FS.26.csv", row.names=1)
 
 aO<-a
 a<-a[1:136]
