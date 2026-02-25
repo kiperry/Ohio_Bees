@@ -34,6 +34,18 @@ a<-a[-49,]
 
 rowSums(a)#all sites have 4+ species
 
+#Need to check Meg. concinna and Meg. pusilla presence
+#This is a taxonomy name change - all concinna in North America are actually pusilla
+a$Megachileconcinna #Okay one concinna found
+a$Megachilepusilla # No pusilla found
+
+#This may cause a change in the datasets because M. pusilla is native, M. concinna is not
+
+a$Megachilepusilla<- ifelse(a$Megachileconcinna != 0 | a$Megachilepusilla != 0, 1, 0)
+a$Megachilepusilla #Okay yes, the above code made M. pusilla have a 1 in locations where either it or M concinna had a 1 
+
+a<- a[,-239] #removing M. concinna
+
 
 str(t)
 names(t)
@@ -63,6 +75,7 @@ hist(log(t$bl))
 t2 <- t #create another duplicate dataset before we transform
 t2$bl <- log(t2$bl + 1)
 
+t2<- t2[-239,] #removing M. concinna
 
 #Double check that all species are present in both datasets
 #Double check if a species is present in one dataset but not the other
@@ -70,6 +83,19 @@ setdiff(colnames(a), rownames(t2))
 setdiff(rownames (t2), colnames(a))
 
 rownames(t2) == colnames(a) # we are good to go!
+
+
+#Going to go ahead and create CSV files for the regional pool with the correction to species name
+#AND with the removed sites so that doesn't need to happen for each local site
+
+write.csv(t2, file = "reg.traits.26.csv")
+
+a2<-a1[-60,]
+a2<-a2[-57,]
+a2<-a2[-54,]
+a2<-a2[-49,]
+a$trmt<-a2$X.1
+write.csv(a, file = "reg.comm.26.csv")
 
 ##############################################################################
 ## Observed Community Metrics----
