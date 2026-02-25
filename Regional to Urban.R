@@ -11,6 +11,7 @@
 #CA Shepard: 20 February 2023 (Updated)
 #CA Shepard: 3 October 2023 (update )
 #CA Shepard: December 20th Update, based on code changes that occurred in a different version of the same document earlier in the year
+#CA Shepard: February 2026 Update, with taxonomy changes
 ###################################################################################
 
 t <- read.csv("btraits_23.csv", row.names=1)
