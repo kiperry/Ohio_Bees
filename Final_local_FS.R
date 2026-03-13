@@ -97,7 +97,7 @@ attr(tdis, "correls")
 attr(tdis, "weights")
 
 # save trait weights for the null model
-wt <- c(0.37, 0.18, 0.11, 0.12, 0.21)
+wt <- c(0.38, 0.18, 0.11, 0.12, 0.21)
 
 #now run a principal coordinates analysis (PCoA) so we can collapse these traits into 
 #a few continuous axes for the functional diversity calculations
