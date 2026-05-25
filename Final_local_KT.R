@@ -97,7 +97,7 @@ attr(tdis, "correls")
 attr(tdis, "weights")
 
 # save trait weights for the null model
-wt <- c(0.38, 0.18, 0.11, 0.12, 0.21)
+wt <- c(0.37, 0.18, 0.11, 0.12, 0.21)
 
 #now run a principal coordinates analysis (PCoA) so we can collapse these traits into 
 #a few continuous axes for the functional diversity calculations
@@ -455,9 +455,12 @@ bsor.prairie
 dotchart(SES$SES_bsor, group = SES$trmt, pch = 19)
 with(SES, bartlett.test(SES_bsor ~ trmt))
 with(SES, ad.test(SES_bsor))
+#Homogeneity of variances failed 
+kruskal.test(SES_bsor ~ trmt, data = SES) #It was not significant p=0.33
+
 
 KT_bsor.lm <- lmer(SES_bsor~trmt+(1|neighd), data = SES)
-#boundary(singular ) fit error
+
 summary(KT_bsor.lm)
 qqnorm(resid(KT_bsor.lm))
 qqline(resid(KT_bsor.lm))
@@ -468,7 +471,7 @@ influenceIndexPlot(KT_bsor.lm, vars = c("Cook"), id = list(n = 3))
 
 summary(KT_bsor.lm)
 Anova(KT_bsor.lm)
-kruskal.test(SES_bsor ~ trmt, data = SES) #It was not significant
+ #It was not significant
 #No sig difference between treatments either way
 
 #below is the code I used for glms before switching to lmer
@@ -528,10 +531,10 @@ influenceIndexPlot(kt_bsim.mod, vars = c("Cook"), id = list(n = 3))
 
 summary(kt_bsim.mod)
 Anova(kt_bsim.mod)
-#Okay look. this technically says significant- BUT IT FAILED the bartlett test and kruskall wallace said not significant
-#I might just try the welches anova too, since the data is normal
+#Significance of 0.044 though failed the bartlet test, and kruskal wallis said not significant
+#I will run the welches anova too, since the data is normal
 oneway.test(SES_bsim ~ trmt, data = SES, var.equal = FALSE)
-#NOT SIGNIFICANT NOW I AM SATISFIED
+#NOT SIGNIFICANT - I AM SATISFIED
 
 
 ### taxonomic diveristy - beta sne----
@@ -551,22 +554,36 @@ bsne.Prairie
 dotchart(SES$SES_bsne, group = SES$trmt, pch = 19)
 with(SES, bartlett.test(SES_bsne ~ trmt))
 with(SES, ad.test(SES_bsne))
-#Failed homogeneity test, passed normality test
+#Failed homogeneity test, and normality test
+#Ran the plot up above and the boxplots by treatment and it looks like there might be an outlier
+SESno19<- SES[-19,]
+plot(SESno19$SES_bsne)
+abline(h = 0.0, col = "black", lwd = 3, lty=2)
+boxplot(SESno19$SES_bsne ~ SESno19$trmt)
+
+with(SESno19, bartlett.test(SES_nest_1 ~ trmt))
+with(SESno19, ad.test(SES_nest_1))
+# Well, DS8 was an outlier that made the variance and normality significant
+
+kruskal.test(SES_bsne ~ trmt, data = SESno19)
+oneway.test(SES_bsne ~ trmt, data = SESno19, var.equal = FALSE)
 kruskal.test(SES_bsne ~ trmt, data = SES)
 oneway.test(SES_bsne ~ trmt, data = SES, var.equal = FALSE)
-#not significant
+#not significant with or without outlier removed
+#also ran the below code which likewise found no significance
 
-#KT_bsne.lm <- lmer(SES_bsne~trmt+(1|neighd), data = SES)
-#summary(KT_bsne.lm)
-#qqnorm(resid(KT_bsne.lm))
-#qqline(resid(KT_bsne.lm))
-#plot(simulateResiduals(KT_bsne.lm))
-#densityPlot(rstudent(KT_bsne.lm)) # check density estimate of the distribution of residuals
-#outlierTest(KT_bsne.lm)
-#influenceIndexPlot(KT_bsne.lm, vars = c("Cook"), id = list(n = 3))
 
-#summary(KT_bsne.lm)
-#Anova(KT_bsne.lm)
+KT_bsne.lm <- lmer(SES_bsne~trmt+(1|neighd), data = SESno19)
+summary(KT_bsne.lm)
+qqnorm(resid(KT_bsne.lm))
+qqline(resid(KT_bsne.lm))
+plot(simulateResiduals(KT_bsne.lm))
+densityPlot(rstudent(KT_bsne.lm)) # check density estimate of the distribution of residuals
+outlierTest(KT_bsne.lm)
+influenceIndexPlot(KT_bsne.lm, vars = c("Cook"), id = list(n = 3))
+
+summary(KT_bsne.lm)
+Anova(KT_bsne.lm)
 #no sig difference
 
 
@@ -603,7 +620,7 @@ dotchart(SES$SES_falpha, group = SES$trmt, pch = 19)
 with(SES, bartlett.test(SES_falpha ~ trmt))
 with(SES, ad.test(SES_falpha))
 #passed homogeneity and normality test
-#kruskal.test(SES_falpha ~ trmt, data = SES) it was significant here anyway
+kruskal.test(SES_falpha ~ trmt, data = SES) #it was significant here 0.008
 
 
 KT_falpha.lm <- lmer(SES_falpha~trmt+(1|neighd), data = SES)
@@ -614,10 +631,24 @@ plot(simulateResiduals(KT_falpha.lm))
 densityPlot(rstudent(KT_falpha.lm)) # check density estimate of the distribution of residuals
 outlierTest(KT_falpha.lm)
 influenceIndexPlot(KT_falpha.lm, vars = c("Cook"), id = list(n = 3))
+#so not an outlier but FA1 has a LOT of influence. Just going to do a test really quickly
 
+KT_falpha.lm.red <- update(KT_falpha.lm, subset = -c(4))
+summary(KT_falpha.lm.red)
+compareCoefs(KT_falpha.lm.red, KT_falpha.lm)
+outlierTest(KT_falpha.lm.red)
+influenceIndexPlot(KT_falpha.lm.red, vars = c("Cook"), id = list(n = 3))
+
+qqnorm(resid(KT_falpha.lm.red))
+qqline(resid(KT_falpha.lm.red))
+plot(simulateResiduals(KT_falpha.lm.red))
+densityPlot(rstudent(KT_falpha.lm.red))
+
+summary(KT_falpha.lm.red)
+Anova(KT_falpha.lm.red)
 summary(KT_falpha.lm)
 Anova(KT_falpha.lm)
-#very significant difference
+#very significant difference with or without FA1
 
 
 #kt_falpha.mod <- glm(SES_falpha ~ trmt , family = gaussian, data = SES)
@@ -651,7 +682,7 @@ dotchart(SES$SES_fbsor, group = SES$trmt, pch = 19)
 with(SES, bartlett.test(SES_fbsor ~ trmt))
 with(SES, ad.test(SES_fbsor))
 #passed homogeneity and normality test
-#kruskal.test(SES_fbsor ~ trmt, data = SES) #it was not significant here anyway
+kruskal.test(SES_fbsor ~ trmt, data = SES) #it was not significant here anyway
 
 
 KT_fbsor.lm <- lmer(SES_fbsor~trmt+(1|neighd), data = SES)
@@ -701,7 +732,7 @@ dotchart(SES$SES_fbsim, group = SES$trmt, pch = 19)
 with(SES, bartlett.test(SES_fbsim ~ trmt))
 with(SES, ad.test(SES_fbsim))
 #passed homogeneity and normality test
-#kruskal.test(SES_fbsim ~ trmt, data = SES) #it was not significant here anyway
+kruskal.test(SES_fbsim ~ trmt, data = SES) #it was not significant here anyway
 
 KT_fbsim.lm <- lmer(SES_fbsim~trmt+(1|neighd), data = SES)
 
@@ -715,7 +746,7 @@ influenceIndexPlot(KT_fbsim.lm, vars = c("Cook"), id = list(n = 3))
 
 summary(KT_fbsim.lm)
 Anova(KT_fbsim.lm)
-#That's a significant difference
+#That's a significant difference 0.04
 
 
 #KT_fbsim.mod <- glm(SES_fbsim ~ trmt , family = gaussian, data = SES)
@@ -750,8 +781,8 @@ dotchart(SES$SES_fbsne, group = SES$trmt, pch = 19)
 
 with(SES, bartlett.test(SES_fbsne ~ trmt))
 with(SES, ad.test(SES_fbsne))
-#passed homogeneity test
-#kruskal.test(SES_fbsne ~ trmt, data = SES) #it was not significant here anyway
+#passed homogeneity and normalty test
+kruskal.test(SES_fbsne ~ trmt, data = SES) #it was not significant here anyway
 
 
 KT_fbsne.lm <- lmer(SES_fbsne~trmt+(1|neighd), data = SES)
@@ -766,7 +797,7 @@ influenceIndexPlot(KT_fbsne.lm, vars = c("Cook"), id = list(n = 3))
 
 summary(KT_fbsne.lm)
 Anova(KT_fbsne.lm)
-#That's not significant now
+#That's not significant 
 
 #kt_fbsne.mod <- glm(SES_fbsne ~ trmt , family = gaussian, data = SES)
 #summary(kt_fbsne.mod)
@@ -803,7 +834,7 @@ dotchart(SES$SES_bl, group = SES$trmt, pch = 19)
 with(SES, bartlett.test(SES_bl ~ trmt))
 with(SES, ad.test(SES_bl))
 #passed homogeneity test
-#kruskal.test(SES_bl ~ trmt, data = SES) #it was not significant here anyway
+kruskal.test(SES_bl ~ trmt, data = SES) #it was not significant here anyway
 
 
 KT_bl.lm <- lmer(SES_bl~trmt+(1|neighd), data = SES)
@@ -867,6 +898,8 @@ plot(simulateResiduals(KT_lec_0.lm))
 densityPlot(rstudent(KT_lec_0.lm)) # check density estimate of the distribution of residuals
 outlierTest(KT_lec_0.lm)
 influenceIndexPlot(KT_lec_0.lm, vars = c("Cook"), id = list(n = 3))
+#TR8 looks like it might have a lot of influence. but it isn't an outlier
+
 
 summary(KT_lec_0.lm)
 Anova(KT_lec_0.lm)
@@ -1012,9 +1045,9 @@ dotchart(SES$SES_nest_1, group = SES$trmt, pch = 19)
 
 with(SES, bartlett.test(SES_nest_1 ~ trmt))
 with(SES, ad.test(SES_nest_1))
-# passed homogeneity test ? 0.09949
-kruskal.test(SES_nest_1 ~ trmt, data = SES) #it was not significant here anyway
-oneway.test(SES_nest_1 ~ trmt, data = SES, var.equal = FALSE)#Not significant
+# passed homogeneity test  0.072
+#kruskal.test(SES_nest_1 ~ trmt, data = SES) #it was not significant here 
+#oneway.test(SES_nest_1 ~ trmt, data = SES, var.equal = FALSE)#Not significant
 
 kt_nest_1.lm <- lmer(SES_nest_1~trmt+(1|neighd), data = SES)
 
@@ -1028,7 +1061,7 @@ influenceIndexPlot(kt_nest_1.lm, vars = c("Cook"), id = list(n = 3))
 #Interesting. Outlier test said that there is no outlier but BU1 has a seriously strong influence- 1.4
 summary(kt_nest_1.lm)
 Anova(kt_nest_1.lm)
-#THIS ONE IS SIGNIFICANT here, Because technically both tests were passed I think I am keeping this 
+#THIS ONE IS SIGNIFICANT here, Because both tests were passed  I am keeping this 
 
 
 
@@ -1164,6 +1197,7 @@ nest_4.T1
 nest_4.prai <- wilcox.test(Prairie$SES_nest_4, y = NULL, mu = 0, alternative = c("two.sided"), conf.int = TRUE)
 nest_4.prai
 
+
 ## compare among treatments
 dotchart(SES$SES_nest_4, group = SES$trmt, pch = 19)
 
@@ -1187,6 +1221,19 @@ summary(kt_nest_4.lm)
 Anova(kt_nest_4.lm)
 #nOT SIGNIFICANT
 
+#Okay but here is the thing. FA8 looks like a serious outlier in the initial boxplot
+kt_nest_4.lm.red <- update(kt_nest_4.lm, subset = -c(20))
+summary(kt_nest_4.lm.red)
+compareCoefs(kt_nest_4.lm, kt_nest_4.lm.red)
+outlierTest(kt_nest_4.lm.red)
+influenceIndexPlot(kt_nest_4.lm.red, vars = c("Cook"), id = list(n = 3))
+
+
+summary(kt_nest_4.lm)
+Anova(kt_nest_4.lm)
+summary(kt_nest_4.lm.red)
+Anova(kt_nest_4.lm.red)
+#not significant either way. Still, good to figure out
 
 #kt_nest_4.mod <- glm(SES_nest_4 ~ trmt , family = gaussian, data = SES)
 #summary(kt_nest_4.mod)
@@ -1572,6 +1619,7 @@ Anova(kt_ori_1.lm)
 #Anova(kt_ori_1.mod)
 #no sig dif
 
+#iGNORE BELOW FIGURES use the Panelfigures.R file
 
 #Figures----
 

@@ -1015,10 +1015,10 @@ png("Figures/Fig4.Regionaldivpanel.png", width = 3000, height = 1000, pointsize 
 par(mfrow=c(1,2)) # indicates one row, two columns
 par(mar=c(5,15,4,2))
 
-boxplot(ses ~ fbeta, data = SES_TBeta, col = viridis(3, alpha = 0.6),
+boxplot(ses ~ tbeta, data = SES_TBeta, col = viridis(3, alpha = 0.6),
         xlab = "Standardized Effect Sizes (SES)", ylab = "",
         horizontal = TRUE, las = 1, range = 0, ylim= c(-90,80), cex.lab = 2, cex.axis = 1.45) #cex.main= 1.8(That is what I would use tomake the graph title size, but no titles))
-stripchart(ses ~ fbeta, data = SES_TBeta, col = viridis(3),
+stripchart(ses ~tbeta, data = SES_TBeta, col = viridis(3),
            pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
 #I am going to put in the text labels in adobe indesign since I can't get them placed consistently across all of the graphs
@@ -1339,3 +1339,4 @@ boxplot(SES_fbsor, col = viridis(1, alpha = 0.55, begin = 0.8),
 stripchart(SES_fbsor, col = viridis(1, begin = 0.8),
            pch = 19, cex = 1, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
+

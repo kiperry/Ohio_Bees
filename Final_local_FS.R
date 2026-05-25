@@ -499,10 +499,21 @@ plot(simulateResiduals(FS_bsim.mod))
 densityPlot(rstudent(FS_bsim.mod)) # check density estimate of the distribution of residuals
 outlierTest(FS_bsim.mod)
 influenceIndexPlot(FS_bsim.mod, vars = c("Cook"), id = list(n = 3))
+#47th street garden is an outlier - I believe this will be a trend
+FS_bsim.mod.red <- update(FS_bsim.mod, subset = -c(1))
+summary(FS_bsim.mod.red)
+compareCoefs(FS_bsim.mod, FS_bsim.mod.red)
+outlierTest(FS_bsim.mod.red)
+influenceIndexPlot(FS_bsim.mod.red, vars = c("Cook"), id = list(n = 3))
+
 
 summary(FS_bsim.mod)
 Anova(FS_bsim.mod)
-#no sig difference
+summary(FS_bsim.mod.red)
+Anova(FS_bsim.mod.red)
+
+
+#no sig difference even with outlier removed
 
 
 ### taxonomic diveristy - beta sne----
@@ -641,7 +652,7 @@ dotchart(SES$SES_fbsne, group = SES$trmt, pch = 19)
 
 with(SES, bartlett.test(SES_fbsne ~ trmt))
 with(SES, ad.test(SES_fbsne))
-#normality test failed
+#normality test very close. 0.053
 kruskal.test(SES_fbsne ~ trmt, data = SES) #It was not significant
 
 
@@ -748,7 +759,7 @@ dotchart(SES$SES_lec_1, group = SES$trmt, pch = 19)
 
 with(SES, bartlett.test(SES_lec_1 ~ trmt))
 with(SES, ad.test(SES_lec_1))
-#Failed normality test
+#Failed normality test. p0.03
 kruskal.test(SES_lec_1 ~ trmt, data = SES) #It was not significant
 
 FS_lec_1.mod <- glm(SES_lec_1 ~ trmt , family = gaussian, data = SES)
@@ -759,10 +770,21 @@ plot(simulateResiduals(FS_lec_1.mod))
 densityPlot(rstudent(FS_lec_1.mod)) # check density estimate of the distribution of residuals
 outlierTest(FS_lec_1.mod)
 influenceIndexPlot(FS_lec_1.mod, vars = c("Cook"), id = list(n = 3))
+#47th street garden is an outlier again
+FS_lec_1.mod.red <- update(FS_lec_1.mod, subset = -c(1))
+summary(FS_lec_1.mod.red)
+compareCoefs(FS_lec_1.mod, FS_lec_1.mod.red)
+outlierTest(FS_lec_1.mod.red)
+influenceIndexPlot(FS_lec_1.mod.red, vars = c("Cook"), id = list(n = 3))
+
 
 summary(FS_lec_1.mod)
 Anova(FS_lec_1.mod)
-#Also not significant
+summary(FS_lec_1.mod.red)
+Anova(FS_lec_1.mod.red)
+
+
+#Also not significant doing that
 
 ### lec_2 - Specialist----
 hist(SES$SES_lec_2)
@@ -802,11 +824,11 @@ influenceIndexPlot(FS_lec_2.mod.red, vars = c("Cook"), id = list(n = 3))
 
 
 summary(FS_lec_2.mod)
-Anova(FS_lec_2.mod)
+Anova(FS_lec_2.mod) #p val of 0.055
 summary(FS_lec_2.mod.red)
 Anova(FS_lec_2.mod.red)
 
-#Not significant with outlier removed 
+# Fully Not significant with outlier removed 
 
 
 ##Nesting----
@@ -829,15 +851,14 @@ dotchart(SES$SES_nest_1, group = SES$trmt, pch = 19)
 with(SES, bartlett.test(SES_nest_1 ~ trmt))
 with(SES, ad.test(SES_nest_1))
 
-
-#failed normality test
+#failed normality test p = 0.02
 kruskal.test(SES_nest_1 ~ trmt, data = SES)
 #Okay but Kruskal wallace called it significant
 
 SESno47<- SES[-1,]
 with(SESno47, bartlett.test(SES_nest_1 ~ trmt))
 with(SESno47, ad.test(SES_nest_1))
-#yep it is 47th street garden causing it to be nonnormal
+# it is 47th street garden causing it to be nonnormal
 
 FS_nest_1.mod <- glm(SES_nest_1 ~ trmt , family = gaussian, data = SES)
 summary(FS_nest_1.mod)
@@ -862,7 +883,7 @@ densityPlot(rstudent(FS_nest_1.mod.red))
 
 summary(FS_nest_1.mod.red)
 Anova(FS_nest_1.mod.red)
-#chi squared p value of 0.053 with outlier removed
+#chi squared p value of 0.046 with outlier removed
 
 summary(FS_nest_1.mod)
 Anova(FS_nest_1.mod)
@@ -960,7 +981,7 @@ dotchart(SES$SES_nest_4, group = SES$trmt, pch = 19)
 
 with(SES, bartlett.test(SES_nest_4 ~ trmt))
 with(SES, ad.test(SES_nest_4))
-#failed normality test
+# normality test 0.057
 kruskal.test(SES_nest_4 ~ trmt, data = SES) #It was not significant
 
 FS_nest_4.mod <- glm(SES_nest_4 ~ trmt , family = gaussian, data = SES)
@@ -1191,7 +1212,7 @@ influenceIndexPlot(FS_ori_0.mod, vars = c("Cook"), id = list(n = 3))
 
 summary(FS_ori_0.mod)
 Anova(FS_ori_0.mod)
-#sig difference
+#sig difference 0.046
 emmeans(FS_ori_0.mod, pairwise ~ trmt)
 
 
