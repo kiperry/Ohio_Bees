@@ -12,24 +12,21 @@
 #CA Shepard: 3 October 2023 (update )
 #CA Shepard: December 20th Update, based on code changes that occurred in a different version of the same document earlier in the year
 #CA Shepard: Dec 23rd removing seasonal bees
+#CA Shepard: 5/19/26 Removing the bees not found in Gibbs Michegan dataset
 ###################################################################################
 
-t <- read.csv("Analysiswithoutseasonalbeestest/btraits_23.csv", row.names=1)
-a <- read.csv("Analysiswithoutseasonalbeestest/bcomm_25.localanalysis.csv", row.names=1)
+t <- read.csv("Analysiswithoutseasonalbeestest/reg.traits.26.red.csv", row.names=1)
+a <- read.csv("Analysiswithoutseasonalbeestest/reg.comm.26.red.csv", row.names=1)
 
 
 str(a)
 a1 <- a #save the original dataset
-a <- a[2:349]
+a <- a[1:316]
 str(a)
 
-rowSums(a1[2:349])
+rowSums(a1[1:316])
 rowSums(a) #all sites have at least 5 species? 
-#t7-C T6-C, T1-H, t1-BE
-a<-a[-60,]
-a<-a[-57,]
-a<-a[-54,]
-a<-a[-49,]
+
 
 rowSums(a)#all sites have 4+ species
 
@@ -108,7 +105,7 @@ attr(tdis, "correls")
 attr(tdis, "weights")
 
 # save trait weights for the null model
-wt <- c(0.38, 0.16, 0.11, 0.10, 0.26)
+wt <- c(0.38, 0.15, 0.11, 0.10, 0.26)
 
 #now run a principal coordinates analysis (PCoA) so we can collapse these traits into 
 #a few continuous axes for the functional diversity calculations
@@ -228,55 +225,55 @@ for(i in 1:numberReps){
 }
 
 # save the output matrices
-write.csv(nbl, file = "Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/nbl.csv")
-write.csv(nlec_0, file = "Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/nlec_0.csv")
-write.csv(nlec_1, file = "Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/nlec_1.csv")
-write.csv(nlec_2, file = "Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/nlec_2.csv")
-write.csv(nnest_1, file = "Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/nnest_1.csv")
-write.csv(nnest_2, file = "Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/nnest_2.csv")
-write.csv(nnest_3, file = "Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/nnest_3.csv")
-write.csv(nnest_4, file = "Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/nnest_4.csv")
-write.csv(nnest_5, file = "Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/nnest_5.csv")
-write.csv(nsoc_1, file = "Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/nsoc_1.csv")
-write.csv(nsoc_2, file = "Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/nsoc_2.csv")
-write.csv(nsoc_3, file = "Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/nsoc_3.csv")
-write.csv(nsoc_4, file = "Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/nsoc_4.csv")
-write.csv(nori_0, file = "Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/nori_0.csv")
-write.csv(nori_1, file = "Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/nori_1.csv")
+write.csv(nbl, file = "Analysiswithoutseasonalbeestest/comptoMichanalysis/nbl.csv")
+write.csv(nlec_0, file = "Analysiswithoutseasonalbeestest/comptoMichanalysis/nlec_0.csv")
+write.csv(nlec_1, file = "Analysiswithoutseasonalbeestest/comptoMichanalysis/nlec_1.csv")
+write.csv(nlec_2, file = "Analysiswithoutseasonalbeestest/comptoMichanalysis/nlec_2.csv")
+write.csv(nnest_1, file = "Analysiswithoutseasonalbeestest/comptoMichanalysis/nnest_1.csv")
+write.csv(nnest_2, file = "Analysiswithoutseasonalbeestest/comptoMichanalysis/nnest_2.csv")
+write.csv(nnest_3, file = "Analysiswithoutseasonalbeestest/comptoMichanalysis/nnest_3.csv")
+write.csv(nnest_4, file = "Analysiswithoutseasonalbeestest/comptoMichanalysis/nnest_4.csv")
+write.csv(nnest_5, file = "Analysiswithoutseasonalbeestest/comptoMichanalysis/nnest_5.csv")
+write.csv(nsoc_1, file = "Analysiswithoutseasonalbeestest/comptoMichanalysis/nsoc_1.csv")
+write.csv(nsoc_2, file = "Analysiswithoutseasonalbeestest/comptoMichanalysis/nsoc_2.csv")
+write.csv(nsoc_3, file = "Analysiswithoutseasonalbeestest/comptoMichanalysis/nsoc_3.csv")
+write.csv(nsoc_4, file = "Analysiswithoutseasonalbeestest/comptoMichanalysis/nsoc_4.csv")
+write.csv(nori_0, file = "Analysiswithoutseasonalbeestest/comptoMichanalysis/nori_0.csv")
+write.csv(nori_1, file = "Analysiswithoutseasonalbeestest/comptoMichanalysis/nori_1.csv")
 
-write.csv(nbsim, file = "Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/tbeta_sim.csv")
-write.csv(nbsne, file = "Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/tbeta_sne.csv")
-write.csv(nbsor, file = "Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/tbeta_sor.csv")
+write.csv(nbsim, file = "Analysiswithoutseasonalbeestest/comptoMichanalysis/tbeta_sim.csv")
+write.csv(nbsne, file = "Analysiswithoutseasonalbeestest/comptoMichanalysis/tbeta_sne.csv")
+write.csv(nbsor, file = "Analysiswithoutseasonalbeestest/comptoMichanalysis/tbeta_sor.csv")
 
-write.csv(nfsim, file = "Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/fbeta_sim.csv")
-write.csv(nfsne, file = "Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/fbeta_sne.csv")
-write.csv(nfsor, file = "Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/fbeta_sor.csv")
+write.csv(nfsim, file = "Analysiswithoutseasonalbeestest/comptoMichanalysis/fbeta_sim.csv")
+write.csv(nfsne, file = "Analysiswithoutseasonalbeestest/comptoMichanalysis/fbeta_sne.csv")
+write.csv(nfsor, file = "Analysiswithoutseasonalbeestest/comptoMichanalysis/fbeta_sor.csv")
 
 # load the output matrices
 
-nbl <- read.csv("Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/nbl.csv", row.names=1)
-nlec_0 <- read.csv("Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/nlec_0.csv", row.names=1)
-nlec_1 <- read.csv("Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/nlec_1.csv", row.names=1)
-nlec_2 <- read.csv("Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/nlec_2.csv", row.names=1)
-nnest_1 <- read.csv("Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/nnest_1.csv", row.names=1)
-nnest_2 <- read.csv("Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/nnest_2.csv", row.names=1)
-nnest_3 <- read.csv("Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/nnest_3.csv", row.names=1)
-nnest_4 <- read.csv("Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/nnest_4.csv", row.names=1)
-nnest_5 <- read.csv("Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/nnest_5.csv", row.names=1)
-nsoc_1 <- read.csv("Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/nsoc_1.csv", row.names=1)
-nsoc_2 <- read.csv("Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/nsoc_2.csv", row.names=1)
-nsoc_3 <- read.csv("Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/nsoc_3.csv", row.names=1)
-nsoc_4 <- read.csv("Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/nsoc_4.csv", row.names=1)
-nori_0 <- read.csv("Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/nori_0.csv", row.names=1)
-nori_1 <- read.csv("Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/nori_1.csv", row.names=1)
+nbl <- read.csv("Analysiswithoutseasonalbeestest/comptoMichanalysis/nbl.csv", row.names=1)
+nlec_0 <- read.csv("Analysiswithoutseasonalbeestest/comptoMichanalysis/nlec_0.csv", row.names=1)
+nlec_1 <- read.csv("Analysiswithoutseasonalbeestest/comptoMichanalysis/nlec_1.csv", row.names=1)
+nlec_2 <- read.csv("Analysiswithoutseasonalbeestest/comptoMichanalysis/nlec_2.csv", row.names=1)
+nnest_1 <- read.csv("Analysiswithoutseasonalbeestest/comptoMichanalysis/nnest_1.csv", row.names=1)
+nnest_2 <- read.csv("Analysiswithoutseasonalbeestest/comptoMichanalysis/nnest_2.csv", row.names=1)
+nnest_3 <- read.csv("Analysiswithoutseasonalbeestest/comptoMichanalysis/nnest_3.csv", row.names=1)
+nnest_4 <- read.csv("Analysiswithoutseasonalbeestest/comptoMichanalysis/nnest_4.csv", row.names=1)
+nnest_5 <- read.csv("Analysiswithoutseasonalbeestest/comptoMichanalysis/nnest_5.csv", row.names=1)
+nsoc_1 <- read.csv("Analysiswithoutseasonalbeestest/comptoMichanalysis/nsoc_1.csv", row.names=1)
+nsoc_2 <- read.csv("Analysiswithoutseasonalbeestest/comptoMichanalysis/nsoc_2.csv", row.names=1)
+nsoc_3 <- read.csv("Analysiswithoutseasonalbeestest/comptoMichanalysis/nsoc_3.csv", row.names=1)
+nsoc_4 <- read.csv("Analysiswithoutseasonalbeestest/comptoMichanalysis/nsoc_4.csv", row.names=1)
+nori_0 <- read.csv("Analysiswithoutseasonalbeestest/comptoMichanalysis/nori_0.csv", row.names=1)
+nori_1 <- read.csv("Analysiswithoutseasonalbeestest/comptoMichanalysis/nori_1.csv", row.names=1)
 
-nbsim <- read.csv("Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/tbeta_sim.csv", row.names=1)
-nbsne <- read.csv("Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/tbeta_sne.csv", row.names=1)
-nbsor <- read.csv("Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/tbeta_sim.csv", row.names=1)
+nbsim <- read.csv("Analysiswithoutseasonalbeestest/comptoMichanalysis/tbeta_sim.csv", row.names=1)
+nbsne <- read.csv("Analysiswithoutseasonalbeestest/comptoMichanalysis/tbeta_sne.csv", row.names=1)
+nbsor <- read.csv("Analysiswithoutseasonalbeestest/comptoMichanalysis/tbeta_sim.csv", row.names=1)
 
-nfsim <- read.csv("Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/fbeta_sim.csv", row.names=1)
-nfsne <- read.csv("Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/fbeta_sne.csv", row.names=1)
-nfsor <- read.csv("Analysiswithoutseasonalbeestest/Regional to Urban Nulls.25rerun/fbeta_sor.csv", row.names=1)
+nfsim <- read.csv("Analysiswithoutseasonalbeestest/comptoMichanalysis/fbeta_sim.csv", row.names=1)
+nfsne <- read.csv("Analysiswithoutseasonalbeestest/comptoMichanalysis/fbeta_sne.csv", row.names=1)
+nfsor <- read.csv("Analysiswithoutseasonalbeestest/comptoMichanalysis/fbeta_sor.csv", row.names=1)
 
 ## SES Calculations
 #calculate standardized effect sizes (SES) for each trait and index
@@ -1203,7 +1200,7 @@ SES.all <- as.data.frame(cbind(SES_bl, SES_lec_0, SES_lec_1, SES_lec_2, SES_ori_
                                SES_nest_1, SES_nest_2, SES_nest_3, SES_nest_4, SES_nest_5,
                                SES_soc_1, SES_soc_2, SES_soc_3, SES_soc_4, SES_bsor, SES_bsim,
                                SES_bsne, SES_fbsor, SES_fbsim, SES_fbsne))
-write.csv(SES.all, file = "Regional to Urban Nulls.25rerun/AllSESvals.csv")
+write.csv(SES.all, file = "comptoMichanalysis/AllSESvals.csv")
 nestsites <- read.csv("Highestfunctnestsites.csv", row.names=1)
 
 

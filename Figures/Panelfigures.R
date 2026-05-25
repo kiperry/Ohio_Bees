@@ -1080,3 +1080,4 @@ stripchart(SES_soc_2 ~ trmt, data = SES.mp, col = c("#5e0a7c","#11290A"),
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
 
 dev.off()
+
