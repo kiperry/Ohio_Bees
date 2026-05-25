@@ -5,32 +5,28 @@
 
 #Step 1- importing data----
 ##1.1 Pham data----
-a.mp <- read.csv("urbanpool.MP.25.csv", row.names=1)
+a.mp <- read.csv("urbanpool.MP.26.csv", row.names=1)
 
 aO.mp<-a.mp
 
 a.mp<-a.mp[1:136]
 rowSums(a.mp)
-a.mp<-a.mp[-12,]
-a.mp<-a.mp[-9,]
-a.mp<-a.mp[-1,]
-rowSums(a.mp)
+
+
 
 #import the SES data
 SES.mp <- read.csv("Urban to Local_Nulls_MP/SES_Local_MP.csv", row.names = 1)
 
 #Including treatment
 a1.mp<-aO.mp
-a1.mp<-a1.mp[-12,]
-a1.mp<-a1.mp[-9,]
-a1.mp<-a1.mp[-1,]
+
 
 SES.mp$trmt <- a1.mp$trmt
 str(SES.mp)
 SES.mp
 
 #Adding the random neighborhood variable
-SES.mp$neighd <- c("C", "DS", "F", "G", "H","SV","TM","SV","TM", "H", "SV", "BE", "C","DS","F","G")
+SES.mp$neighd <- c("C", "DS", "F", "G", "SV","TM","SV","TM", "H", "SV", "BE", "C","DS","F","G")
 
 
 ## pull out data for each treatment
@@ -41,7 +37,7 @@ UP2019<- SES.mp[which(SES.mp$trmt== "UP"),]
 str(UP2019)
 
 ##1.2 Turo data ----
-a.kt <- read.csv("urbanpool.KT.25.csv", row.names=1)
+a.kt <- read.csv("urbanpool.KT.26.csv", row.names=1)
 
 aO.kt<-a.kt
 a.kt<-a.kt[1:136]
@@ -66,7 +62,7 @@ Prairie <- SES.kt[which(SES.kt$trmt == "Prairie"),]
 str(Prairie)
 
 ##1.3 Sivakoff data----
-a.fs <- read.csv("urbanpool.FS.25.csv", row.names=1)
+a.fs <- read.csv("urbanpool.FS.26.csv", row.names=1)
 
 aO.fs<-a.fs
 a.fs<-a.fs[1:136]
@@ -1034,6 +1030,52 @@ boxplot(SES_nest_1 ~ treatmentspelledout, data = SES.mp,  col = c("#C1BDFF", "#5
         ylim = c(-3.6,3), cex.lab = 2, cex.axis = 1.45, 
         horizontal = TRUE, las = 1, range = 0)
 stripchart(SES_nest_1 ~ trmt, data = SES.mp, col = c("#5e0a7c","#11290A"),
+           pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+abline(v = 0.0, col = "black", lwd = 3, lty=2)
+
+dev.off()
+
+png("Figures/fig7b  turo and pham pithy stem.png", width = 1500, height = 1000, pointsize = 20)
+par(mfrow=c(2,2)) # indicates one row, two columns
+par(mar = c(5,7,4,2)) # sets the margins around the figure
+# pithy stem Nesting.kt
+boxplot(SES_nest_4 ~ treatmentspelledout, data = SES.kt,  col = c("#C1BDFF", "#52A43B"),
+        xlab = "Standardized Effect Sizes (SES)", ylab = "", 
+        ylim = c(-3.6,3), cex.lab = 2, cex.axis = 1.45, 
+        horizontal = TRUE, las = 1, range = 0)
+stripchart(SES_nest_4 ~ trmt, data = SES.kt, col = c("#5e0a7c","#11290A"),
+           pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+abline(v = 0.0, col = "black", lwd = 3, lty=2)
+
+# pithy stem Nesting.mp
+boxplot(SES_nest_4 ~ treatmentspelledout, data = SES.mp,  col = c("#C1BDFF", "#52A43B"),
+        xlab = "Standardized Effect Sizes (SES)", ylab = "", 
+        ylim = c(-3.6,3), cex.lab = 2, cex.axis = 1.45, 
+        horizontal = TRUE, las = 1, range = 0)
+stripchart(SES_nest_4 ~ trmt, data = SES.mp, col = c("#5e0a7c","#11290A"),
+           pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+abline(v = 0.0, col = "black", lwd = 3, lty=2)
+
+dev.off()
+
+png("Figures/fig7c  turo and pham solitary.png", width = 1500, height = 1000, pointsize = 20)
+par(mfrow=c(2,2)) # indicates one row, two columns
+par(mar = c(5,7,4,2)) # sets the margins around the figure
+# solitary.kt
+boxplot(SES_soc_2 ~ treatmentspelledout, data = SES.kt,  col = c("#C1BDFF", "#52A43B"),
+        xlab = "Standardized Effect Sizes (SES)", ylab = "", 
+        ylim = c(-3.6,3), cex.lab = 2, cex.axis = 1.45, 
+        horizontal = TRUE, las = 1, range = 0)
+stripchart(SES_soc_2 ~ trmt, data = SES.kt, col = c("#5e0a7c","#11290A"),
+           pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+abline(v = 0.0, col = "black", lwd = 3, lty=2)
+
+# solitary.mp
+boxplot(SES_soc_2 ~ treatmentspelledout, data = SES.mp,  col = c("#C1BDFF", "#52A43B"),
+        xlab = "Standardized Effect Sizes (SES)", ylab = "", 
+        ylim = c(-3.6,3), cex.lab = 2, cex.axis = 1.45, 
+        horizontal = TRUE, las = 1, range = 0)
+stripchart(SES_soc_2 ~ trmt, data = SES.mp, col = c("#5e0a7c","#11290A"),
            pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
 
