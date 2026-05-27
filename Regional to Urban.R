@@ -1015,10 +1015,10 @@ png("Figures/Fig4.Regionaldivpanel.png", width = 3000, height = 1000, pointsize 
 par(mfrow=c(1,2)) # indicates one row, two columns
 par(mar=c(5,15,4,2))
 
-boxplot(ses ~ tbeta, data = SES_TBeta, col = viridis(3, alpha = 0.6),
+boxplot(ses ~ fbeta, data = SES_TBeta, col = viridis(3, alpha = 0.6),
         xlab = "Standardized Effect Sizes (SES)", ylab = "",
         horizontal = TRUE, las = 1, range = 0, ylim= c(-90,80), cex.lab = 2, cex.axis = 1.45) #cex.main= 1.8(That is what I would use tomake the graph title size, but no titles))
-stripchart(ses ~tbeta, data = SES_TBeta, col = viridis(3),
+stripchart(ses ~fbeta, data = SES_TBeta, col = viridis(3),
            pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
 #I am going to put in the text labels in adobe indesign since I can't get them placed consistently across all of the graphs
@@ -1137,7 +1137,7 @@ abline(v = 0.0, col = "black", lwd = 3, lty=2)
 
 
 #Same graphs but Put in figure order for making paper figures----
-png("Figures/Figure 5 Regionalsp traits panel.png", width = 1500, height = 1000, pointsize = 20)
+png("Figures/Figure 5.26large. Regionalsp traits panel.png", width = 1500, height = 1000, pointsize = 20)
 
 par(mfrow=c(2,2)) # indicates two rows, two columns
 par(mar = c(5,9,4,2)) # sets the margins around the figure
@@ -1152,7 +1152,7 @@ colnames(SES_lengthandorigin) <- c("trait","ses")
 
 boxplot(ses ~ trait, data = SES_lengthandorigin, col = viridis(5, alpha = 0.6),
         xlab = "Standardized Effect Sizes (SES)", ylab = "",
-        horizontal = TRUE, las = 1, range = 0, ylim= c(-9,9), cex.lab = 2, cex.axis = 1.45)
+        horizontal = TRUE, las = 1, range = 0, ylim= c(-10,10), cex.lab = 2, cex.axis = 1.45)
 stripchart(ses ~ trait, data = SES_lengthandorigin, col = viridis(5),
            pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
@@ -1168,7 +1168,7 @@ colnames(SES_Nest) <- c("nest","ses")
 
 boxplot(ses ~ nest, data = SES_Nest, col = viridis(5, alpha = 0.6),
         xlab = "Standardized Effect Sizes (SES)", ylab = "",
-        horizontal = TRUE, las = 1, range = 0, ylim= c(-9,9), cex.lab = 2, cex.axis = 1.45)
+        horizontal = TRUE, las = 1, range = 0, ylim= c(-10,10), cex.lab = 2, cex.axis = 1.45)
 stripchart(ses ~ nest, data = SES_Nest, col = viridis(5),
            pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
@@ -1183,7 +1183,7 @@ colnames(SES_lect) <- c("trait","ses")
 
 boxplot(ses ~ trait, data = SES_lect, col = viridis(6, alpha = 0.6),
         xlab = "Standardized Effect Sizes (SES)", ylab = "",
-        horizontal = TRUE, las = 1, range = 0, ylim= c(-9,9), cex.lab = 2, cex.axis = 1.45)
+        horizontal = TRUE, las = 1, range = 0, ylim= c(-10,10), cex.lab = 2, cex.axis = 1.45)
 stripchart(ses ~ trait, data = SES_lect, col = viridis(6),
            pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
@@ -1200,7 +1200,7 @@ colnames(SES_Soc) <- c("soc","ses")
 
 boxplot(ses ~ soc, data = SES_Soc, col = viridis(4, alpha = 0.6),
         xlab = "Standardized Effect Sizes (SES)", ylab = "",
-        horizontal = TRUE, las = 1, range = 0, ylim= c(-9,9), cex.lab = 2, cex.axis = 1.45)
+        horizontal = TRUE, las = 1, range = 0, ylim= c(-10,10), cex.lab = 2, cex.axis = 1.45)
 stripchart(ses ~ soc, data = SES_Soc, col = viridis(4),
            pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
