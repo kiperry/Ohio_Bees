@@ -1011,7 +1011,100 @@ abline(v = 0.0, col = "black", lwd = 3, lty=2)
 
 dev.off()
 
+#Figure combining all of the turo and pham soil, pithy stem, and solitary bee graphs----
+##step one make data for turo----
+SES_ALLdiv.kt.groups.forcomp <- as.data.frame(rbind(Prairie$SES_soc_2,T1$SES_soc_2, Prairie$SES_nest_4, T1$SES_nest_4, Prairie$SES_nest_1, T1$SES_nest_1))
+str(SES_ALLdiv.kt.groups.forcomp)
+#Not sure where that last column comes from
+#It bound them in the wrong direction. The t function should switch row and columns. 
+SES_ALLdiv.kt.groups.forcomp <- data.frame(t(SES_ALLdiv.kt.groups.forcomp))
+str(SES_ALLdiv.kt.groups.forcomp)
+colnames(SES_ALLdiv.kt.groups.forcomp) <- c( "PP Solitary", "VL Solitary",  "PP Pithy Stem", "VL Pithy Stem",  "PP Soil",  "VL Soil" )
 
+
+SES_ALLdiv.kt.groups.forcomp <- melt(SES_ALLdiv.kt.groups.forcomp)
+colnames(SES_ALLdiv.kt.groups.forcomp) <- c("Functional_groups","ses")
+
+##Pham  dataset----
+
+SES_ALLdiv.mp.groups.forcomp <- as.data.frame(rbind( UP2019$SES_soc_2, VL2019$SES_soc_2, UP2019$SES_nest_4, VL2019$SES_nest_4, UP2019$SES_nest_1,  VL2019$SES_nest_1))
+str(SES_ALLdiv.mp.groups.forcomp)
+#Not sure where that last column comes from
+#It bound them in the wrong direction. The t function should switch row and columns. 
+SES_ALLdiv.mp.groups.forcomp  <- data.frame(t(SES_ALLdiv.mp.groups.forcomp ))
+str(SES_ALLdiv.mp.groups.forcomp )
+colnames(SES_ALLdiv.mp.groups.forcomp ) <- c( "PP Solitary", "VL Solitary",  "PP Pithy Stem", "VL Pithy Stem",  "PP Soil",  "VL Soil")
+
+
+SES_ALLdiv.mp.groups.forcomp  <- melt(SES_ALLdiv.mp.groups.forcomp )
+colnames(SES_ALLdiv.mp.groups.forcomp) <- c("Functional_groups","ses")
+
+##colors----
+turo.groupstcolors.forcomp<-ifelse(levels(SES_ALLdiv.kt.groups.forcomp$Functional_groups)=="PP Solitary", "#C1BDFF" ,
+                                 ifelse(levels(SES_ALLdiv.kt.groups.forcomp$Functional_groups)=="PP Pithy Stem","#C1BDFF",
+                                        ifelse(levels(SES_ALLdiv.kt.groups.forcomp$Functional_groups)==" PP Beta-Diversity", "#C1BDFF",
+                                               ifelse(levels(SES_ALLdiv.kt.groups.forcomp$Functional_groups)=="PP Soil", "#C1BDFF",
+                                                      ifelse(levels(SES_ALLdiv.kt.groups.forcomp$Functional_groups)=="VL Pithy Stem", "#52A43B",
+                                                             ifelse(levels(SES_ALLdiv.kt.groups.forcomp$Functional_groups)==" VL Beta-Diversity", "#52A43B",
+                                                                    ifelse(levels(SES_ALLdiv.kt.groups.forcomp$Functional_groups)=="VL Soil","#52A43B",
+                                                                           ifelse(levels(SES_ALLdiv.kt.groups.forcomp$Functional_groups)=="VL Solitary", "#52A43B",
+                                                                                  "grey90")))))))) 
+turopoints.groupscolors.forcomp <-ifelse(levels(SES_ALLdiv.kt.groups.forcomp$Functional_groups)=="PP Solitary", "#5e0a7c", 
+                                        ifelse(levels(SES_ALLdiv.kt.groups.forcomp$Functional_groups)=="PP Pithy Stem", "#5e0a7c",
+                                               ifelse(levels(SES_ALLdiv.kt.groups.forcomp$Functional_groups)==" PP Beta-Diversity", "#5e0a7c",
+                                                      ifelse(levels(SES_ALLdiv.kt.groups.forcomp$Functional_groups)=="PP Soil", "#5e0a7c",
+                                                             ifelse(levels(SES_ALLdiv.kt.groups.forcomp$Functional_groups)=="VL Pithy Stem", "#11290A",
+                                                                    ifelse(levels(SES_ALLdiv.kt.groups.forcomp$Functional_groups)==" VL Beta-Diversity", "#11290A",
+                                                                           ifelse(levels(SES_ALLdiv.kt.groups.forcomp$Functional_groups)=="VL Solitary", "#11290A",
+                                                                                  ifelse(levels(SES_ALLdiv.kt.groups.forcomp$Functional_groups)=="VL Soil", "#11290A",
+                                                                                         "grey90"))))))))
+
+pham.groupscolors.forcomp<-ifelse(levels(SES_ALLdiv.mp.groups.forcomp$Functional_groups)=="PP Solitary", "#C1BDFF", 
+                                 ifelse(levels(SES_ALLdiv.mp.groups.forcomp$Functional_groups)=="PP Pithy Stem", "#C1BDFF",
+                                        ifelse(levels(SES_ALLdiv.mp.groups.forcomp$Functional_groups)==" PP Beta-Diversity", "#C1BDFF",
+                                               ifelse(levels(SES_ALLdiv.mp.groups.forcomp$Functional_groups)=="PP Soil", "#C1BDFF",
+                                                      ifelse(levels(SES_ALLdiv.mp.groups.forcomp$Functional_groups)=="VL Soil", "#52A43B",
+                                                             ifelse(levels(SES_ALLdiv.mp.groups.forcomp$Functional_groups)==" VL Beta-Diversity", "#52A43B",
+                                                                    ifelse(levels(SES_ALLdiv.mp.groups.forcomp$Functional_groups)=="VL Pithy Stem", "#52A43B",
+                                                                           ifelse(levels(SES_ALLdiv.mp.groups.forcomp$Functional_groups)=="VL Solitary", "#52A43B",
+                                                                                  "grey90"))))))))
+
+phampoints.groupscolors.forcomp <-ifelse(levels(SES_ALLdiv.mp.groups.forcomp$Functional_groups)=="PP Solitary", "#5e0a7c", 
+                                        ifelse(levels(SES_ALLdiv.mp.groups.forcomp$Functional_groups)=="PP Pithy Stem", "#5e0a7c",
+                                               ifelse(levels(SES_ALLdiv.mp.groups.forcomp$Functional_groups)==" PP Beta-Diversity", "#5e0a7c",
+                                                      ifelse(levels(SES_ALLdiv.mp.groups.forcomp$Functional_groups)=="PP Alpha", "#5e0a7c",
+                                                             ifelse(levels(SES_ALLdiv.mp.groups.forcomp$Functional_groups)=="VL Solitary", "#11290A",
+                                                                    ifelse(levels(SES_ALLdiv.mp.groups.forcomp$Functional_groups)==" VL Beta-Diversity", "#11290A",
+                                                                           ifelse(levels(SES_ALLdiv.mp.groups.forcomp$Functional_groups)=="VL Pithy Stem", "#11290A",
+                                                                                  ifelse(levels(SES_ALLdiv.mp.groups.forcomp$Functional_groups)=="VL Soil", "#11290A",
+                                                                                         "grey90"))))))))
+
+png("Figures/ panel ktvsmp siggroups.png", width = 2500, height = 800, pointsize = 20)
+par(mfrow=c(1,2)) # indicates 1 rows, 2 columns
+par(mar = c(2,11,2,2)) # sets the margins around the figure (I made them small since I'm going to be editing all the things later)
+
+boxplot(ses ~ Functional_groups, data = SES_ALLdiv.kt.groups.forcomp, col = turo.groupstcolors.forcomp,
+        xlab = "Standardized Effect Sizes (SES)", ylab = "",
+        horizontal = TRUE, las = 1, range = 0,  ylim=c(-6,7), cex.lab = 2, cex.axis=1.45)
+stripchart(ses ~ Functional_groups, data = SES_ALLdiv.kt.groups.forcomp, col = turopoints.groupscolors.forcomp,
+           pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+abline(v = 0.0, col = "black", lwd = 3, lty=2)
+#text(5.5, 8, "D", pos = 4, font = 2, cex = 2.6)
+
+boxplot(ses ~ Functional_groups, data = SES_ALLdiv.mp.groups.forcomp, col = pham.groupscolors.forcomp,
+        xlab = "Standardized Effect Sizes (SES)", ylab = "",
+        horizontal = TRUE, las = 1, range = 0,  ylim=c(-6,7), cex.lab = 2, cex.axis=1.45)
+stripchart(ses ~ Functional_groups, data = SES_ALLdiv.mp.groups.forcomp, col = phampoints.groupscolors.forcomp,
+           pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
+abline(v = 0.0, col = "black", lwd = 3, lty=2)
+
+dev.off()
+
+
+
+
+
+###Below are the old versions of the graphs----
 png("Figures/fig7  turo and pham soil.png", width = 1500, height = 1000, pointsize = 20)
 par(mfrow=c(2,2)) # indicates one row, two columns
 par(mar = c(5,7,4,2)) # sets the margins around the figure
