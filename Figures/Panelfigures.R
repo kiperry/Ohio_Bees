@@ -1072,7 +1072,7 @@ pham.groupscolors.forcomp<-ifelse(levels(SES_ALLdiv.mp.groups.forcomp$Functional
 phampoints.groupscolors.forcomp <-ifelse(levels(SES_ALLdiv.mp.groups.forcomp$Functional_groups)=="PP Solitary", "#5e0a7c", 
                                         ifelse(levels(SES_ALLdiv.mp.groups.forcomp$Functional_groups)=="PP Pithy Stem", "#5e0a7c",
                                                ifelse(levels(SES_ALLdiv.mp.groups.forcomp$Functional_groups)==" PP Beta-Diversity", "#5e0a7c",
-                                                      ifelse(levels(SES_ALLdiv.mp.groups.forcomp$Functional_groups)=="PP Alpha", "#5e0a7c",
+                                                      ifelse(levels(SES_ALLdiv.mp.groups.forcomp$Functional_groups)=="PP Soil", "#5e0a7c",
                                                              ifelse(levels(SES_ALLdiv.mp.groups.forcomp$Functional_groups)=="VL Solitary", "#11290A",
                                                                     ifelse(levels(SES_ALLdiv.mp.groups.forcomp$Functional_groups)==" VL Beta-Diversity", "#11290A",
                                                                            ifelse(levels(SES_ALLdiv.mp.groups.forcomp$Functional_groups)=="VL Pithy Stem", "#11290A",
@@ -1085,7 +1085,7 @@ par(mar = c(2,11,2,2)) # sets the margins around the figure (I made them small s
 
 boxplot(ses ~ Functional_groups, data = SES_ALLdiv.kt.groups.forcomp, col = turo.groupstcolors.forcomp,
         xlab = "Standardized Effect Sizes (SES)", ylab = "",
-        horizontal = TRUE, las = 1, range = 0,  ylim=c(-6,7), cex.lab = 2, cex.axis=1.45)
+        horizontal = TRUE, las = 1, range = 0,  ylim=c(-4,4), cex.lab = 2, cex.axis=1.45)
 stripchart(ses ~ Functional_groups, data = SES_ALLdiv.kt.groups.forcomp, col = turopoints.groupscolors.forcomp,
            pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
@@ -1093,7 +1093,7 @@ abline(v = 0.0, col = "black", lwd = 3, lty=2)
 
 boxplot(ses ~ Functional_groups, data = SES_ALLdiv.mp.groups.forcomp, col = pham.groupscolors.forcomp,
         xlab = "Standardized Effect Sizes (SES)", ylab = "",
-        horizontal = TRUE, las = 1, range = 0,  ylim=c(-6,7), cex.lab = 2, cex.axis=1.45)
+        horizontal = TRUE, las = 1, range = 0,  ylim=c(-4,4), cex.lab = 2, cex.axis=1.45)
 stripchart(ses ~ Functional_groups, data = SES_ALLdiv.mp.groups.forcomp, col = phampoints.groupscolors.forcomp,
            pch = 19, cex = 1.2, las = 1, add = TRUE, method = "jitter", jitter = 0.2)
 abline(v = 0.0, col = "black", lwd = 3, lty=2)
