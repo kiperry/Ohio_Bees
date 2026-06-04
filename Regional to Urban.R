@@ -1217,7 +1217,18 @@ absent<-which(colSums(a)==0)
 present<-a[,-absent]
 #okay got that to work- 136 present species
 sort(colSums(present), decreasing = T)
-
+#Lasioglossumimitatum            Apismellifera     Agapostemonvirescens 
+#59/63 sites                       56                       55 
+#Bombusimpatiens        Ceratinacalcarata          Halictusligatus 
+#52                       51                       49 
+#Lasioglossumephialtum       Megachilerotundata         Halictusconfusus 
+#47                       47                       44 
+#Bombusgriseocollis        Hylaeushyalinatus           Bombusfervidus 
+#42                       41                       39 
+#Agapostemontexanus          Andrenawilkella   Hylaeusaffinismodestus 
+#37                       37                       37 
+#Melissodesbimaculatus        Osmiacaerulescens    Lasioglossumhitchensi 
+#36                       35                       34 
 
 t$ori
 
