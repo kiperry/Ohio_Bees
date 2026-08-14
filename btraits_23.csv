@@ -1,4 +1,4 @@
-,BodyLength,Lecty,Nesting,Sociality,Origin
+﻿,BodyLength,Lecty,Nesting,Sociality,Origin
 Agapostemonsericeus,10,1,1,1,0
 Agapostemonsplendens,10.5,1,1,1,0
 Agapostemontexanus,10.25,1,1,1,0
@@ -250,7 +250,7 @@ Megachilemontivaga,11,1,2,2,0
 Megachilemucida,12.5,1,1,2,0
 Megachilepetulans,10.5,1,2,2,0
 Megachilepugnata,13.5,2,2,2,0
-Megachilepusilla,7,1,2,2,0
+Megachilepusilla,7,1,2,2,1
 Megachilerelativa,9.75,1,2,2,0
 Megachilerotundata,8,1,2,2,1
 Megachilerugifrons,11.75,1,2,2,0
