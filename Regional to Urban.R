@@ -40,7 +40,7 @@ rowSums(a)#all sites have 4+ species
 a$Megachileconcinna #Okay one concinna found
 a$Megachilepusilla # No pusilla found
 
-#This may cause a change in the datasets because M. pusilla is native, M. concinna is not
+#This may cause a change in the datasets because while neither M. pusilla nor M. concinna is native, we will have one fewer species
 
 a$Megachilepusilla<- ifelse(a$Megachileconcinna != 0 | a$Megachilepusilla != 0, 1, 0)
 a$Megachilepusilla #Okay yes, the above code made M. pusilla have a 1 in locations where either it or M concinna had a 1 
@@ -95,8 +95,9 @@ a2<-a1[-60,]
 a2<-a2[-57,]
 a2<-a2[-54,]
 a2<-a2[-49,]
-a$trmt<-a2$X.1
-write.csv(a, file = "reg.comm.26.csv")
+a3<-a
+a3$trmt<-a2$X.1
+write.csv(a3, file = "reg.comm.26.csv")
 
 ##############################################################################
 ## Observed Community Metrics----
@@ -136,7 +137,7 @@ attr(tdis, "correls")
 attr(tdis, "weights")
 
 # save trait weights for the null model
-wt <- c(0.37, 0.15, 0.11, 0.10, 0.26)
+wt <- c(0.38, 0.15, 0.11, 0.10, 0.26)
 
 #now run a principal coordinates analysis (PCoA) so we can collapse these traits into 
 #a few continuous axes for the functional diversity calculations
@@ -1232,7 +1233,7 @@ sort(colSums(present), decreasing = T)
 
 t$ori
 
-Nonnative <- t[which(t$ori == 1),]
+Nonnative <- t2[which(t2$ori == 1),]
 Nonnative
 
 
@@ -1242,7 +1243,7 @@ SES.all <- as.data.frame(cbind(SES_bl, SES_lec_0, SES_lec_1, SES_lec_2, SES_ori_
                                SES_nest_1, SES_nest_2, SES_nest_3, SES_nest_4, SES_nest_5,
                                SES_soc_1, SES_soc_2, SES_soc_3, SES_soc_4, SES_bsor, SES_bsim,
                                SES_bsne, SES_fbsor, SES_fbsim, SES_fbsne))
-write.csv(SES.all, file = "Final.25.Regional to Urban_Nulls/AllSESvals.csv")
+write.csv(SES.all, file = "Final.26.Regional to Urban_Nulls/AllSESvals.csv")
 
 #The below code seems left over from something
 #nestsites <- read.csv("Highestfunctnestsites.csv", row.names=1)
