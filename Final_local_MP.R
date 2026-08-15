@@ -56,7 +56,7 @@ setdiff(rownames (t2), colnames(a))
 rownames(t2) == colnames(a) # we are good to go!
 
 #just testing file locations before I continue
-write.csv(t, file = "Urban to Local_Nulls_MP/test.csv")
+write.csv(t2, file = "Urban to Local_Nulls_MP/test.csv")
 ##############################################################################
 ## Observed Community Metrics----
 
@@ -461,10 +461,10 @@ bsor.up
 dotchart(SES$SES_bsor, group = SES$trmt, pch = 19)
 with(SES, bartlett.test(SES_bsor ~ trmt))
 with(SES, ad.test(SES_bsor))
-#passed homogeneity test but not normality test
-kruskal.test(SES_bsor ~ trmt, data = SES) #it was not significant here 
+#passed homogeneity test and normality test Below codes are significance tests should the data have been non-homoegnous or nonnormal
+#kruskal.test(SES_bsor ~ trmt, data = SES) #
 #I will run the welches anova too, since the data is normal
-oneway.test(SES_bsor ~ trmt, data = SES, var.equal = FALSE) #not sig
+#oneway.test(SES_bsor ~ trmt, data = SES, var.equal = FALSE) #
 
 #Doing this to try and resolve an error I had with running the code below: install.packages("lme4", type = "source")
 #library(lme4) 
@@ -514,7 +514,7 @@ bsim.up
 dotchart(SES$SES_bsim, group = SES$trmt, pch = 19)
 with(SES, bartlett.test(SES_bsim ~ trmt))
 with(SES, ad.test(SES_bsim))
-#passed homogeneity test but failed normality test
+#passed homogeneity test but almost failed normality test (0.06)
 kruskal.test(SES_bsim ~ trmt, data = SES)#not significant anyway
 oneway.test(SES_bsim ~ trmt, data = SES, var.equal = FALSE) #not sig
 
@@ -564,7 +564,7 @@ bsne.up
 dotchart(SES$SES_bsne, group = SES$trmt, pch = 19)
 with(SES, bartlett.test(SES_bsne ~ trmt))
 with(SES, ad.test(SES_bsne))
-#passed homogeneity test
+#passed homogeneity and normality test
 #kruskal.test(SES_bsne ~ trmt, data = SES)
 #
 
@@ -668,8 +668,8 @@ fbsor.UP
 dotchart(SES$SES_fbsor, group = SES$trmt, pch = 19)
 with(SES, bartlett.test(SES_fbsor ~ trmt))
 with(SES, ad.test(SES_fbsor))
-#passed homogeneity test
-#kruskal.test(SES_fbsor ~ trmt, data = SES) #it was not significant here anyway
+#barely passed homogeneity test (0.056)
+kruskal.test(SES_fbsor ~ trmt, data = SES) #it was not significant here anyway
 
 mp_fbsor.lm <- lmer(SES_fbsor~trmt+(1|neighd), data = SES)
 
@@ -1046,8 +1046,9 @@ dotchart(SES$SES_nest_1, group = SES$trmt, pch = 19)
 
 with(SES, bartlett.test(SES_nest_1 ~ trmt))
 with(SES, ad.test(SES_nest_1))
-#passed homogeneity test but 0.052 for normality
-kruskal.test(SES_nest_1 ~ trmt, data = SES) #it was not significant- 0.906
+#passed homogeneity test and 0.07 for normality
+#kruskal.test(SES_nest_1 ~ trmt, data = SES) 
+#oneway.test(SES_nest_1 ~ trmt, data = SES, var.equal = FALSE)
 
 mp_nest_1.lm <- lmer(SES_nest_1~trmt+(1|neighd), data = SES)
 
@@ -1097,9 +1098,10 @@ nest_2.UP
 dotchart(SES$SES_nest_2, group = SES$trmt, pch = 19)
 
 with(SES, bartlett.test(SES_nest_2 ~ trmt))
-with(SES, ad.test(SES_nest_2))# p 0.056 
-#passed normality  test
-kruskal.test(SES_nest_2 ~ trmt, data = SES) #it was not significant here anyway
+with(SES, ad.test(SES_nest_2))# p 0.076 
+#passed both  tests
+#kruskal.test(SES_nest_2 ~ trmt, data = SES) #it was not significant here anyway
+#oneway.test(SES_nest_2 ~ trmt, data = SES, var.equal = FALSE)
 
 mp_nest_2.lm <- lmer(SES_nest_2~trmt+(1|neighd), data = SES)
 #
@@ -1234,7 +1236,7 @@ influenceIndexPlot(mp_nest_4.lm.red, vars = c("Cook"), id = list(n = 3))
 SESno5<- SES[-5,]
 with(SESno5, bartlett.test(SES_nest_4 ~ trmt))
 with(SESno5, ad.test(SES_nest_4))
-#okay also if T1-SV is removed it's not normal
+#okay also if T1-SV is removed it's barely normal
 kruskal.test(SES_nest_4 ~ trmt, data = SESno5) #not significant
 
 summary(mp_nest_4.lm)
@@ -1334,7 +1336,7 @@ dotchart(SES$SES_soc_1, group = SES$trmt, pch = 19)
 
 with(SES, bartlett.test(SES_soc_1 ~ trmt))
 with(SES, ad.test(SES_soc_1))
-# Almost did not pass homogeneity test 0.052
+# Did not pass homogeneity test 0.049
 kruskal.test(SES_soc_1 ~ trmt, data = SES) #it was not significant here 
 oneway.test(SES_soc_1 ~ trmt, data = SES, var.equal = FALSE)#Not significant
 
@@ -1386,9 +1388,9 @@ dotchart(SES$SES_soc_2, group = SES$trmt, pch = 19)
 
 with(SES, bartlett.test(SES_soc_2 ~ trmt))
 with(SES, ad.test(SES_soc_2))
-#almost failed homogeneity test 0.054
-kruskal.test(SES_soc_2 ~ trmt, data = SES) #almost significant here 0.045
-oneway.test(SES_soc_2 ~ trmt, data = SES, var.equal = FALSE)# significant 0.039
+#almost failed homogeneity test 0.051
+kruskal.test(SES_soc_2 ~ trmt, data = SES) #almost significant here 0.059
+oneway.test(SES_soc_2 ~ trmt, data = SES, var.equal = FALSE)# almost significant 0.06
 
 
 mp_soc_2.lm <- lmer(SES_soc_2~trmt+(1|neighd), data = SES)
@@ -1403,7 +1405,7 @@ influenceIndexPlot(mp_soc_2.lm, vars = c("Cook"), id = list(n = 3))
 
 summary(mp_soc_2.lm)
 Anova(mp_soc_2.lm)
-#significant - 0.045
+#Not significant - 0.08
 
 
 #mp_soc_2.mod <- glm(SES_soc_2 ~ trmt , family = gaussian, data = SES)
@@ -1440,7 +1442,7 @@ dotchart(SES$SES_soc_3, group = SES$trmt, pch = 19)
 
 with(SES, bartlett.test(SES_soc_3 ~ trmt))
 with(SES, ad.test(SES_soc_3))
-#passed homogeneity test
+#passed both tests
 #kruskal.test(SES_soc_3 ~ trmt, data = SES) #it was not significant here anyway
 
 mp_soc_3.lm <- lmer(SES_soc_3~trmt+(1|neighd), data = SES)
@@ -1507,7 +1509,7 @@ influenceIndexPlot(mp_soc_4.lm, vars = c("Cook"), id = list(n = 3))
 
 summary(mp_soc_4.lm)
 Anova(mp_soc_4.lm)
-#NO LONGER a Significant difference! (UPDATE WITH 2025 RUN- consistent in 2026)
+#NO LONGER a Significant difference! (UPDATE WITH 2025 RUN- consistent in 2026 may and aug)
 
 
 #mp_soc_4.mod <- glm(SES_soc_4 ~ trmt , family = gaussian, data = SES)
@@ -1633,7 +1635,7 @@ Anova(mp_ori_1.lm)
 
 
 
-#Figures----
+#Old Figures Code - go to panelfigures R document for the ones used in manuscript----
 
 ##Loading programs needed
 if (!suppressWarnings(require(viridis))) install.packages("viridis")
@@ -1860,3 +1862,28 @@ abline(v = 0.0, col = "black", lwd = 3, lty=2)
 #text(1.87, 2.42, "C", pos = 4, font = 2, cex = 2)
 
 dev.off()
+
+
+#Some mini Discussion Stats----
+#
+ordered(colSums(a))
+sort(colSums(a), decreasing=T)
+
+t$soc
+
+solitary <- t[which(t$soc == 2),]
+solitary
+
+solitary.a<-a[,rownames(solitary)]
+
+absent.solitary<-which(colSums(solitary.a)==0)
+present.solitary<-solitary.a[,-absent.solitary]
+
+vlsonly<-present.solitary[1:6,]
+absentsol.vls<-which(colSums(vlsonly)==0)
+present.inpp.solitary<-present.solitary[,-absentsol.vls]
+
+absent.invl.solitary<-present.solitary[,absentsol.vls]
+absent.invl.solitary.t<-solitary[colnames(absent.invl.solitary),]
+
+sort(colSums(present), decreasing = T)
